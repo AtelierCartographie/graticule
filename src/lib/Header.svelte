@@ -1,0 +1,54 @@
+<script>
+
+</script>
+
+
+<header role="banner">
+    <nav role="navigation" id="topbar">
+        <h1>#Cartofond</h1>
+        <ol>
+            <li>Cadrer</li>
+            <li>Projeter</li>
+            <li>Alimenter</li>
+            <li>Simplifier</li>
+            <li>Mettre en page</li>
+        </ol>
+        <button>Télécharger</button>
+    </nav>
+</header>
+
+<style>
+    #topbar { 
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: var(--nav-h);
+        /* padding: 0 10px 0 10px; */
+        display: flex;
+        align-items: center;
+        background-color: white;
+        background-color: white;
+        box-shadow: 0 4px 4px rgb(0 0 0 / 6%);
+        border-bottom: 1px solid #ccc;
+        z-index: 10;
+    }
+    #topbar ol {
+        list-style-type: none;
+        padding: 0;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #topbar h1 { 
+        text-align: center;;
+        width: 300px; }
+    #topbar ol { 
+        display: flex;
+    }
+    #topbar li {
+        /* margin-left: 1rem;
+        margin-right: 1rem; */
+    }
+    #opbar button {
+        right: 0;
+    }
+</style>
