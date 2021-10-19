@@ -48,7 +48,7 @@
         /* margin-left: 1rem;
         margin-right: 1rem; */
     }
-    #opbar button {
+    #topbar button {
         right: 0;
     }
 </style>

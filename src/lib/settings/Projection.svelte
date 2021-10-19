@@ -46,18 +46,18 @@
     <h3>Paramétrage de la projection</h3>
     <ul>
         <li>
-            <label>Longitude</label>
-            <input type="range" bind:value={lambda} min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
+            <label for="lon">Longitude</label>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
             <input type="number" bind:value={lambda} min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
         </li>
         <li>
-            <label>Latitude</label>
-            <input type="range" bind:value={phi} min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
+            <label for="lat">Latitude</label>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
             <input type="number" bind:value={phi} min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
         </li>
         <li>
-            <label>Rotation</label>
-            <input type="range" bind:value={gamma} min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
+            <label for="rot">Rotation</label>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
             <input type="number" bind:value={gamma} min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
         </li>
     </ul>
