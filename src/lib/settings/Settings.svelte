@@ -1,7 +1,8 @@
 <script>
     import Layers from './Layers.svelte'
     import Projection from './Projection.svelte'
-    // import Download from '../Download.svelte'
+    import Resolution from './Resolution.svelte';
+    import Download from '../Download.svelte'
 
     export let canRender
 
@@ -23,7 +24,8 @@
     {#if canRender}
     <Layers {layers_list} {lyr_selected} />
     {/if}
-    <!-- <Download /> -->
+    <Resolution />
+    <Download />
 </div>
 
 

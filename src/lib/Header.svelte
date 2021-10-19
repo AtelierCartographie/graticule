@@ -26,6 +26,7 @@
         /* padding: 0 10px 0 10px; */
         display: flex;
         align-items: center;
+        justify-content: space-between;
         background-color: white;
         background-color: white;
         box-shadow: 0 4px 4px rgb(0 0 0 / 6%);
@@ -33,6 +34,7 @@
         z-index: 10;
     }
     #topbar ol {
+        display: flex;
         list-style-type: none;
         padding: 0;
         align-items: center;
@@ -40,13 +42,15 @@
     }
     #topbar h1 { 
         text-align: center;;
-        width: 300px; }
-    #topbar ol { 
-        display: flex;
+        width: 300px;
     }
     #topbar li {
-        /* margin-left: 1rem;
-        margin-right: 1rem; */
+        font-size: var(--text-medium);
+        font-weight: bold;
+        color: var(--dark-grey);
+        background-color: var(--light-grey);
+        padding: 0.5rem;
+        margin: 0 1rem;
     }
     #topbar button {
         right: 0;

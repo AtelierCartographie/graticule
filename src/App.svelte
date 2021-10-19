@@ -47,18 +47,27 @@
 
     --nav-h: 3.5rem;
     --settings-width: 18rem;
-    --footer-height: 8rem;
+    --footer-height: 7rem;
+    --step-gap: 6rem;
 
     --text-big: 16px;
     --text-medium: 14px;
     --text-small: 12px;
-    
+
     --dark-grey: #4B4B4B;
     --grey: #E5E5E5;
     --light-grey: #F9F9F9;
   }
 
   :global(body) { margin: 0;}
+  :global(h2) {
+    font-size: var(--text-big);
+    color: var(--dark-grey);
+  }
+  :global(h3) {
+    font-size: var(--text-medium);
+    color: var(--dark-grey);
+  }
 
   main {
     /* display: flex; */

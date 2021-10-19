@@ -20,7 +20,7 @@
         position: fixed;
         bottom: 0;
         width: 18rem;
-        padding: 1rem;
+        padding: 0.5rem 1rem 1rem 1rem;
         border-top: 1px solid #ccc;
         z-index: 10;
         display: flex;

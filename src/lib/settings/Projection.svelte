@@ -28,7 +28,9 @@
     let m2 = "Choisir parmi la liste de projection et régler si besoin les paramètres."
 </script>
 
-<Tip message={m1} />
+<h2>Projeter</h2>
+
+<Tip message={m2} />
 
 <form id="proj-select">
     <label for="proj-select">Sélectionner une projection</label>
@@ -41,7 +43,7 @@
 </form>
 
 
-<Tip message={m2} />
+
 <form id="proj-rotate">
     <h3>Paramétrage de la projection</h3>
     <ul>
@@ -65,9 +67,13 @@
 
 
 <style>
-    #proj-select label, #proj-rotate h3 {
-        font-size: var(--text-big);
+    #proj-rotate {
+        margin-bottom: var(--step-gap);
+    }
+    #proj-select label {
+        font-size: var(--text-medium);
         font-weight: bold;
+        color: var(--dark-grey);
     }
     #proj-rotate ul {
         list-style-type: none;
@@ -79,7 +85,8 @@
     }
     #proj-rotate label {
         /* Taille du label */
-        flex: 1; 
+        flex: 1;
+        font-size: var(--text-medium);
     }
     #proj-rotate input {
         /* Taille de l'input par rapport au label (1x, 2x...) */

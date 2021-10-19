@@ -25,9 +25,10 @@
     })  
 </script>
 
+<h2>Alimenter</h2>
 <Tip message={m1} />
 <form id="layers-select">
-    <h3>Afficher/masquer une couche</h3>
+    <h3>Informations géographiques</h3>
     <ul>
         {#each Object.entries(layers_list) as [name, value]}
             <li>
@@ -41,8 +42,8 @@
 
 
 <style>
-    #layers-select h3 {
-        font-size: var(--text-big)
+    #layers-select {
+        margin-bottom: var(--step-gap);
     }
     #layers-select ul {
         list-style-type: none;
@@ -54,7 +55,8 @@
     }
     #layers-select label {
         /* Taille du label */
-        flex: 1; 
+        flex: 1;
+        font-size: var(--text-medium);
     }
     #layers-select input {
         /* Taille de l'input par rapport au label (1x, 2x...) */
