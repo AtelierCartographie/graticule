@@ -38,12 +38,6 @@
         font-size: var(--text-small);
         color: var(--dark-grey);
     }
-    /* footer div {
-        flex: 1;
-    }
-    footer > p {
-        flex: 0.5;
-    } */
     footer img {
         width: 10rem;
     }

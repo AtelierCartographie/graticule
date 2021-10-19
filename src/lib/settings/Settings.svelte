@@ -30,11 +30,11 @@
 <style>
     #settings {
         position: fixed;
-        width: 18rem;
+        width: var(--settings-width);
         overflow-y: scroll;
         overflow: -moz-scrollbars-none;
         top: var(--nav-h);
-        bottom: 0;
+        bottom: var(--footer-height);
         padding: 1rem;
         /* height: 100vh; */
         /* margin-top: var(--nav-h); */

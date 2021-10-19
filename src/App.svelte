@@ -44,10 +44,15 @@
   :root {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
     --nav-h: 3.5rem;
+    --settings-width: 18rem;
+    --footer-height: 8rem;
+
     --text-big: 16px;
     --text-medium: 14px;
     --text-small: 12px;
+    
     --dark-grey: #4B4B4B;
     --grey: #E5E5E5;
     --light-grey: #F9F9F9;
