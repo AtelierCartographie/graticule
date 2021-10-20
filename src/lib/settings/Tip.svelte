@@ -10,11 +10,13 @@
 <style>
     .tip { 
         /* margin: 1rem; */
-        box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+        /* box-shadow: 0 4px 4px rgb(0 0 0 / 25%); */
+        
     }
     .tip p {
-        padding: 1rem;
-        background: white;
+        border: 1px solid var(--dark-grey);
+        padding: 0.5rem;
+        background: transparent;
         font-size: var(--text-medium);
         color: var(--dark-grey);
     }

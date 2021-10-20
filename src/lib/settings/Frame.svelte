@@ -26,7 +26,7 @@
 
 <style>
     #reg-select {
-        margin-bottom: var(--step-gap);
+        margin-bottom: calc(var(--step-gap) / 2);
     }
     #reg-select label {
         font-size: var(--text-medium);

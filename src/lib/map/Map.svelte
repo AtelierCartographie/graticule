@@ -8,7 +8,7 @@
     import Basemap from './Basemap.svelte'
     import Zoom from './Zoom.svelte'
 
-    let width = 500, height = 500
+    let width = 500, height = 400
     let projection
     const unsubscribe = proj.subscribe(value => { projection = value })
 
