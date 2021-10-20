@@ -2,9 +2,9 @@
     import { select } from 'd3-selection'
     import { onMount } from 'svelte'
     import Tip from './Tip.svelte'
+    import layers_list from '../../assets/layers_list.js'
 
-    export let layers_list
-    export let lyr_selected
+    let lyr_selected = ['ocean', 'land']
 
     //Tips message
     let m1 = "Ajouter si besoin des informations supplémentaires"

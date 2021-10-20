@@ -1,41 +1,14 @@
 <script>
-  import { onMount } from 'svelte'
-  import { proj } from './stores.js'
-
-  import { feature } from 'topojson-client'
-  import basemap from './assets/basemap.json'
-
   import Header from './lib/Header.svelte'
   import Settings from './lib/settings/Settings.svelte'
-  import Map from './lib/Map.svelte'
-  //import Projection from './lib/settings/Projection.svelte'
+  import Map from './lib/map/Map.svelte'
   import Footer from './lib/Footer.svelte'
-
-  // # DONNÉES DES COMPOSANTS -------
-  // ## Map.svelte
-  let projection
-  const unsubscribe = proj.subscribe(value => { projection = value })
-  
-  // récupérer les différentes couches du topojson au format geojson
-  const geo = {
-        land: feature(basemap, basemap.objects.land),
-        borders: feature(basemap, basemap.objects.borders),
-        borders_disputed: feature(basemap, basemap.objects.borders_disputed),
-        urban: feature(basemap, basemap.objects.urban)
-    }
-  // ------------------------------------------------------
-
-  let canRender = false
-
-  onMount( () => {
-    canRender = true
-  })
 </script>
 
 <Header />
 <main id="app">
-  <Settings {canRender}/>
-  <Map {projection} {geo} />
+  <Settings />
+  <Map />
 </main>
 
 <Footer />

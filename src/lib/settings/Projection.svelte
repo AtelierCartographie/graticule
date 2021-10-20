@@ -2,26 +2,26 @@
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
     import { proj } from '../../stores.js'
     import Tip from './Tip.svelte'
-
-    import { geoEqualEarth } from 'd3-geo'
-    import { geoArmadillo, geoBertin1953, geoMollweide, geoNaturalEarth2, geoInterruptedMollweide } from 'd3-geo-projection'
-
-    const proj_list = [
-        {name: "Equal Earth", fn: geoEqualEarth(), lambda: 0, phi: 0, gamma: 0},
-        {name: "Natural Earth 2", fn: geoNaturalEarth2(), lambda: 0, phi: 0, gamma: 0},
-        {name: "Armadillo", fn: geoArmadillo(), lambda: -10, phi: 0, gamma: NaN},
-        {name: "Bertin 1953", fn: geoBertin1953(), lambda: -16, phi: -42, gamma: 0},
-        {name: "Interrupted Mollweide", fn: geoInterruptedMollweide(), lambda: 0, phi: 0, gamma: 0},
-        {name: "Atlantis", fn: geoMollweide().angle(-90), lambda: 30, phi: -45, gamma: 90},
-    ]
+    import proj_list from '../../assets/proj_list.js'
 
     let proj_selected = "Natural Earth 2"
 
     $: lambda = proj_list.find( d => d.name === proj_selected).lambda
     $: phi = proj_list.find( d => d.name === proj_selected).phi
     $: gamma = proj_list.find( d => d.name === proj_selected).gamma
+    $: parallel = proj_list.find( d => d.name === proj_selected).parallel
+    $: distance = proj_list.find( d => d.name === proj_selected).distance
+    $: tilt = proj_list.find( d => d.name === proj_selected).tilt
+    $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
 
-    $: proj.set(proj_list.find( d => d.name === proj_selected).fn.rotate([lambda, phi, gamma]))
+    $: {
+        let p = proj_list.find( d => d.name === proj_selected).fn.rotate([lambda, phi, gamma])
+        if (parallel) p.parallel([parallel])
+        if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
+        proj.set(p)
+    }
+
+    $: console.log(phi)
 
     // Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
@@ -62,6 +62,25 @@
             <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
             <input type="number" bind:value={gamma} min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
         </li>
+        {#if parallel}
+        <li>
+            <label for="parallel">Parallèle</label>
+            <input type="range" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
+            <input type="number" bind:value={parallel} min="-90" max="90" step="1" >
+        </li>
+        {/if}
+        {#if distance}
+        <li>
+            <label for="alt">Altitude en km</label>
+            <input type="range" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
+            <input type="number" bind:value={distance} min="1" max="16" step="0.1" >
+        </li>
+        <li>
+            <label for="tilt">Inclinaison en degré</label>
+            <input type="range" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
+            <input type="number" bind:value={tilt} min="0" max="90" step="1" >
+        </li>
+        {/if}
     </ul>
 </form>
 

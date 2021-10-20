@@ -1,29 +1,15 @@
 <script>
+    import Frame from './Frame.svelte'
     import Layers from './Layers.svelte'
     import Projection from './Projection.svelte'
     import Resolution from './Resolution.svelte';
     import Download from '../Download.svelte'
-
-    export let canRender
-
-  // ## Layers.svelte
-  const layers_list = {
-    "Ocean": "ocean",
-    "Graticule": "graticule",
-    "Land": "land",
-    "Borders": "borders",
-    "Borders disputed": "borders_disputed",
-    "Urban centre": "urban"
-  }
-  let lyr_selected = ['ocean', 'land']
-
 </script>
 
 <div id="settings">
+    <Frame />
     <Projection />
-    {#if canRender}
-    <Layers {layers_list} {lyr_selected} />
-    {/if}
+    <Layers />
     <Resolution />
     <Download />
 </div>

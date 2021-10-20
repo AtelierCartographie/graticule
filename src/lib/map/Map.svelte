@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte'
+    import { proj } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -8,8 +9,8 @@
     import Zoom from './Zoom.svelte'
 
     let width = 500, height = 500
-
-    export let projection, geo
+    let projection
+    const unsubscribe = proj.subscribe(value => { projection = value })
 
     $: path = geoPath(projection)
 
@@ -74,9 +75,9 @@
             <g id="gBrush"></g>
 
             <g style="clip-path: url(#clip-cadrage)">
-                <Zoom svgID="#map-svg" {width} {height} >
+                <Zoom svgID="#map-svg" {width} {height} {path} >
                     
-                    <Basemap {path} {geo} {outline} />
+                    <Basemap {path} {outline} />
 
                     <use xlink:href="#outline" id="outline" />
 
