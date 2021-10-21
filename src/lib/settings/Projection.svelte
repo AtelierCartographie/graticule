@@ -6,6 +6,7 @@
 
     let proj_selected = "Natural Earth 2"
 
+    // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
     $: lambda = proj_list.find( d => d.name === proj_selected).lambda
     $: phi = proj_list.find( d => d.name === proj_selected).phi
     $: gamma = proj_list.find( d => d.name === proj_selected).gamma
@@ -16,7 +17,7 @@
 
     $: {
         let p = proj_list.find( d => d.name === proj_selected).fn.rotate([lambda, phi, gamma])
-        if (parallel) p.parallel([parallel])
+        if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
         proj.set(p)
     }
@@ -28,65 +29,68 @@
     let m2 = "Choisir parmi la liste de projection et régler si besoin les paramètres."
 </script>
 
-<h2>Projeter</h2>
+<section id="projection">
+    <h2>Projeter</h2>
 
-<Tip message={m2} />
+    <Tip message={m2} />
 
-<form id="proj-select">
-    <label for="proj-select">Sélectionner une projection</label>
+    <form id="proj-select">
+        <label for="proj-select">Sélectionner une projection</label>
 
-    <select bind:value={proj_selected} name="projection" id="proj-select">
-        {#each proj_list as d}
-            <option value={d.name}>{d.name}</option>
-        {/each}
-    </select>
-</form>
+        <select bind:value={proj_selected} name="projection" id="proj-select">
+            {#each proj_list as d}
+                <option value={d.name}>{d.name}</option>
+            {/each}
+        </select>
+    </form>
 
 
 
-<form id="proj-rotate">
-    <h3>Paramétrage de la projection</h3>
-    <ul>
-        <li>
-            <label for="lon">Longitude</label>
-            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
-            <input type="number" bind:value={lambda} min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
-        </li>
-        <li>
-            <label for="lat">Latitude</label>
-            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
-            <input type="number" bind:value={phi} min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
-        </li>
-        <li>
-            <label for="rot">Rotation</label>
-            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
-            <input type="number" bind:value={gamma} min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
-        </li>
-        {#if parallel}
-        <li>
-            <label for="parallel">Parallèle</label>
-            <input type="range" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
-            <input type="number" bind:value={parallel} min="-90" max="90" step="1" >
-        </li>
-        {/if}
-        {#if distance}
-        <li>
-            <label for="alt">Altitude en km</label>
-            <input type="range" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
-            <input type="number" bind:value={distance} min="1" max="16" step="0.1" >
-        </li>
-        <li>
-            <label for="tilt">Inclinaison en degré</label>
-            <input type="range" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
-            <input type="number" bind:value={tilt} min="0" max="90" step="1" >
-        </li>
-        {/if}
-    </ul>
-</form>
+    <form id="proj-rotate">
+        <h3>Paramétrage de la projection</h3>
+        <ul>
+            <li>
+                <label for="lon">Longitude</label>
+                <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
+                <input type="number" bind:value={lambda} min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
+            </li>
+            <li>
+                <label for="lat">Latitude</label>
+                <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
+                <input type="number" bind:value={phi} min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
+            </li>
+            <li>
+                <label for="rot">Rotation</label>
+                <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
+                <input type="number" bind:value={gamma} min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
+            </li>
+            {#if parallel || parallel == 0}
+            <li>
+                <label for="parallel">Parallèle</label>
+                <input type="range" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
+                <input type="number" bind:value={parallel} min="-90" max="90" step="1" >
+            </li>
+            {/if}
+            {#if distance}
+            <li>
+                <label for="alt">Altitude en km</label>
+                <input type="range" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
+                <input type="number" bind:value={distance} min="1" max="16" step="0.1" >
+            </li>
+            <li>
+                <label for="tilt">Inclinaison en degré</label>
+                <input type="range" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
+                <input type="number" bind:value={tilt} min="0" max="90" step="1" >
+            </li>
+            {/if}
+        </ul>
+    </form>
+</section>
+
 
 
 <style>
-    #proj-rotate {
+    #projection {
         margin-bottom: var(--step-gap);
     }
     #proj-select label {

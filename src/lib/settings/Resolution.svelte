@@ -13,23 +13,26 @@
     let res_selected = ["Normal"]
 </script>
 
-<h2>Simplification</h2>
-<Tip message={m1} />
-<form id="res-select">
-    <h3>Détail des tracés</h3>
-    <ul>
-        {#each Object.entries(res_list) as [name, value] }
-            <li>
-                <label for={value}>{name}</label>
-                <input type="radio" bind:group={res_selected} id={value} {value} {name}>
-            </li>
-            
-        {/each}
-    </ul>
-</form>
+<section id="resolution">
+    <h2>Simplification</h2>
+    <Tip message={m1} />
+    <form id="res-select">
+        <h3>Détail des tracés</h3>
+        <ul>
+            {#each Object.entries(res_list) as [name, value] }
+                <li>
+                    <label for={value}>{name}</label>
+                    <input type="radio" bind:group={res_selected} id={value} {value} {name}>
+                </li>
+                
+            {/each}
+        </ul>
+    </form>
+</section>
+
 
 <style>
-    #res-select {
+    #resolution {
         margin-bottom: var(--step-gap);
     }
     #res-select ul {

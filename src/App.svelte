@@ -29,7 +29,7 @@
 
     --dark-grey: #4B4B4B;
     --grey: #E5E5E5;
-    --light-grey: #F9F9F9;
+    --light-grey: #f9f9f9c5;
   }
 
   :global(body) { margin: 0;}

@@ -34,4 +34,13 @@
         background-color:var(--light-grey);
     }
     #settings::-webkit-scrollbar { width: 0 !important; }
+    #settings::after {
+      content: "";
+      position: fixed;
+      width: calc(var(--settings-width) + 2rem);
+      left: 0;
+      bottom: var(--footer-height);
+      height: 4rem;
+      background: linear-gradient(to bottom,rgba(249, 249, 249, 0) 0%,rgba(249, 249, 249, .7) 50%,rgba(249, 249, 249, 1) 100%);
+    }
 </style>

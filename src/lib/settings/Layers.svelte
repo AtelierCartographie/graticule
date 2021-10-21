@@ -2,6 +2,7 @@
     import { select } from 'd3-selection'
     import { onMount } from 'svelte'
     import Tip from './Tip.svelte'
+    import Styling from './Styling.svelte'
     import layers_list from '../../assets/layers_list.js'
 
     let lyr_selected = ['ocean', 'land']
@@ -23,26 +24,33 @@
         // applique la couche par défaut au démarrage
         add_layer(lyr_selected)
     })  
+    $: console.log(lyr_selected)
 </script>
 
-<h2>Alimenter</h2>
-<Tip message={m1} />
-<form id="layers-select">
-    <h3>Informations géographiques</h3>
-    <ul>
-        {#each Object.entries(layers_list) as [name, value]}
-            <li>
-                <label for={value}>{name}</label>
-                <input type="checkbox" bind:group={lyr_selected} id={value} {value} {name}>
-            </li>
-            
-        {/each}
-    </ul>
-</form>
+<section id="layers">
+    <h2>Alimenter</h2>
+    <Tip message={m1} />
+    <form id="layers-select">
+        <h3>Informations géographiques</h3>
+        <ul>
+            {#each layers_list as {id, name, style} }
+                <li>
+                    <label for={id}>{name}</label>
+                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name}>
+                    {#if lyr_selected.includes(id)}
+                    <Styling />
+                    {/if}
+                </li>
+                
+            {/each}
+        </ul>
+    </form>
+</section>
+
 
 
 <style>
-    #layers-select {
+    #layers {
         margin-bottom: var(--step-gap);
     }
     #layers-select ul {
