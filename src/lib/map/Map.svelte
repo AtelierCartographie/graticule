@@ -41,7 +41,7 @@
         .on("brush", brushed)
 
     // $: height = document.getElementById("svg-container").clientHeight
-    $: console.log(height)
+    // $: console.log(height)
 
     onMount( () => {
         // height = document.getElementById("svg-container").clientHeight

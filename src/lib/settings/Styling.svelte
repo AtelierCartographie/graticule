@@ -1,18 +1,43 @@
 <script>
+    import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
     // https://svelte.dev/repl/0aff293b94e44574a83a8271ba457136?version=3.29.4
     // https://svelte.dev/repl/74ff0da7cb074d4788b996e2d91258d3?version=3.23.0
 
-    // export let id, style
-    let isOpen = false
+    export let lyr, style
+
+    let isOpen = true
     const toggle = () => isOpen = !isOpen
     let fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth
 
+    // 1. charger les inputs des styles de la carte
+    // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
+    // ATTENTION aux unités => width en 'px' et color en hexadecimal (voir utils observable)
+    $: fillColor     = select(`#${lyr}`).style("fill")
+    $: fillOpacity   = select(`#${lyr}`).style("fill-opacity")
+    $: strokeColor   = select(`#${lyr}`).style("stroke")
+    $: strokeOpacity = select(`#${lyr}`).style("stroke-opacity")
+    $: strokeWidth   = select(`#${lyr}`).style("stroke-width")
+    $: {
+        select(`#${lyr}`).style("fill-opacity", fillOpacity)
+        console.log(select(`#${lyr}`).style("fill"))
+    }
+
+    // 2. le faire une fois à l'ouverture de la boite de stylage
+    // 3. lier les valeurs des inputs au style de la carte
+    function addStyling(lyr, value) {
+        const base = select("g#basemap")
+        // Couches hidden par défault
+        base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
+        // Pour chaque bouton radio sélectionné => rendre visible le layer
+        lyr.forEach(e => select("g#basemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
+    }
+
 </script>
 
-<button aria-expanded={isOpen} class="accordion" on:click={toggle}>
+<button type="button" aria-expanded={isOpen} class="accordion" on:click={toggle}>
     {#if isOpen}
     <!-- PICTO OUVERT -->
     <span class="icon">&minus;</span>
@@ -23,7 +48,7 @@
 </button>
 
 {#if isOpen}
-<section class:open-panel={isOpen} class="panel" transition:slide={{ duration: 1000 }}>
+<section class:open-panel={isOpen} class="panel" transition:slide={{ duration: 300 }}>
     <form id="form-styling">
         <h3>Fond</h3>
         <ul>

@@ -22,8 +22,6 @@
         proj.set(p)
     }
 
-    $: console.log(phi)
-
     // Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
     let m2 = "Choisir parmi la liste de projection et régler si besoin les paramètres."

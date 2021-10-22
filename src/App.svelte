@@ -1,13 +1,19 @@
 <script>
+  import { onMount } from 'svelte'
   import Header from './lib/Header.svelte'
   import Settings from './lib/settings/Settings.svelte'
   import Map from './lib/map/Map.svelte'
   import Footer from './lib/Footer.svelte'
+
+  let canRender = false
+  onMount( () => {
+    canRender = true
+  })
 </script>
 
 <Header />
 <main id="app">
-  <Settings />
+  <Settings {canRender} />
   <Map />
 </main>
 

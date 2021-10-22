@@ -5,12 +5,13 @@
     import Styling from './Styling.svelte'
     import layers_list from '../../assets/layers_list.js'
 
-    let lyr_selected = ['ocean', 'land']
+    export let canRender
+    let lyr_selected = ['ocean', 'land', 'borders']
 
     //Tips message
     let m1 = "Ajouter si besoin des informations supplémentaires"
 
-    function add_layer(lyr) {
+    function addLayer(lyr) {
         const base = select("g#basemap")
         // Couches hidden par défault
         base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
@@ -18,15 +19,15 @@
         lyr.forEach(e => select("g#basemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
     }
 
-    $: add_layer(lyr_selected)
-
+    $: addLayer(lyr_selected)
+    
     onMount( () => {
         // applique la couche par défaut au démarrage
-        add_layer(lyr_selected)
-    })  
-    $: console.log(lyr_selected)
+        addLayer(lyr_selected)
+    })
 </script>
 
+{#if canRender}
 <section id="layers">
     <h2>Alimenter</h2>
     <Tip message={m1} />
@@ -36,18 +37,16 @@
             {#each layers_list as {id, name, style} }
                 <li>
                     <label for={id}>{name}</label>
-                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name}>
-                    {#if lyr_selected.includes(id)}
-                    <Styling />
-                    {/if}
+                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name} >
+                    <!-- {#if lyr_selected.includes(id)} -->
+                    <Styling lyr={id} {style} />
+                    <!-- {/if} -->
                 </li>
-                
-            {/each}
+            {/each} 
         </ul>
     </form>
 </section>
-
-
+{/if}
 
 <style>
     #layers {
