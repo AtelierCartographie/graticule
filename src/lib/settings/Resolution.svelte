@@ -14,7 +14,7 @@
 </script>
 
 <section id="resolution">
-    <h2>Simplification</h2>
+    <h2>4. Simplification</h2>
     <Tip message={m1} />
     <form id="res-select">
         <h3>Détail des tracés</h3>

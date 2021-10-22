@@ -11,7 +11,7 @@
 </script>
 
 <section id="frame">
-    <h2>Cadrer</h2>
+    <h2>1. Cadrer</h2>
     <Tip message={m1} />
     <form id="reg-select">
         <label for="reg-select">Régions du monde</label>

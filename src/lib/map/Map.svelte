@@ -108,7 +108,7 @@
         /* display: flex; */
         position: relative;
         margin-top: var(--nav-h);
-        margin-left: calc(18rem + 2rem);
+        margin-left: calc(var(--settings-width) + 2rem);
         /* width: 100%; */
         /* height: 100%;
         margin: 1rem; */

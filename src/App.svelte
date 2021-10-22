@@ -40,6 +40,7 @@
 
   :global(body) { margin: 0;}
   :global(h2) {
+    margin-bottom: 0.5rem;
     font-size: var(--text-big);
     color: var(--dark-grey);
   }

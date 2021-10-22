@@ -29,7 +29,7 @@
 
 {#if canRender}
 <section id="layers">
-    <h2>Alimenter</h2>
+    <h2>3. Alimenter</h2>
     <Tip message={m1} />
     <form id="layers-select">
         <h3>Informations géographiques</h3>
@@ -59,6 +59,7 @@
     #layers-select li {
         display: flex;
         justify-content: flex-end;
+        flex-wrap: wrap;
     }
     #layers-select label {
         /* Taille du label */
@@ -67,6 +68,6 @@
     }
     #layers-select input {
         /* Taille de l'input par rapport au label (1x, 2x...) */
-        flex: 1;
+        flex: .1;
     }
 </style>

@@ -28,7 +28,7 @@
 </script>
 
 <section id="projection">
-    <h2>Projeter</h2>
+    <h2>2. Projeter</h2>
 
     <Tip message={m2} />
 

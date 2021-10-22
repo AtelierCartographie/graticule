@@ -14,10 +14,12 @@
         
     }
     .tip p {
-        border: 1px solid var(--dark-grey);
-        padding: 0.5rem;
+        /* border: 1px solid var(--dark-grey); */
+        margin-top: 0;
+        padding: 0;
         background: transparent;
         font-size: var(--text-medium);
+        font-style: italic;
         color: var(--dark-grey);
     }
 </style>

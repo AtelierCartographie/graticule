@@ -46,7 +46,7 @@
 
 </script>
 
-<button type="button" aria-expanded={isOpen} class="accordion" on:click={toggle}>
+<button type="button" aria-expanded={isOpen} on:click={toggle}>
     {#if isOpen}
     <!-- PICTO OUVERT -->
     <span class="icon">&minus;</span>
@@ -57,9 +57,9 @@
 </button>
 
 {#if isOpen}
-<section class:open-panel={isOpen} class="panel" transition:slide={{ duration: 300 }}>
+<section class="panel" transition:slide={{ duration: 300 }}>
     {#if style.includes("fill")}
-    <form id="form-styling">
+    <form class="form-style">
         <h3>Fond</h3>
         <ul>
             <li>
@@ -76,7 +76,7 @@
     {/if}
 
     {#if style.includes("stroke")}
-    <form id="form-styling">
+    <form class="form-style">
         <h3>Contour</h3>
         <ul>
             <li>
@@ -100,4 +100,34 @@
 {/if}
 
 <style>
+    section {
+        padding: 1rem;
+        background-color: var(--grey);
+    }
+    .form-style:first-of-type {
+        margin-bottom: 1rem;
+    }
+    .form-style h3 {
+        font-size: var(--text-small);
+        margin: 0;
+    }
+    .form-style ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .form-style li {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .form-style label {
+        /* Taille du label */
+        flex: 1;
+        font-size: var(--text-small);
+    }
+    .form-style input {
+        /* Taille de l'input par rapport au label (1x, 2x...) */
+        /* flex: 1; */
+    }
 </style>
