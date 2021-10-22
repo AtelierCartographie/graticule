@@ -38,9 +38,9 @@
                 <li>
                     <label for={id}>{name}</label>
                     <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name} >
-                    <!-- {#if lyr_selected.includes(id)} -->
+                    {#if lyr_selected.includes(id)}
                     <Styling lyr={id} {style} />
-                    <!-- {/if} -->
+                    {/if}
                 </li>
             {/each} 
         </ul>

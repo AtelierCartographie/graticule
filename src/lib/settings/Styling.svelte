@@ -1,6 +1,8 @@
 <script>
     import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
+    import rgb2hex from '../../assets/rgb2hex.js'
+
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
     // https://svelte.dev/repl/0aff293b94e44574a83a8271ba457136?version=3.29.4
@@ -8,21 +10,28 @@
 
     export let lyr, style
 
-    let isOpen = true
+    let isOpen = false
     const toggle = () => isOpen = !isOpen
     let fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth
+
+    // select("#basemap").append('rect').attr('id', "test").attr('x', 50).attr('y', 50).attr('width', 100).attr('height', 100)
 
     // 1. charger les inputs des styles de la carte
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
     // ATTENTION aux unités => width en 'px' et color en hexadecimal (voir utils observable)
-    $: fillColor     = select(`#${lyr}`).style("fill")
-    $: fillOpacity   = select(`#${lyr}`).style("fill-opacity")
-    $: strokeColor   = select(`#${lyr}`).style("stroke")
-    $: strokeOpacity = select(`#${lyr}`).style("stroke-opacity")
-    $: strokeWidth   = select(`#${lyr}`).style("stroke-width")
+    
+    $: fillColor     = rgb2hex( select(`g#basemap #${lyr}`).style("fill") )
+    $: fillOpacity   = select(`g#basemap #${lyr}`).style("fill-opacity")
+    $: strokeColor   = rgb2hex( select(`g#basemap #${lyr}`).style("stroke") )
+    $: strokeOpacity = select(`g#basemap #${lyr}`).style("stroke-opacity")
+    $: strokeWidth   = select(`g#basemap #${lyr}`).style("stroke-width")
     $: {
-        select(`#${lyr}`).style("fill-opacity", fillOpacity)
-        console.log(select(`#${lyr}`).style("fill"))
+        select(`g#basemap #${lyr}`)
+            .style("fill", fillColor)
+            .style("fill-opacity", fillOpacity)
+            .style("stroke", strokeColor)
+            .style("stroke-opacity", strokeOpacity)
+            .style("stroke-width", strokeWidth)
     }
 
     // 2. le faire une fois à l'ouverture de la boite de stylage
@@ -49,6 +58,7 @@
 
 {#if isOpen}
 <section class:open-panel={isOpen} class="panel" transition:slide={{ duration: 300 }}>
+    {#if style.includes("fill")}
     <form id="form-styling">
         <h3>Fond</h3>
         <ul>
@@ -63,6 +73,9 @@
             </li>
         </ul>
     </form>
+    {/if}
+
+    {#if style.includes("stroke")}
     <form id="form-styling">
         <h3>Contour</h3>
         <ul>
@@ -77,11 +90,12 @@
             </li>
             <li>
                 <label for="strokeWidth">Épaisseur</label>
-                <input type="range" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="10" step="0.1" >
-                <input type="number" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="10" step="0.1" >
+                <input type="range" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="6" step="0.1" >
+                <input type="number" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="6" step="0.1" >
             </li>
         </ul>
     </form>
+    {/if}
 </section>
 {/if}
 

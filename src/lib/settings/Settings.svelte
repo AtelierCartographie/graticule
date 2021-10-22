@@ -13,7 +13,10 @@
     <Projection />
     <Layers {canRender} />
     <Resolution />
-    <Download />
+    <section id="download">
+      <Download />
+    </section>
+    
 </div>
 
 
@@ -44,5 +47,8 @@
       bottom: var(--footer-height);
       height: 4rem;
       background: linear-gradient(to bottom,rgba(249, 249, 249, 0) 0%,rgba(249, 249, 249, .7) 50%,rgba(249, 249, 249, 1) 100%);
+    }
+    #download {
+        margin-bottom: var(--step-gap);
     }
 </style>
