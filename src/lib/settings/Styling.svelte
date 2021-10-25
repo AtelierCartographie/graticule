@@ -49,10 +49,10 @@
 <button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
     {#if isOpen}
     <!-- PICTO OUVERT -->
-    <span class="icon">&minus;</span>
+    <span class="material-icons">settings</span>
     {:else}
     <!-- PICTO FERMÉ -->
-    <span class="icon">&plus;</span>
+    <span class="material-icons">settings</span>
     {/if}
 </button>
 
@@ -104,6 +104,16 @@
         padding: 1rem;
         background-color: var(--grey);
     }
+
+    button {
+        background-color: transparent;
+        border: 0;
+        color: var(--dark-grey);
+    }
+    button:hover, button:hover[aria-expanded="true"] { color: var(--accent-color); }
+    button[aria-expanded="true"] { color: var(--accent-color-light);}
+    button:disabled { color: var(--grey); }
+    
     .form-style:first-of-type {
         margin-bottom: 1rem;
     }

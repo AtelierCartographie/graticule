@@ -7,11 +7,11 @@
     <nav role="navigation" id="topbar">
         <h1>#Cartofond</h1>
         <ol>
-            <li>1. Cadrer</li>
-            <li>2. Projeter</li>
-            <li>3. Alimenter</li>
-            <li>4. Simplifier</li>
-            <li>5. Mettre en page</li>
+            <li><span class="material-icons">crop</span> Cadrer</li>
+            <li><span class="material-icons">language</span> Projeter</li>
+            <li><span class="material-icons">layers</span> Alimenter</li>
+            <li><span class="material-icons">timeline</span> Simplifier</li>
+            <li><span class="material-icons">grid_3x3</span> Mettre en page</li>
         </ol>
         <button>Télécharger</button>
     </nav>
