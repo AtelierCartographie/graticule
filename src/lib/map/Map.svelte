@@ -88,7 +88,7 @@
                 
             <style>
                 #map-svg { background-color: white; }
-                #cadrage { fill: none; stroke: blue; }
+                #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 0.5; }
                 #outline { fill: none; stroke: #ccc; stroke-width: 0.5; }
                 #ocean { fill: AliceBlue; fill-opacity: .5; stroke: none; }
                 #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }

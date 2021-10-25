@@ -35,7 +35,10 @@
 
     --dark-grey: #4B4B4B;
     --grey: #E5E5E5;
-    --light-grey: #f9f9f9c5;
+    --light-grey: #f9f9f9;
+
+    --accent-color: #ff3b00;
+    --accent-color-light: #ffd8cc;
   }
 
   :global(body) { margin: 0;}
@@ -47,6 +50,10 @@
   :global(h3) {
     font-size: var(--text-medium);
     color: var(--dark-grey);
+  }
+
+  :global(input) {
+    accent-color: var(--accent-color);
   }
 
   main {

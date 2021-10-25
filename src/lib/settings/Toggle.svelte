@@ -193,7 +193,7 @@
     *    pale green instead. 
     */
     .Toggle__input:checked + .Toggle__display {
-        background-color: #e3f5eb; /* 1 */
+        background-color: var(--accent-color-light); /* 1 */
     }
 
     /**
@@ -233,6 +233,6 @@
     }
 
     .Toggle__icon--checkmark {
-        color: #1fb978;
+        color: var(--accent-color);
     }
 </style>

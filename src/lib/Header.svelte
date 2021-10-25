@@ -7,11 +7,11 @@
     <nav role="navigation" id="topbar">
         <h1>#Cartofond</h1>
         <ol>
-            <li>Cadrer</li>
-            <li>Projeter</li>
-            <li>Alimenter</li>
-            <li>Simplifier</li>
-            <li>Mettre en page</li>
+            <li>1. Cadrer</li>
+            <li>2. Projeter</li>
+            <li>3. Alimenter</li>
+            <li>4. Simplifier</li>
+            <li>5. Mettre en page</li>
         </ol>
         <button>Télécharger</button>
     </nav>

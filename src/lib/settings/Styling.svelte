@@ -18,20 +18,20 @@
 
     // 1. charger les inputs des styles de la carte
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
-    // ATTENTION aux unités => width en 'px' et color en hexadecimal (voir utils observable)
+    // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb3hex voir mon notebook utils observable)
     
     $: fillColor     = rgb2hex( select(`g#basemap #${lyr}`).style("fill") )
     $: fillOpacity   = select(`g#basemap #${lyr}`).style("fill-opacity")
     $: strokeColor   = rgb2hex( select(`g#basemap #${lyr}`).style("stroke") )
     $: strokeOpacity = select(`g#basemap #${lyr}`).style("stroke-opacity")
-    $: strokeWidth   = select(`g#basemap #${lyr}`).style("stroke-width")
+    $: strokeWidth   = parseFloat( select(`g#basemap #${lyr}`).style("stroke-width") )
     $: {
         select(`g#basemap #${lyr}`)
             .style("fill", fillColor)
             .style("fill-opacity", fillOpacity)
             .style("stroke", strokeColor)
             .style("stroke-opacity", strokeOpacity)
-            .style("stroke-width", strokeWidth)
+            .style("stroke-width", `${strokeWidth}px`)
     }
 
     // 2. le faire une fois à l'ouverture de la boite de stylage
@@ -90,8 +90,8 @@
             </li>
             <li>
                 <label for="strokeWidth">Épaisseur</label>
-                <input type="range" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="6" step="0.1" >
-                <input type="number" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="6" step="0.1" >
+                <input type="range" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
+                <input type="number" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
             </li>
         </ul>
     </form>
