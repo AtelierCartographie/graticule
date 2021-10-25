@@ -90,7 +90,7 @@
                 #map-svg { background-color: white; }
                 #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 0.5; }
                 #outline { fill: none; stroke: #ccc; stroke-width: 0.5; }
-                #ocean { fill: AliceBlue; fill-opacity: .5; stroke: none; }
+                #ocean { fill: AliceBlue; stroke: none; }
                 #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
                 #land { fill: lightgrey; stroke: none; }
                 #borders { fill: none; stroke: white; stroke-width: 0.5; }

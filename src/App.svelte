@@ -38,6 +38,7 @@
     --light-grey: #f9f9f9;
 
     --accent-color: #ff3b00;
+    --accent-color-medium: rgb(255, 169, 143);
     --accent-color-light: #ffd8cc;
   }
 
@@ -56,8 +57,9 @@
     accent-color: var(--accent-color);
   }
 
+  /* -------------------------- */
   /* PICTOGRAMME MATERIAL ICONS */
-@font-face {
+  @font-face {
     font-family: 'Material Icons';
     font-style: normal;
     font-weight: 400;
@@ -91,7 +93,8 @@
     /* Support for IE. */
     font-feature-settings: 'liga';
   }
-
+  /* -------------------------- */
+  
   main {
     /* display: flex; */
     /* flex-direction: row; */

@@ -111,9 +111,9 @@
         color: var(--dark-grey);
     }
     button:hover, button:hover[aria-expanded="true"] { color: var(--accent-color); }
-    button[aria-expanded="true"] { color: var(--accent-color-light);}
+    button[aria-expanded="true"] { color: var(--accent-color-medium);}
     button:disabled { color: var(--grey); }
-    
+
     .form-style:first-of-type {
         margin-bottom: 1rem;
     }
