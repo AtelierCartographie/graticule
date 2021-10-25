@@ -8,7 +8,7 @@
     // https://svelte.dev/repl/0aff293b94e44574a83a8271ba457136?version=3.29.4
     // https://svelte.dev/repl/74ff0da7cb074d4788b996e2d91258d3?version=3.23.0
 
-    export let lyr, style
+    export let lyr, style, disabled
 
     let isOpen = false
     const toggle = () => isOpen = !isOpen
@@ -46,7 +46,7 @@
 
 </script>
 
-<button type="button" aria-expanded={isOpen} on:click={toggle}>
+<button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
     {#if isOpen}
     <!-- PICTO OUVERT -->
     <span class="icon">&minus;</span>

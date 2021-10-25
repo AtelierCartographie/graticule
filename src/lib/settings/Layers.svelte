@@ -3,6 +3,7 @@
     import { onMount } from 'svelte'
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
+    import Toggle from './Toggle.svelte'
     import layers_list from '../../assets/layers_list.js'
 
     export let canRender
@@ -36,11 +37,10 @@
         <ul>
             {#each layers_list as {id, name, style} }
                 <li>
-                    <label for={id}>{name}</label>
-                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name} >
-                    {#if lyr_selected.includes(id)}
-                    <Styling lyr={id} {style} />
-                    {/if}
+                    <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
+                    <!-- <label for={id}>{name}</label>
+                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name} > -->
+                    <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true} />
                 </li>
             {/each} 
         </ul>
@@ -58,12 +58,14 @@
     }
     #layers-select li {
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         flex-wrap: wrap;
+        gap: 1rem;
     }
-    #layers-select label {
+    :global(#layers-select .Toggle__label) {
         /* Taille du label */
-        flex: 1;
+        /* flex: 1; */
+        width: 10rem;
         font-size: var(--text-medium);
     }
     #layers-select input {
