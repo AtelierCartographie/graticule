@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte'
     import { regbbox } from '../../stores.js'
 
     import { zoom, zoomIdentity } from 'd3-zoom'
@@ -12,27 +13,10 @@
     let bbox
     const unsubscribe = regbbox.subscribe(d => { bbox = d })
     
-    
-    // TODO : faire fonctionner sans conflit 'add_zoom' et 'zoomRegion'
-    // éviter les répétitions
-    function addZoom() {
-        // sélectionne le groupe où s'applique le pan and zoom
-            const g = d3.select(svgID).select("g#zoom") 
-
-        // paramètres du pan and zoom
-        const zoom2 = d3.zoom()
-            .scaleExtent([0.5, 10]) // min, max du zoom
-            .translateExtent([[0, 0], [width, height]]) // bornes extérieures du translate
-            .on("zoom", zoomed)
-
-
-        // pendant le pan and zoom
-        function zoomed(event) {
-            const {transform} = event;
-            g.attr("transform", transform);
-        }
-
-        d3.select(svgID).call(zoom2);
+    // pendant le pan and zoom
+    function zoomed(event) {
+        const {transform} = event;
+        select("g#zoom").attr("transform", transform);
     }
 
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
@@ -45,13 +29,6 @@
             .scaleExtent([0.5, 10]) // min, max du zoom
             .translateExtent([[0, 0], [width, height]]) // bornes extérieures du translate
             .on("zoom", zoomed)
-
-
-        // pendant le pan and zoom
-        function zoomed(event) {
-            const {transform} = event;
-            g.attr("transform", transform);
-        }
 
         // Récupère les coordonnées en pixel de la bbox d'un geosjon
         const [[x0, y0], [x1, y1]] = path.bounds(b)
@@ -69,9 +46,26 @@
         }
     }
     $: zoomRegion(bbox)
+
+    onMount( () => {
+        // sélectionne le groupe où s'applique le pan and zoom
+        const g = d3.select(svgID).select("g#zoom") 
+
+        // paramètres du pan and zoom
+        const zoom2 = d3.zoom()
+            .scaleExtent([0.5, 10]) // min, max du zoom
+            // .scaleTo(4)
+            .translateExtent([[0, 0], [width, height]]) // bornes extérieures du translate
+            .on("zoom", zoomed)
+
+        // applique le zoom sur le groupe "g#zoom" plutôt que l'ensemble du svg
+        // => limite le zoom à l'intérieur du cadrage (via d3-brush)
+        g.call(zoom2).call(zoom2);
+
+    })
         
 </script>
 
-<g id="zoom" on:wheel={addZoom}>
+<g id="zoom" >
     <slot></slot>
 </g>

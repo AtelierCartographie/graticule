@@ -22,15 +22,15 @@
     // y1 - y0
     // $: height = Math.ceil(bbox[1][1] - bbox[0][1])
 
-    let rx, ry, rw, rh
 
-    function brushed({selection: [[x0, y0], [x1, y1]]}) {
+    let rx, ry, rw, rh
+    function brushed( { selection: [[x0, y0], [x1, y1]] } ) {
         // passer les coordonnées du brush courant
         // au rectangle de cadrage => clipPath #clip-cadrage
-        rx = x0
-        ry = y0
-        rw = x1 - x0
-        rh = y1 - y0
+        rx = x0 - 5
+        ry = y0 - 5
+        rw = x1 - x0 + 10
+        rh = y1 - y0 + 10
     }
 
     let Brush = brush()
@@ -38,7 +38,9 @@
           && !event.button
           && !select(event.target).classed("selection"))
         .handleSize(24)
+        // .on("start", () => select('#zoom').on("mousedown.zoom", null))
         .on("brush", brushed)
+        // .on("end", () => select('#zoom').attr("pointer-events", "all"))
 
     // $: height = document.getElementById("svg-container").clientHeight
     // $: console.log(height)
@@ -49,13 +51,15 @@
         let gBrush = select('#gBrush')
         gBrush
             .call(Brush)
-            .call(Brush.move, [[12, 12], [width-12, height-12]])
+            .call(Brush.move, [[5, 5], [width-10, height-10]])
             
-        gBrush.select(".overlay").remove() // empêche la création d'un nouveau brush
+        gBrush.select(".overlay").remove()  // empêche la création d'un nouveau brush
         gBrush.select(".selection")
+            .attr("id", "cadrage")
             .attr("fill", "none")
             .attr("stroke", "none")
-            .attr("cursor", "auto") // rétablit valeur par défaut
+            .attr("cursor", "auto")         // rétablit valeur par défaut
+            .attr("pointer-events", "none") // ne bloque/cache pas les events en dessous (ici le zoom)
     })
 </script>
 
@@ -65,32 +69,23 @@
 
         <svg id="map-svg" viewBox="0 0 {width} {height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
-                <path id="outline" d="{path(outline)}" />
-                <clipPath id="clip"><use xlink:href="#outline" /></clipPath>
+                <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
                 <clipPath id="clip-cadrage">
                     <rect x={rx} y={ry} width={rw} height={rh} />
                 </clipPath>
             </defs>
 
-            <g id="gBrush"></g>
-
-            <g style="clip-path: url(#clip-cadrage)">
-                <Zoom svgID="#map-svg" {width} {height} {path} >
-                    
+            <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
+                <Zoom svgID="#map-svg" {width} {height} {path} >          
                     <Basemap {path} {outline} />
-
-                    <use xlink:href="#outline" id="outline" />
-
                 </Zoom>
             </g>
-            
-            <rect id="cadrage" x={rx} y={ry} width={rw} height={rh} />
+            <g id="gBrush"></g>
                 
             <style>
                 #map-svg { background-color: white; }
-                #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 0.5; }
-                #outline { fill: none; stroke: #ccc; stroke-width: 0.5; }
-                #ocean { fill: AliceBlue; stroke: none; }
+                #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
+                #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
                 #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
                 #land { fill: lightgrey; stroke: none; }
                 #borders { fill: none; stroke: white; stroke-width: 0.5; }
@@ -109,6 +104,7 @@
         position: relative;
         margin-top: var(--nav-h);
         margin-left: calc(var(--settings-width) + 2rem);
+        padding: 1rem;
         /* width: 100%; */
         /* height: 100%;
         margin: 1rem; */
