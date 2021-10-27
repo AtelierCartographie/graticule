@@ -10,8 +10,8 @@
     $: regbbox.set(reg_bbox.find( d => d.id === reg_selected).bbox)
 </script>
 
-<section id="frame">
-    <h2>1. Cadrer</h2>
+<section id="frame" class="settings-section">
+    <h2><span class="material-icons">crop</span> Cadrer</h2>
     <Tip message={m1} />
     <form id="reg-select">
         <label for="reg-select">Régions du monde</label>
@@ -22,14 +22,12 @@
             {/each}
         </select>
     </form>
+    <a href="#projection" class="next-section"><span class="material-icons">expand_more</span></a>
 </section>
 
 
 
 <style>
-    #frame {
-        margin-bottom: var(--step-gap);
-    }
     #reg-select label {
         font-size: var(--text-medium);
         font-weight: bold;

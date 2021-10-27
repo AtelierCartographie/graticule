@@ -27,8 +27,8 @@
     let m2 = "Choisir parmi la liste de projection et régler si besoin les paramètres."
 </script>
 
-<section id="projection">
-    <h2>2. Projeter</h2>
+<section id="projection" class="settings-section">
+    <h2><span class="material-icons">language</span> Projeter</h2>
 
     <Tip message={m2} />
 
@@ -83,14 +83,12 @@
             {/if}
         </ul>
     </form>
+    <a href="#layers" class="next-section"><span class="material-icons">expand_more</span></a>
 </section>
 
 
 
 <style>
-    #projection {
-        margin-bottom: var(--step-gap);
-    }
     #proj-select label {
         font-size: var(--text-medium);
         font-weight: bold;

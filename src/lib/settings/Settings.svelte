@@ -1,4 +1,5 @@
 <script>
+    import { select } from 'd3-selection'
     import Frame from './Frame.svelte'
     import Layers from './Layers.svelte'
     import Projection from './Projection.svelte'
@@ -6,6 +7,7 @@
     import Download from '../Download.svelte'
 
     export let canRender
+
 </script>
 
 <div id="settings">
@@ -13,8 +15,13 @@
     <Projection />
     <Layers {canRender} />
     <Resolution />
-    <section id="download">
-      <Download />
+    <section id="layout" class="settings-section">
+        <h2><span class="material-icons">grid_3x3</span> Mise en page</h2>
+        <a href="#download" class="next-section"><span class="material-icons">expand_more</span></a>
+    </section>
+    <section id="download" class="settings-section">
+        <h2><span class="material-icons">download</span> Télécharger</h2>
+        <Download />
     </section>
     
 </div>
@@ -24,31 +31,45 @@
     #settings {
         position: fixed;
         width: var(--settings-width);
+        scroll-behavior: smooth;
         overflow-y: scroll;
         overflow: -moz-scrollbars-none;
         top: var(--nav-h);
         bottom: var(--footer-height);
-        padding: 1rem;
-        /* height: 100vh; */
-        /* margin-top: var(--nav-h); */
-        /* flex-grow: 0;
-        flex-shrink: 0;
-        flex-basis: 300px; */
-        /* display: flex;
-        flex-direction: column; */
+        padding: 0 1rem 0 1rem;
         background-color:var(--light-grey);
     }
+   
     #settings::-webkit-scrollbar { width: 0 !important; }
-    #settings::after {
-      content: "";
-      position: fixed;
-      width: calc(var(--settings-width) + 2rem);
-      left: 0;
-      bottom: var(--footer-height);
-      height: 4rem;
-      background: linear-gradient(to bottom,rgba(249, 249, 249, 0) 0%,rgba(249, 249, 249, .7) 50%,rgba(249, 249, 249, 1) 100%);
-    }
-    #download {
+    /* #settings::after {
+        content: "";
+        position: fixed;
+        width: calc(var(--settings-width) + 2rem);
+        left: 0;
+        bottom: var(--footer-height);
+        height: 4rem;
+        background: linear-gradient(to bottom,rgba(249, 249, 249, 0) 0%,rgba(249, 249, 249, .7) 50%,rgba(249, 249, 249, 1) 100%);
+    } */
+
+    :global(.settings-section){
         margin-bottom: var(--step-gap);
+        height: 90%;
+        padding-top: 1rem;
+        display: flex;
+        flex-flow: column nowrap;
+        flex: 1;
+    }
+    :global(.settings-section a.next-section) {
+        align-self: center;
+        margin-top: auto;
+        text-decoration: none;
+        /* color: var(--dark-grey); */
+    }
+    :global(.settings-section a.next-section .material-icons) {
+        font-size: 54px;
+        color: var(--dark-grey);
+    }
+    :global(.settings-section a.next-section .material-icons:hover) {
+        color: var(--accent-color);
     }
 </style>

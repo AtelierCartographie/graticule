@@ -47,13 +47,7 @@
 </script>
 
 <button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
-    {#if isOpen}
-    <!-- PICTO OUVERT -->
     <span class="material-icons">settings</span>
-    {:else}
-    <!-- PICTO FERMÉ -->
-    <span class="material-icons">settings</span>
-    {/if}
 </button>
 
 {#if isOpen}

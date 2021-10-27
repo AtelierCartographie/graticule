@@ -25,7 +25,7 @@
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
     --nav-h: 3.5rem;
-    --settings-width: 18rem;
+    --settings-width: 16rem;
     --footer-height: 7rem;
     --step-gap: 6rem;
 
@@ -65,7 +65,7 @@
     font-weight: 400;
     src: local('Material Icons'),
       local('MaterialIcons-Regular'),
-      url("./MaterialIcons-Regular.woff2") format('woff2');
+      url("/MaterialIcons-Regular.woff2") format('woff2');
   }
 
   :global(.material-icons) {
@@ -94,7 +94,7 @@
     font-feature-settings: 'liga';
   }
   /* -------------------------- */
-  
+
   main {
     /* display: flex; */
     /* flex-direction: row; */

@@ -5,15 +5,15 @@
 
 <header role="banner">
     <nav role="navigation" id="topbar">
-        <h1>#Cartofond</h1>
+        <h1><a href="#frame">#Cartofond</a></h1>
         <ol>
-            <li><span class="material-icons">crop</span> Cadrer</li>
-            <li><span class="material-icons">language</span> Projeter</li>
-            <li><span class="material-icons">layers</span> Alimenter</li>
-            <li><span class="material-icons">timeline</span> Simplifier</li>
-            <li><span class="material-icons">grid_3x3</span> Mettre en page</li>
+            <li> <a href="#frame" class="header-steps"><span class="material-icons">crop</span> Cadrer</a> </li>
+            <li> <a href="#projection"class="header-steps" ><span class="material-icons">language</span> Projeter</a> </li>
+            <li> <a href="#layers" class="header-steps"><span class="material-icons">layers</span> Alimenter</a> </li>
+            <li> <a href="#resolution" class="header-steps"><span class="material-icons">timeline</span> Simplifier</a> </li>
+            <li> <a href="#layout" class="header-steps"><span class="material-icons">grid_3x3</span> Mettre en page</a> </li>
+            <li> <a href="#download" class="header-steps"><span class="material-icons">file_download</span> Télécharger</a> </li>
         </ol>
-        <button>Télécharger</button>
     </nav>
 </header>
 
@@ -23,10 +23,8 @@
         top: 0;
         width: 100vw;
         height: var(--nav-h);
-        /* padding: 0 10px 0 10px; */
         display: flex;
         align-items: center;
-        justify-content: space-between;
         background-color: white;
         background-color: white;
         box-shadow: 0 4px 4px rgb(0 0 0 / 6%);
@@ -38,21 +36,44 @@
         list-style-type: none;
         padding: 0;
         align-items: center;
-        justify-content: space-between;
+        gap: 2rem;
+        /* justify-content: space-between; */
     }
     #topbar h1 { 
         text-align: center;;
-        width: 300px;
+        width: calc(var(--settings-width) + 2rem) ;
+    }
+    #topbar h1 a {
+        all: inherit;
+        cursor: pointer;
     }
     #topbar li {
         font-size: var(--text-medium);
         font-weight: bold;
-        color: var(--dark-grey);
         background-color: var(--light-grey);
         padding: 0.5rem;
-        margin: 0 1rem;
+        /* margin: 0 1rem; */
     }
-    #topbar button {
-        right: 0;
+    #topbar li:hover {
+        background-color: var(--accent-color-light);
+    }
+    a.header-steps {
+        display: block;
+        text-decoration: none;
+        color: var(--dark-grey);
+    }
+    a.header-steps:hover {
+        color: var(--accent-color);
+    }
+
+    @media (max-width: 1200px) {
+        #topbar li { font-size: var(--text-small); } 
+        .material-icons { font-size: 18px; }
+    }
+    @media (max-width: 1100px) {
+        #topbar ol { gap: 1rem; }
+    }
+    @media (max-width: 1000px) {
+        #topbar ol { gap: .5rem; }
     }
 </style>

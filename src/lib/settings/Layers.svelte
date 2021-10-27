@@ -29,8 +29,8 @@
 </script>
 
 {#if canRender}
-<section id="layers">
-    <h2>3. Alimenter</h2>
+<section id="layers" class="settings-section">
+    <h2><span class="material-icons">layers</span> Alimenter</h2>
     <Tip message={m1} />
     <form id="layers-select">
         <h3>Informations géographiques</h3>
@@ -45,13 +45,11 @@
             {/each} 
         </ul>
     </form>
+    <a href="#resolution" class="next-section"><span class="material-icons">expand_more</span></a>
 </section>
 {/if}
 
 <style>
-    #layers {
-        margin-bottom: var(--step-gap);
-    }
     #layers-select ul {
         list-style-type: none;
         padding: 0;
@@ -65,11 +63,7 @@
     :global(#layers-select .Toggle__label) {
         /* Taille du label */
         /* flex: 1; */
-        width: 10rem;
+        width: 9rem;
         font-size: var(--text-medium);
-    }
-    #layers-select input {
-        /* Taille de l'input par rapport au label (1x, 2x...) */
-        flex: .1;
     }
 </style>

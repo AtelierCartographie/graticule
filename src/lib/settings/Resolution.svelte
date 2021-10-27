@@ -13,8 +13,8 @@
     let res_selected = ["Normal"]
 </script>
 
-<section id="resolution">
-    <h2>4. Simplification</h2>
+<section id="resolution" class="settings-section">
+    <h2><span class="material-icons">timeline</span> Simplification</h2>
     <Tip message={m1} />
     <form id="res-select">
         <h3>Détail des tracés</h3>
@@ -28,13 +28,11 @@
             {/each}
         </ul>
     </form>
+    <a href="#layout" class="next-section"><span class="material-icons">expand_more</span></a>
 </section>
 
 
 <style>
-    #resolution {
-        margin-bottom: var(--step-gap);
-    }
     #res-select ul {
         list-style-type: none;
         padding: 0;
