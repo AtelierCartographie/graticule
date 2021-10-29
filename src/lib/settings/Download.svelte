@@ -1,6 +1,17 @@
 <script>
     import { onMount } from 'svelte'
     import { select } from 'd3-selection'
+    import Tip from './Tip.svelte'
+
+    //Tips message
+    let m1 = "SVG est un format vectoriel permettant l'édition et le changement de dimensions sans dégrader la résolution"
+
+    //
+    const today = new Date().toLocaleString("fr", {
+        "day": "numeric",
+        "month": "numeric",
+        "year": "numeric"
+    })
 
     let size
 
@@ -12,13 +23,17 @@
         const d3svg = select(svg)
         d3svg.selectAll(".hidden").remove()
 
-        // corrige le lien du clip-path
-        d3svg.select('g#basemap').attr('clip-path', '#clip')
+        // supprime le groupe d'interaction g#brush
+        d3svg.selectAll("#gBrush").remove()
 
-        // dégrouper g#zoom =>  puis les ré-inserts
+        // stock le zoom appliqué par l'utilisateur
+        let transform = d3svg.select('g#zoom').attr('transform')
+
+        // dégrouper g#zoom =>  puis les ré-inserts dans g#gCadrage
         const zoomChildren = d3svg.select('g#zoom').selectChildren().remove().nodes()   // sélectionner tous les enfants
         d3svg.select('g#zoom').remove()                                                 // supprimer g#zoom
-        zoomChildren.forEach( node => d3svg.append(() => node))                         // réinsérer les enfants
+        zoomChildren.forEach( node => d3svg.select('g#gCadrage').append(() => node))    // réinsérer les enfants
+        d3svg.select('g#basemap').attr('transform', transform)                          // réapplique le zoom utilisateur
         
         return svg
     }
@@ -39,20 +54,21 @@
 
     }
 
-    const today = new Date().toLocaleString("fr", {
-          "day": "numeric",
-          "month": "numeric",
-          "year": "numeric"
-        })
-
+    // Comment rendre dynamique la préparation du téléchargement pour connaitre la taille du fichier ?
+    // à chaque changement de selected layers ?
     onMount( () => {
         downloadSVG()
     })
 </script>
 
-<a id="download_svg" download={`basemap-${today}.svg`} on:click={downloadSVG}>
-    <button>Télécharger la carte au format svg (~ {size} Mo)</button>
-</a>
+<section id="download" class="settings-section">
+    <h2><span class="material-icons">download</span> Télécharger</h2>
+    <Tip message={m1} />
+    <a id="download_svg" download={`basemap-${today}.svg`} on:click={downloadSVG}>
+        <button>Télécharger la carte au format svg (~ {size} Mo)</button>
+    </a>
+</section>
+
 
 <style>
 

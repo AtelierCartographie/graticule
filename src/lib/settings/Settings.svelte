@@ -4,7 +4,7 @@
     import Layers from './Layers.svelte'
     import Projection from './Projection.svelte'
     import Resolution from './Resolution.svelte'
-    import Download from '../Download.svelte'
+    import Download from './Download.svelte'
 
     export let canRender
 
@@ -19,10 +19,7 @@
         <h2><span class="material-icons">grid_3x3</span> Mise en page</h2>
         <a href="#download" class="next-section"><span class="material-icons">expand_more</span></a>
     </section>
-    <section id="download" class="settings-section">
-        <h2><span class="material-icons">download</span> Télécharger</h2>
-        <Download />
-    </section>
+    <Download />
     
 </div>
 
