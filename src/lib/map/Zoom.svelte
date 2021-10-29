@@ -94,3 +94,9 @@
 <g id="zoom" >
     <slot></slot>
 </g>
+
+<style>
+    g#zoom {
+        cursor: grab;
+    }
+</style>

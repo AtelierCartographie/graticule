@@ -8,7 +8,7 @@
     import Basemap from './Basemap.svelte'
     import Zoom from './Zoom.svelte'
 
-    let width = 500, height = 400
+    let width = 900, height = 600
     let projection
     const unsubscribe = proj.subscribe(value => { projection = value })
 
@@ -26,7 +26,7 @@
     let rx, ry, rw, rh
     function brushed( { selection: [[x0, y0], [x1, y1]] } ) {
         // passer les coordonnées du brush courant
-        // au rectangle de cadrage => clipPath #clip-cadrage
+        // au clip de cadrage => clipPath #clip-cadrage
         rx = x0 - 5
         ry = y0 - 5
         rw = x1 - x0 + 10
@@ -38,15 +38,9 @@
           && !event.button
           && !select(event.target).classed("selection"))
         .handleSize(24)
-        // .on("start", () => select('#zoom').on("mousedown.zoom", null))
         .on("brush", brushed)
-        // .on("end", () => select('#zoom').attr("pointer-events", "all"))
-
-    // $: height = document.getElementById("svg-container").clientHeight
-    // $: console.log(height)
 
     onMount( () => {
-        // height = document.getElementById("svg-container").clientHeight
         // initier le cadrage avec d3-brush
         let gBrush = select('#gBrush')
         gBrush
@@ -65,9 +59,7 @@
 
 <figure id="svg-container">
 
-    {#if width}
-
-        <svg id="map-svg" viewBox="0 0 {width} {height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg id="map-svg" width="100%" height="100%" viewBox="0 0 {width} {height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
                 <clipPath id="clip-cadrage">
@@ -94,8 +86,6 @@
             </style>
         </svg>
 
-    {/if}
-
 </figure>
 
 <style>
@@ -106,7 +96,7 @@
         margin-left: calc(var(--settings-width) + 2rem);
         padding: 1rem;
         /* width: 100%; */
-        /* height: 100%;
-        margin: 1rem; */
+        height: calc(100vh - var(--nav-h) - 2rem);
+        /* margin: 1rem; */
     }
 </style>

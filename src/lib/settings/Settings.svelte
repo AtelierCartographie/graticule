@@ -15,10 +15,10 @@
     <Projection />
     <Layers {canRender} />
     <Resolution />
-    <section id="layout" class="settings-section">
+    <!-- <section id="layout" class="settings-section">
         <h2><span class="material-icons">grid_3x3</span> Mise en page</h2>
         <a href="#download" class="next-section"><span class="material-icons">expand_more</span></a>
-    </section>
+    </section> -->
     <Download />
     
 </div>

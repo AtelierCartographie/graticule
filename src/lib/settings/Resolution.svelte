@@ -28,7 +28,7 @@
             {/each}
         </ul>
     </form>
-    <a href="#layout" class="next-section"><span class="material-icons">expand_more</span></a>
+    <a href="#download" class="next-section"><span class="material-icons">expand_more</span></a>
 </section>
 
 

@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from 'svelte'
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
 
@@ -13,7 +12,8 @@
         "year": "numeric"
     })
 
-    let size
+    // stock la taille et l'url de l'export svg en blob
+    let blobInfo = {}
 
     // Voir le travail d'Arnaud
     // https://github.com/AtelierCartographie/Khartis/blob/master/app/utils/svg-exporter.js
@@ -39,13 +39,12 @@
     }
 
     function downloadSVG() {
-        // ToDo, dégrouper les enfants de g#zoom
         const svgHtml = cleaningSVG()
         const svgData = new XMLSerializer().serializeToString(svgHtml)
         const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"})
         const svgUrl = URL.createObjectURL(svgBlob)
-        select('#download_svg').attr('href', svgUrl)
-        return size = (svgBlob.size / 1024 / 1024).toFixed(0) // octet => Ko => Mo
+        const size = (svgBlob.size / 1024 / 1024).toFixed(0) // octet => Ko => Mo
+        return blobInfo = {size, url: svgUrl}
     }
 
     // https://observablehq.com/@mbostock/saving-svg
@@ -54,22 +53,31 @@
 
     }
 
+    function printSVG(url) {
+        let win = window.open(url, '__blank')
+        win.addEventListener('afterprint', event => event.target.close() )
+        win.print()
+    }
+    
     // Comment rendre dynamique la préparation du téléchargement pour connaitre la taille du fichier ?
-    // à chaque changement de selected layers ?
-    onMount( () => {
-        downloadSVG()
-    })
+    // à chaque changement de selected layers ? car 'onMount' ne suffit pas
 </script>
 
 <section id="download" class="settings-section">
     <h2><span class="material-icons">download</span> Télécharger</h2>
     <Tip message={m1} />
-    <a id="download_svg" download={`basemap-${today}.svg`} on:click={downloadSVG}>
-        <button>Télécharger la carte au format svg (~ {size} Mo)</button>
+    <a id="download_svg" download={`basemap-${today}.svg`} href={blobInfo.url} on:click={downloadSVG}>
+        <button><span class="material-icons">download_for_offline</span> Télécharger (svg)</button>
+    </a>
+
+    <a id="print_svg" on:click={downloadSVG} on:click={printSVG(blobInfo.url)}>
+        <button><span class="material-icons">print</span> Imprimer</button>
     </a>
 </section>
 
 
 <style>
-
+    section#download a {
+        margin-bottom: 1rem;
+    }
 </style>
