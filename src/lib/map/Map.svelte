@@ -55,48 +55,72 @@
             .attr("cursor", "auto")         // rétablit valeur par défaut
             .attr("pointer-events", "none") // ne bloque/cache pas les events en dessous (ici le zoom)
     })
+    $: height
 </script>
 
 <figure id="svg-container">
 
-        <svg id="map-svg" width="100%" height="100%" viewBox="0 0 {width} {height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs>
-                <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
-                <clipPath id="clip-cadrage">
-                    <rect x={rx} y={ry} width={rw} height={rh} />
-                </clipPath>
-            </defs>
+    <svg id="map-svg" width="100%" height="100%" viewBox="0 0 {width} {height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
+            <clipPath id="clip-cadrage">
+                <rect x={rx} y={ry} width={rw} height={rh} />
+            </clipPath>
+        </defs>
 
-            <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
-                <Zoom svgID="#map-svg" {width} {height} {path} >          
-                    <Basemap {path} {outline} />
-                </Zoom>
-            </g>
-            <g id="gBrush"></g>
-                
-            <style>
-                #map-svg { background-color: white; }
-                #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
-                #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
-                #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
-                #land { fill: lightgrey; stroke: none; }
-                #borders { fill: none; stroke: white; stroke-width: 0.5; }
-                #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
-                #urban { fill: black; stroke: none; }
-            </style>
-        </svg>
+        <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
+            <Zoom svgID="#map-svg" {width} {height} {path} >          
+                <Basemap {path} {outline} />
+            </Zoom>
+        </g>
+        <g id="gBrush"></g>
+            
+        <style>
+            #map-svg { background-color: white; }
+            #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
+            #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
+            #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
+            #land { fill: lightgrey; stroke: none; }
+            #borders { fill: none; stroke: white; stroke-width: 0.5; }
+            #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
+            #urban { fill: black; stroke: none; }
+        </style>
+    </svg>
 
+    <div id="zoom-button">
+        <button><span class="material-icons">add</span></button>
+        <button><span class="material-icons">remove</span></button>
+    </div>
 </figure>
 
 <style>
     #svg-container {
-        /* display: flex; */
+        all: inherit;
+        display: block;
         position: relative;
-        margin-top: var(--nav-h);
-        margin-left: calc(var(--settings-width) + 2rem);
+        flex: 1;
         padding: 1rem;
-        /* width: 100%; */
-        height: calc(100vh - var(--nav-h) - 2rem);
-        /* margin: 1rem; */
+        height: calc(var(--content-h) - 2rem);
+    }
+
+    #zoom-button {
+        position: absolute;
+        top: 2em;
+        right: 2em;
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 2px;
+    }
+    #zoom-button button {
+        border: none;
+        box-shadow: 0 4px 4px rgb(0 0 0 / 20%);
+        background-color: var(--light-grey);
+        padding: .2rem;
+        border-radius: .2rem;
+    }
+    #zoom-button button:hover {
+        background-color: var(--accent-color-light);
+        color: var(--accent-color);
+        cursor: pointer;
     }
 </style>

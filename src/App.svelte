@@ -25,6 +25,7 @@
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
     --nav-h: 3.5rem;
+    --content-h: calc(100vh - var(--nav-h));
     --settings-width: 16rem;
     --footer-height: 7rem;
     --step-gap: 6rem;
@@ -55,6 +56,12 @@
 
   :global(input) {
     accent-color: var(--accent-color);
+  }
+
+  main {
+    display: flex;
+    flex-flow: row nowrap;
+    height: var(--content-h);
   }
 
   /* -------------------------- */
@@ -94,9 +101,4 @@
     font-feature-settings: 'liga';
   }
   /* -------------------------- */
-
-  main {
-    /* display: flex; */
-    /* flex-direction: row; */
-  }
 </style>

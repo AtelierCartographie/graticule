@@ -19,7 +19,7 @@
 
 <style>
     #topbar { 
-        position: fixed;
+        /* position: fixed; */
         top: 0;
         width: 100vw;
         height: var(--nav-h);
@@ -50,8 +50,9 @@
     #topbar li {
         font-size: var(--text-medium);
         font-weight: bold;
-        background-color: var(--light-grey);
-        padding: 0.5rem;
+        background-color: var(--grey);
+        border-radius: 0 1rem 1rem 0;
+        padding: .5rem 1rem .5rem .5rem;
         /* margin: 0 1rem; */
     }
     #topbar li:hover {

@@ -26,13 +26,10 @@
 
 <style>
     #settings {
-        position: fixed;
-        width: var(--settings-width);
+        flex: 0 1 var(--settings-width);
         scroll-behavior: smooth;
         overflow-y: scroll;
         overflow: -moz-scrollbars-none;
-        top: var(--nav-h);
-        bottom: var(--footer-height);
         padding: 0 1rem 0 1rem;
         background-color:var(--light-grey);
     }
@@ -50,7 +47,7 @@
 
     :global(.settings-section){
         margin-bottom: var(--step-gap);
-        height: 90%;
+        height: 80%;
         padding-top: 1rem;
         display: flex;
         flex-flow: column nowrap;
