@@ -47,7 +47,7 @@
 
     :global(.settings-section){
         margin-bottom: var(--step-gap);
-        height: 80%;
+        height: 85%;
         padding-top: 1rem;
         display: flex;
         flex-flow: column nowrap;
@@ -57,13 +57,18 @@
         align-self: center;
         margin-top: auto;
         text-decoration: none;
-        /* color: var(--dark-grey); */
+        text-align: center;
+        color: var(--dark-grey);
+    }
+    :global(.settings-section a.next-section p) {
+        margin: 0;
+        font-weight: bold;
     }
     :global(.settings-section a.next-section .material-icons) {
         font-size: 54px;
         color: var(--dark-grey);
     }
-    :global(.settings-section a.next-section .material-icons:hover) {
+    :global(.settings-section a.next-section:hover, .settings-section a.next-section:hover .material-icons) {
         color: var(--accent-color);
     }
 </style>

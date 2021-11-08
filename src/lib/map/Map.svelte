@@ -7,7 +7,9 @@
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
-    import { zoom, zoomIdentity } from 'd3-zoom'
+    import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom'
+    import { drag } from 'd3-drag'
+    import { geoScaleBar } from 'd3-geo-scale-bar'
 
     import Basemap from './Basemap.svelte'
 
@@ -26,7 +28,39 @@
     // $: height = Math.ceil(bbox[1][1] - bbox[0][1])
 
 
-    // BRUSH ------------------- //
+    // --------------- SCALE BAR -------------- //
+    let k = 1 // stocke le facteur de zoom
+    let dist = 2000 // distance de l'échelle en km
+    const scaleBar = geoScaleBar()
+        .projection(projection)
+        .size([width, height])
+        .left(.5)
+        .top(.5)
+        .radius(6371.0088)
+        .distance(dist / k)
+        .labelAnchor("middle")
+        .tickSize(null)
+        .tickValues(null)
+        .zoomFactor(k)
+
+    $: { 
+        select("g#scaleBar").call(scaleBar.distance(dist / k)
+                                          .label(`${Math.round(scaleBar.distance())} km`))
+        select("g#scaleBar .label").attr("font-size", 12 / k)
+        select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
+    }
+
+    // Déplacer l'échelle graphique
+    function dragged(event) {
+        scaleBar.left(event.x / width).top(event.y / height) // passer des pixels du svg au 0-1 de scaleBar.left et .top
+        select("g#scaleBar").attr("cursor", "grabbing").call(scaleBar)
+    }
+    const dragScaleBar = drag()
+        .on("drag", dragged)
+        .on("end", () => select("g#scaleBar").attr("cursor", "move")) // retour au curseur d'origine
+    // ---------------------------------------- //
+
+    // ----------------- BRUSH ---------------- //
     let rx, ry, rw, rh
     function brushed( { selection: [[x0, y0], [x1, y1]] } ) {
         // passer les coordonnées du brush courant
@@ -43,10 +77,9 @@
           && !select(event.target).classed("selection"))
         .handleSize(24)
         .on("brush", brushed)
+    // ---------------------------------------- //
 
-    // ------------------------- //
-
-    // ZOOM ------------------- //
+    // ----------------- ZOOM ----------------- //
     let regBbox
     const unsubscribeRegbbox = regbbox.subscribe(d => { regBbox = d })
 
@@ -56,7 +89,11 @@
     const zoom2 = zoom()
             .scaleExtent([0.5, 10]) // min, max du zoom
             .translateExtent([[0, 0], [width, height]]) // bornes extérieures du translate
-            .on("zoom", ({ transform }) => select("g#zoom").attr("transform", transform))
+            .on("zoom", ({ transform }) => {
+                select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
+                k = transform.k // utiliser par scaleBar
+            })
+            .on("end", () => select("g#zoom").attr("cursor", "grab"))
 
     
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
@@ -78,17 +115,20 @@
 
     $: if (isReady) { zoomRegion(regBbox) }
 
-
+    // Boutons de contrôle du zoom
+    // voir https://observablehq.com/@d3/programmatic-zoom
     const zoomIn = () => select("g#zoom").transition().call(zoom2.scaleBy, 1.5)
     const zoomOut = () => select("g#zoom").transition().call(zoom2.scaleBy, 1/1.5)
-
-    // ------------------------- //
+    const zoomReset = () => select("g#zoom").transition().duration(750).call(
+        zoom2.transform,
+        zoomIdentity,
+        zoomTransform(select("g#zoom").node()).invert([width / 2, height / 2]))
+    // ---------------------------------------- //
 
     onMount( () => {
         isReady = true
 
-        // BRUSH -----
-        // initier le cadrage avec d3-brush
+        // BRUSH ----- initialise le cadrage avec d3-brush
         let gBrush = select('#gBrush')
         gBrush
             .call(Brush)
@@ -102,10 +142,17 @@
             .attr("cursor", "auto")         // rétablit valeur par défaut
             .attr("pointer-events", "none") // ne bloque/cache pas les events en dessous (ici le zoom)
 
-        // ZOOM -----
-        // applique le zoom sur le groupe "g#zoom" plutôt que l'ensemble du svg
+        // ZOOM ----- applique le zoom sur "g#zoom" plutôt que l'ensemble du svg
         // => limite le zoom à l'intérieur du cadrage (via d3-brush)
-        select("g#zoom").call(zoom2);
+        select("g#zoom")
+            .attr("cursor", "grab")
+            .call(zoom2)
+
+        // SCALE BAR ----- initialise l'échelle graphique
+        select("g#scaleBar")
+            .attr("cursor", "move")
+            .call(scaleBar)
+            .call(dragScaleBar)
     })
 </script>
 
@@ -122,8 +169,10 @@
         <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
             <g id="zoom" >        
                 <Basemap {path} {outline} />
+                <g id="scaleBar"></g>
             </g>
         </g>
+        
         <g id="gBrush"></g>
             
         <style>
@@ -139,10 +188,13 @@
     </svg>
 
     <div id="zoom-button">
-        <button on:click={zoomIn}><span class="material-icons">add</span></button>
-        <button on:click={zoomOut}><span class="material-icons">remove</span></button>
+        <button on:click={zoomIn} title="Zoom avant"><span class="material-icons">add</span></button>
+        <button on:click={zoomOut} title="Zoom arrière"><span class="material-icons">remove</span></button>
+        <button on:click={zoomReset} title="Réinitialiser le zoom"><span class="material-icons">restart_alt</span></button>
     </div>
 </figure>
+
+
 
 <style>
     #svg-container {
@@ -154,9 +206,9 @@
         height: calc(var(--content-h) - 2rem);
     }
     
-    g#zoom {
+    /* g#zoom {
         cursor: grab;
-    }
+    } */
 
     #zoom-button {
         position: absolute;

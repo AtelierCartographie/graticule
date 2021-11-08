@@ -45,7 +45,10 @@
             {/each} 
         </ul>
     </form>
-    <a href="#resolution" class="next-section"><span class="material-icons">expand_more</span></a>
+    <a href="#resolution" class="next-section">
+        <p>continuer</p>
+        <span class="material-icons">expand_more</span>
+    </a>
 </section>
 {/if}
 
