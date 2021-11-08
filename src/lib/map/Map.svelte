@@ -13,7 +13,16 @@
 
     import Basemap from './Basemap.svelte'
 
-    let width = 900, height = 600
+    let svg, width = 900, height = 600
+    let mapHeight, windowHeight = 10
+
+    const resizeSVG = () => {
+        mapHeight = windowHeight - 28
+    };
+
+
+
+
     let projection
     const unsubscribeProj = proj.subscribe(value => { projection = value })
 
@@ -128,6 +137,8 @@
     onMount( () => {
         isReady = true
 
+        resizeSVG()
+
         // BRUSH ----- initialise le cadrage avec d3-brush
         let gBrush = select('#gBrush')
         gBrush
@@ -156,9 +167,11 @@
     })
 </script>
 
-<figure id="svg-container">
+<svelte:window on:resize={resizeSVG} />
 
-    <svg id="map-svg" width="100%" height="100%" viewBox="0 0 {width} {height}" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<figure id="svg-container" bind:clientHeight={windowHeight}>
+
+    <svg id="map-svg" bind:this={svg} width="100%" height={mapHeight} viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
             <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
             <clipPath id="clip-cadrage">
