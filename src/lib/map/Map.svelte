@@ -45,7 +45,8 @@
         .tickValues(null)
         .zoomFactor(k)
 
-    $: { 
+    $: {
+        // Relancer l'échelle pour chaque variable dynamique (projection et facteur de zoom)
         select("g#scaleBar").call(scaleBar.projection(projection)
                                           .distance(dist / k)
                                           .label(`${Math.round(scaleBar.distance())} km`))
@@ -115,7 +116,9 @@
         }
     }
 
-    $: if (isReady) { zoomRegion(regBbox) }
+    $: if (isReady) { 
+        projection
+        zoomRegion(regBbox) }
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
