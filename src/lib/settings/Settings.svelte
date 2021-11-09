@@ -32,6 +32,7 @@
         overflow: -moz-scrollbars-none;
         padding: 0 1rem 0 1rem;
         background-color:var(--light-grey);
+        height: calc(100vh - var(--nav-h) - var(--footer-height));
     }
    
     #settings::-webkit-scrollbar { width: 0 !important; }
@@ -47,7 +48,7 @@
 
     :global(.settings-section){
         margin-bottom: var(--step-gap);
-        height: 85%;
+        height: calc(100% - 2rem);
         padding-top: 1rem;
         display: flex;
         flex-flow: column nowrap;

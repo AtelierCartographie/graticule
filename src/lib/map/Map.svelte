@@ -13,15 +13,7 @@
 
     import Basemap from './Basemap.svelte'
 
-    let svg, width = 900, height = 600
-    let mapHeight, windowHeight = 10
-
-    const resizeSVG = () => {
-        mapHeight = windowHeight - 28
-    };
-
-
-
+    export let width, height
 
     let projection
     const unsubscribeProj = proj.subscribe(value => { projection = value })
@@ -32,21 +24,22 @@
 
     // d'après https://observablehq.com/@observablehq/d3-world-map
     // [[x0, y0], [x1, y1]]
+    let bbox
     $: bbox = geoPath(projection.fitWidth(width, outline)).bounds(outline)
     // y1 - y0
     // $: height = Math.ceil(bbox[1][1] - bbox[0][1])
 
 
     // --------------- SCALE BAR -------------- //
-    let k = 1 // stocke le facteur de zoom
+    let k = 1 // stock le facteur de zoom
     let dist = 2000 // distance de l'échelle en km
     const scaleBar = geoScaleBar()
         .projection(projection)
         .size([width, height])
         .left(.5)
-        .top(.5)
+        .top(.25)
         .radius(6371.0088)
-        .distance(dist / k)
+        .distance(dist)
         .labelAnchor("middle")
         .tickSize(null)
         .tickValues(null)
@@ -103,7 +96,6 @@
                 k = transform.k // utiliser par scaleBar
             })
             .on("end", () => select("g#zoom").attr("cursor", "grab"))
-
     
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
     function zoomRegion(b) {
@@ -137,8 +129,6 @@
     onMount( () => {
         isReady = true
 
-        resizeSVG()
-
         // BRUSH ----- initialise le cadrage avec d3-brush
         let gBrush = select('#gBrush')
         gBrush
@@ -167,62 +157,44 @@
     })
 </script>
 
-<svelte:window on:resize={resizeSVG} />
+<svg id="map-svg" width="100%" height="100%" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
+        <clipPath id="clip-cadrage">
+            <rect x={rx} y={ry} width={rw} height={rh} />
+        </clipPath>
+    </defs>
 
-<figure id="svg-container" bind:clientHeight={windowHeight}>
-
-    <svg id="map-svg" bind:this={svg} width="100%" height={mapHeight} viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <defs>
-            <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
-            <clipPath id="clip-cadrage">
-                <rect x={rx} y={ry} width={rw} height={rh} />
-            </clipPath>
-        </defs>
-
-        <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
-            <g id="zoom" >        
-                <Basemap {path} {outline} />
-                <g id="scaleBar"></g>
-            </g>
+    <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
+        <g id="zoom" >        
+            <Basemap {path} {outline} />
+            <g id="scaleBar"></g>
         </g>
+    </g>
+    
+    <g id="gBrush"></g>
         
-        <g id="gBrush"></g>
-            
-        <style>
-            #map-svg { background-color: white; }
-            #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
-            #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
-            #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
-            #land { fill: lightgrey; stroke: none; }
-            #borders { fill: none; stroke: white; stroke-width: 0.5; }
-            #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
-            #urban { fill: black; stroke: none; }
-        </style>
-    </svg>
+    <style>
+        #map-svg { background-color: white; }
+        #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
+        #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
+        #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
+        #land { fill: lightgrey; stroke: none; }
+        #borders { fill: none; stroke: white; stroke-width: 0.5; }
+        #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
+        #urban { fill: black; stroke: none; }
+    </style>
+</svg>
 
-    <div id="zoom-button">
-        <button on:click={zoomIn} title="Zoom avant"><span class="material-icons">add</span></button>
-        <button on:click={zoomOut} title="Zoom arrière"><span class="material-icons">remove</span></button>
-        <button on:click={zoomReset} title="Réinitialiser le zoom"><span class="material-icons">restart_alt</span></button>
-    </div>
-</figure>
+<div id="zoom-button">
+    <button on:click={zoomIn} title="Zoom avant"><span class="material-icons">add</span></button>
+    <button on:click={zoomOut} title="Zoom arrière"><span class="material-icons">remove</span></button>
+    <button on:click={zoomReset} title="Réinitialiser le zoom"><span class="material-icons">restart_alt</span></button>
+</div>
 
 
 
 <style>
-    #svg-container {
-        all: inherit;
-        display: block;
-        position: relative;
-        flex: 1;
-        padding: 1rem;
-        height: calc(var(--content-h) - 2rem);
-    }
-    
-    /* g#zoom {
-        cursor: grab;
-    } */
-
     #zoom-button {
         position: absolute;
         top: 2em;

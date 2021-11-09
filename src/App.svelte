@@ -6,15 +6,23 @@
   import Footer from './lib/Footer.svelte'
 
   let canRender = false
+  let width, height
   onMount( () => {
     canRender = true
+    width = document.getElementById('svg-container').clientWidth
+    height = document.getElementById('svg-container').clientHeight
   })
 </script>
 
 <Header />
 <main id="app">
   <Settings {canRender} />
-  <Map />
+
+  <figure id="svg-container">
+    {#if canRender}
+      <Map {width} {height} />
+    {/if}
+  </figure>
 </main>
 
 <Footer />
@@ -63,6 +71,15 @@
     flex-flow: row nowrap;
     height: var(--content-h);
   }
+
+  #svg-container {
+        all: inherit;
+        display: block;
+        position: relative;
+        flex: 1;
+        padding: 1rem;
+        height: calc(var(--content-h) - 2rem);
+    }
 
   /* -------------------------- */
   /* PICTOGRAMME MATERIAL ICONS */
