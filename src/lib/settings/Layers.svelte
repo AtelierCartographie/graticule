@@ -18,6 +18,8 @@
         base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
         lyr.forEach(e => select("g#basemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
+        // Cas particulier de l'échelle graphique
+        lyr.includes("scaleBar") ? select("g#scaleBar").style("visibility", "visible") : select("g#scaleBar").style("visibility", "hidden")
     }
 
     $: addLayer(lyr_selected)
@@ -38,11 +40,20 @@
             {#each layers_list as {id, name, style} }
                 <li>
                     <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
-                    <!-- <label for={id}>{name}</label>
-                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name} > -->
                     <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true} />
                 </li>
             {/each} 
+        </ul>
+    </form>
+    <hr>
+    <form id="title-scale">
+        <h3>Habillage</h3>
+        <ul>
+                <li>
+                    <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
+                    <!-- <label for={id}>{name}</label>
+                    <input type="checkbox" bind:group={lyr_selected} id={id} value={id} {name} > -->
+                </li>
         </ul>
     </form>
     <a href="#resolution" class="next-section">
@@ -53,17 +64,17 @@
 {/if}
 
 <style>
-    #layers-select ul {
+    #layers-select ul, #title-scale ul {
         list-style-type: none;
         padding: 0;
     }
-    #layers-select li {
+    #layers-select li, #title-scale ul {
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
         gap: 1rem;
     }
-    :global(#layers-select .Toggle__label) {
+    :global(#layers-select .Toggle__label, #title-scale .Toggle__label) {
         /* Taille du label */
         /* flex: 1; */
         width: 9rem;

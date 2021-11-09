@@ -46,7 +46,8 @@
         .zoomFactor(k)
 
     $: { 
-        select("g#scaleBar").call(scaleBar.distance(dist / k)
+        select("g#scaleBar").call(scaleBar.projection(projection)
+                                          .distance(dist / k)
                                           .label(`${Math.round(scaleBar.distance())} km`))
         select("g#scaleBar .label").attr("font-size", 12 / k)
         select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
@@ -168,7 +169,7 @@
     <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
         <g id="zoom" >        
             <Basemap {path} {outline} />
-            <g id="scaleBar"></g>
+            <g id="scaleBar" style="visibility: hidden"></g>
         </g>
     </g>
     
