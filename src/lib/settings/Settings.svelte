@@ -1,5 +1,4 @@
 <script>
-    import { select } from 'd3-selection'
     import Frame from './Frame.svelte'
     import Layers from './Layers.svelte'
     import Projection from './Projection.svelte'
@@ -7,7 +6,6 @@
     import Download from './Download.svelte'
 
     export let canRender
-
 </script>
 
 <div id="settings">

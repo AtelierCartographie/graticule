@@ -1,5 +1,5 @@
 <script>
-
+   
 </script>
 
 
@@ -7,12 +7,12 @@
     <nav role="navigation" id="topbar">
         <h1><a href="/">#Cartofond</a></h1>
         <ol>
-            <li> <a href="#frame" class="header-steps"><span class="material-icons">crop</span> Cadrer</a> </li>
-            <li> <a href="#projection"class="header-steps" ><span class="material-icons">language</span> Projeter</a> </li>
-            <li> <a href="#layers" class="header-steps"><span class="material-icons">layers</span> Alimenter</a> </li>
-            <li> <a href="#resolution" class="header-steps"><span class="material-icons">timeline</span> Simplifier</a> </li>
+            <li id="headerFrame" class="navSteps inView"> <a href="#frame" class="header-steps"><span class="material-icons">crop</span> Cadrer</a> </li>
+            <li id="headerProjection" class="navSteps inView"> <a href="#projection"class="header-steps" ><span class="material-icons">language</span> Projeter</a> </li>
+            <li id="headerLayers" class="navSteps inView"> <a href="#layers" class="header-steps"><span class="material-icons">layers</span> Alimenter</a> </li>
+            <li id="headerResolution" class="navSteps inView"> <a href="#resolution" class="header-steps"><span class="material-icons">timeline</span> Simplifier</a> </li>
             <!-- <li> <a href="#layout" class="header-steps"><span class="material-icons">grid_3x3</span> Mettre en page</a> </li> -->
-            <li> <a href="#download" class="header-steps"><span class="material-icons">file_download</span> Télécharger</a> </li>
+            <li id="headerDownload" class="navSteps inView"> <a href="#download" class="header-steps"><span class="material-icons">file_download</span> Télécharger</a> </li>
         </ol>
     </nav>
 </header>
@@ -55,15 +55,13 @@
         padding: .5rem 1rem .5rem .5rem;
         /* margin: 0 1rem; */
     }
-    #topbar li:hover {
-        background-color: var(--accent-color-light);
-    }
     a.header-steps {
         display: block;
         text-decoration: none;
         color: var(--dark-grey);
     }
-    a.header-steps:hover {
+    #topbar li.inView, #topbar li.inView a.header-steps, #topbar li:hover, #topbar li:hover a.header-steps {
+        background-color: var(--accent-color-light);
         color: var(--accent-color);
     }
 

@@ -3,6 +3,8 @@
     import { proj } from '../../stores.js'
     import Tip from './Tip.svelte'
     import proj_list from '../../assets/proj_list.js'
+    import inView from '../../assets/inView.js'
+    import stepEnter from '../../assets/stepEnter.js'
 
     let proj_selected = "Natural Earth 2"
 
@@ -27,7 +29,10 @@
     let m2 = "Choisir parmi la liste de projection et régler si besoin les paramètres."
 </script>
 
-<section id="projection" class="settings-section">
+<section id="projection" class="settings-section" 
+    use:inView 
+    on:enter={() => stepEnter("headerProjection")}
+>
     <h2><span class="material-icons">language</span> Projeter</h2>
 
     <Tip message={m2} />

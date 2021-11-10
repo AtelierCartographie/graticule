@@ -1,5 +1,7 @@
 <script>
     import Tip from './Tip.svelte'
+    import inView from '../../assets/inView.js'
+    import stepEnter from '../../assets/stepEnter.js'
 
     //Tips message
     let m1 = "Simplifier (ou généraliser) les tracés permet de modifier le niveau de détails des objets. Cette fonction est par exemple utile pour adapter la carte à une certaine échelle."
@@ -13,7 +15,10 @@
     let res_selected = ["Normal"]
 </script>
 
-<section id="resolution" class="settings-section">
+<section id="resolution" class="settings-section"
+    use:inView 
+    on:enter={() => stepEnter("headerResolution")}
+>
     <h2><span class="material-icons">timeline</span> Simplification</h2>
     <Tip message={m1} />
     <form id="res-select">

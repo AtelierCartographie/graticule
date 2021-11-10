@@ -1,6 +1,8 @@
 <script>
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
+    import inView from '../../assets/inView.js'
+    import stepEnter from '../../assets/stepEnter.js'
 
     //Tips message
     let m1 = "SVG est un format vectoriel permettant l'édition et le changement de dimensions sans dégrader la résolution"
@@ -63,7 +65,10 @@
     // à chaque changement de selected layers ? car 'onMount' ne suffit pas
 </script>
 
-<section id="download" class="settings-section">
+<section id="download" class="settings-section"
+    use:inView 
+    on:enter={() => stepEnter("headerDownload")}
+>
     <h2><span class="material-icons">download</span> Télécharger</h2>
     <Tip message={m1} />
     <a id="download_svg" download={`basemap-${today}.svg`} href={blobInfo.url} on:click={downloadSVG}>

@@ -1,45 +1,48 @@
 <script>
     import { onMount } from 'svelte'
-
-    import { proj } from '../../stores.js'
-    import { regbbox } from '../../stores.js'
-
+    import { proj, regbbox, title, dist } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
     import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom'
     import { drag } from 'd3-drag'
     import { geoScaleBar } from 'd3-geo-scale-bar'
-
     import Basemap from './Basemap.svelte'
 
-    export let width, height
+    export let width, height // dimensions du svg
 
+    // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
+    const mapMargin = (height * 0.05) / 2
+    const mapHeight = height - mapMargin
+    
+    let mapTitle
+    const unsubscribeTitle = title.subscribe(value => { mapTitle = value })
+
+    let mapCredit = "Source : Natural Earth. Réalisé avec #Cartofond"
+
+    // --------------- PROJECTION -------------- //
     let projection
     const unsubscribeProj = proj.subscribe(value => { projection = value })
 
-    $: path = geoPath(projection)
-
     let outline = ({type: "Sphere"})
 
-    // d'après https://observablehq.com/@observablehq/d3-world-map
-    // [[x0, y0], [x1, y1]]
-    let bbox
-    $: bbox = geoPath(projection.fitWidth(width, outline)).bounds(outline)
-    // y1 - y0
-    // $: height = Math.ceil(bbox[1][1] - bbox[0][1])
+    $: path = geoPath(projection.fitExtent([[0, mapMargin], [width, mapHeight]], outline))
+    // ---------------------------------------- //
 
 
     // --------------- SCALE BAR -------------- //
+    let scaleDist = 2000 // distance de l'échelle en km
+    const unsubscribeDist = dist.subscribe(value => { scaleDist = value })
+
     let k = 1 // stock le facteur de zoom
-    let dist = 2000 // distance de l'échelle en km
+    
     const scaleBar = geoScaleBar()
         .projection(projection)
-        .size([width, height])
+        .extent([[0, mapMargin], [width, mapHeight]])
         .left(.5)
-        .top(.25)
+        .top(.5)
         .radius(6371.0088)
-        .distance(dist)
+        .distance(scaleDist)
         .labelAnchor("middle")
         .tickSize(null)
         .tickValues(null)
@@ -48,7 +51,7 @@
     $: {
         // Relancer l'échelle pour chaque variable dynamique (projection et facteur de zoom)
         select("g#scaleBar").call(scaleBar.projection(projection)
-                                          .distance(dist / k)
+                                          .distance(scaleDist / k)
                                           .label(`${Math.round(scaleBar.distance())} km`))
         select("g#scaleBar .label").attr("font-size", 12 / k)
         select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
@@ -56,7 +59,7 @@
 
     // Déplacer l'échelle graphique
     function dragged(event) {
-        scaleBar.left(event.x / width).top(event.y / height) // passer des pixels du svg au 0-1 de scaleBar.left et .top
+        scaleBar.left(event.x / width).top(event.y / mapHeight) // passer des pixels du svg au 0-1 de scaleBar.left et .top
         select("g#scaleBar").attr("cursor", "grabbing").call(scaleBar)
     }
     const dragScaleBar = drag()
@@ -92,7 +95,7 @@
     // paramètres du pan and zoom
     const zoom2 = zoom()
             .scaleExtent([0.5, 10]) // min, max du zoom
-            .translateExtent([[0, 0], [width, height]]) // bornes extérieures du translate
+            .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
             .on("zoom", ({ transform }) => {
                 select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
                 k = transform.k // utiliser par scaleBar
@@ -109,8 +112,8 @@
             select("g#zoom").transition().duration(750).call(
                 zoom2.transform,
                 zoomIdentity
-                    .translate(width / 2, height / 2)
-                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+                    .translate(width / 2, mapHeight / 2)
+                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / mapHeight)))
                     .translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
             ) 
         }
@@ -127,7 +130,7 @@
     const zoomReset = () => select("g#zoom").transition().duration(750).call(
         zoom2.transform,
         zoomIdentity,
-        zoomTransform(select("g#zoom").node()).invert([width / 2, height / 2]))
+        zoomTransform(select("g#zoom").node()).invert([width / 2, mapHeight / 2]))
     // ---------------------------------------- //
 
     onMount( () => {
@@ -137,7 +140,7 @@
         let gBrush = select('#gBrush')
         gBrush
             .call(Brush)
-            .call(Brush.move, [[5, 5], [width-10, height-10]])
+            .call(Brush.move, [[5, mapMargin + 5], [width-10, mapHeight-10]])
             
         gBrush.select(".overlay").remove()  // empêche la création d'un nouveau brush
         gBrush.select(".selection")
@@ -169,6 +172,8 @@
         </clipPath>
     </defs>
 
+    <text id="mapTitle" x={rx} y={ry} dy=-5>{mapTitle}</text>
+    <text id="mapCredit" x={rx + rw} y={ry + rh} dy=10>{mapCredit}</text>
     <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
         <g id="zoom" >        
             <Basemap {path} {outline} />
@@ -187,6 +192,8 @@
         #borders { fill: none; stroke: white; stroke-width: 0.5; }
         #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
         #urban { fill: black; stroke: none; }
+        #mapTitle { font-size: var(--text-big); font-weight: bold; fill: var(--dark-grey); visibility: hidden; }
+        #mapCredit { font-size: var(--text-small); text-anchor: end; fill: var(--dark-grey); }
     </style>
 </svg>
 
