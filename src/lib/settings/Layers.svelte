@@ -1,7 +1,7 @@
 <script>
     import { select } from 'd3-selection'
     import { onMount } from 'svelte'
-    import { title, dist } from '../../stores.js'
+    import { mapTitle, dist, canAddScale } from '../../stores.js'
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
@@ -11,12 +11,20 @@
     
 
     export let canRender
+
     let lyr_selected = ['ocean', 'land', 'borders']
 
     // Titre de la carte
-    let mapTitle = "Titre de la carte"
-    $: title.set(mapTitle)
+    let map_title = "Titre de la carte"
+    $: mapTitle.set(map_title)
 
+    // Ajouter l'échelle graphique
+    
+    $: if (lyr_selected.includes("scaleBar")) {
+        let checked = document.getElementById('scale').checked
+        if (checked) { canAddScale.set(checked) }
+        console.log("true")
+    }
     // Taille de l'échelle graphique
     let scaleDist = 2000
     $: dist.set(scaleDist)
@@ -50,6 +58,7 @@
 >
     <h2><span class="material-icons">layers</span> Alimenter</h2>
     <Tip message={m1} />
+
     <form id="layers-select">
         <h3>Informations géographiques</h3>
         <ul>
@@ -61,6 +70,8 @@
             {/each} 
         </ul>
     </form>
+    
+
     <hr>
     <form id="title-scale">
         <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
@@ -76,7 +87,7 @@
                 <li>
                     <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={lyr_selected} />
                     {#if lyr_selected.includes("mapTitle")}
-                        <input type="text" bind:value={mapTitle}>
+                        <input type="text" bind:value={map_title}>
                     {/if}
                 </li>
         </ul>

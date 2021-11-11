@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, title, dist } from '../../stores.js'
+    import { proj, regbbox, mapTitle, dist, canAddScale } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -14,57 +14,12 @@
     // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
     const mapMargin = (height * 0.05) / 2
     const mapHeight = height - mapMargin
-    
-    let mapTitle
-    const unsubscribeTitle = title.subscribe(value => { mapTitle = value })
 
     let mapCredit = "Source : Natural Earth. Réalisé avec #Cartofond"
 
     // --------------- PROJECTION -------------- //
-    let projection
-    const unsubscribeProj = proj.subscribe(value => { projection = value })
-
     let outline = ({type: "Sphere"})
-
-    $: path = geoPath(projection.fitExtent([[0, mapMargin], [width, mapHeight]], outline))
-    // ---------------------------------------- //
-
-
-    // --------------- SCALE BAR -------------- //
-    let scaleDist = 2000 // distance de l'échelle en km
-    const unsubscribeDist = dist.subscribe(value => { scaleDist = value })
-
-    let k = 1 // stock le facteur de zoom
-    
-    const scaleBar = geoScaleBar()
-        .projection(projection)
-        .extent([[0, mapMargin], [width, mapHeight]])
-        .left(.5)
-        .top(.5)
-        .radius(6371.0088)
-        .distance(scaleDist)
-        .labelAnchor("middle")
-        .tickSize(null)
-        .tickValues(null)
-        .zoomFactor(k)
-
-    $: {
-        // Relancer l'échelle pour chaque variable dynamique (projection et facteur de zoom)
-        select("g#scaleBar").call(scaleBar.projection(projection)
-                                          .distance(scaleDist / k)
-                                          .label(`${Math.round(scaleBar.distance())} km`))
-        select("g#scaleBar .label").attr("font-size", 12 / k)
-        select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
-    }
-
-    // Déplacer l'échelle graphique
-    function dragged(event) {
-        scaleBar.left(event.x / width).top(event.y / mapHeight) // passer des pixels du svg au 0-1 de scaleBar.left et .top
-        select("g#scaleBar").attr("cursor", "grabbing").call(scaleBar)
-    }
-    const dragScaleBar = drag()
-        .on("drag", dragged)
-        .on("end", () => select("g#scaleBar").attr("cursor", "move")) // retour au curseur d'origine
+    $: path = geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline))
     // ---------------------------------------- //
 
     // ----------------- BRUSH ---------------- //
@@ -86,10 +41,62 @@
         .on("brush", brushed)
     // ---------------------------------------- //
 
-    // ----------------- ZOOM ----------------- //
-    let regBbox
-    const unsubscribeRegbbox = regbbox.subscribe(d => { regBbox = d })
+    // --------------- SCALE BAR -------------- //
+    let scaleDist = 2000 // distance de l'échelle en km
+    const unsubscribeDist = dist.subscribe(value => { scaleDist = value })
 
+    let k = 1           // stock le facteur de zoom
+    let zx = 0, zy = 0  // stock le translate du zoom
+    // centre du cadrage
+    $: cx = rx + rw / 2
+    $: cy = ry + rh / 2
+    // centre du cadrage dans la carte avec le zoom
+    $: zcx = (cx - zx) / k
+    $: zcy = (cy - zy) / k
+    // position de la légende
+    $: left = zcx / width
+    $: top = zcy / mapHeight
+    
+    const scaleBar = geoScaleBar()
+        .projection($proj)
+        .extent([[0, mapMargin], [width, mapHeight]])
+        .radius(6371.0088)
+        .distance(scaleDist)
+        .labelAnchor("middle")
+        .tickSize(null)
+        .tickValues(null)
+        .zoomFactor(k)
+
+    // initialise l'échelle graphique quand le toggle est activé
+    // appliquer une seule fois !
+    let i = true
+    $: if ($canAddScale && i) {
+        i = !i
+        select("g#scaleBar")
+            .attr("cursor", "move")
+            .call(scaleBar.left(left).top(top))
+            .call(dragScaleBar)
+    }
+    $: {
+        // Relancer l'échelle pour chaque variable dynamique (projection et facteur de zoom)
+        select("g#scaleBar").call(scaleBar.projection($proj)
+                                          .distance(scaleDist / k)
+                                          .label(`${Math.round(scaleBar.distance())} km`))
+        select("g#scaleBar .label").attr("font-size", 12 / k)
+        select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
+    }
+
+    // Déplacer l'échelle graphique
+    function dragged(event) {
+        scaleBar.left(event.x / width).top(event.y / mapHeight) // passer des pixels du svg au 0-1 de scaleBar.left et .top
+        select("g#scaleBar").attr("cursor", "grabbing").call(scaleBar)
+    }
+    const dragScaleBar = drag()
+        .on("drag", dragged)
+        .on("end", () => select("g#scaleBar").attr("cursor", "move")) // retour au curseur d'origine
+    // ---------------------------------------- //
+
+    // ----------------- ZOOM ----------------- //
     let isReady = false
 
     // paramètres du pan and zoom
@@ -99,6 +106,8 @@
             .on("zoom", ({ transform }) => {
                 select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
                 k = transform.k // utiliser par scaleBar
+                zx = transform.x
+                zy = transform.y
             })
             .on("end", () => select("g#zoom").attr("cursor", "grab"))
     
@@ -120,8 +129,8 @@
     }
 
     $: if (isReady) { 
-        projection
-        zoomRegion(regBbox) }
+        $proj
+        zoomRegion($regbbox) }
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
@@ -155,12 +164,6 @@
         select("g#zoom")
             .attr("cursor", "grab")
             .call(zoom2)
-
-        // SCALE BAR ----- initialise l'échelle graphique
-        select("g#scaleBar")
-            .attr("cursor", "move")
-            .call(scaleBar)
-            .call(dragScaleBar)
     })
 </script>
 
@@ -172,7 +175,7 @@
         </clipPath>
     </defs>
 
-    <text id="mapTitle" x={rx} y={ry} dy=-5>{mapTitle}</text>
+    <text id="mapTitle" x={rx} y={ry} dy=-5>{$mapTitle}</text>
     <text id="mapCredit" x={rx + rw} y={ry + rh} dy=10>{mapCredit}</text>
     <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
         <g id="zoom" >        
