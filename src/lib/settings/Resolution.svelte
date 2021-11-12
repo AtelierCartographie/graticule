@@ -19,7 +19,7 @@
     use:inView 
     on:enter={() => stepEnter("headerResolution")}
 >
-    <h2><span class="material-icons">timeline</span> Simplification</h2>
+    <h2><span class="material-icons">timeline</span> Simplifier</h2>
     <Tip message={m1} />
     <form id="res-select">
         <h3>Détail des tracés</h3>
