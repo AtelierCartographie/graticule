@@ -36,8 +36,9 @@
         list-style-type: none;
         padding: 0;
         align-items: center;
-        gap: 2rem;
-        /* justify-content: space-between; */
+        gap: 1rem;
+        justify-content: space-evenly;
+        width: 100%;
     }
     #topbar h1 { 
         text-align: center;;
@@ -65,14 +66,11 @@
         color: var(--accent-color);
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1000px) {
         #topbar li { font-size: var(--text-small); } 
         .material-icons { font-size: 18px; }
     }
-    @media (max-width: 1100px) {
-        #topbar ol { gap: 1rem; }
-    }
-    @media (max-width: 1000px) {
+    @media (max-width: 900px) {
         #topbar ol { gap: .5rem; }
     }
 </style>

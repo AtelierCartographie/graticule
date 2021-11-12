@@ -92,11 +92,6 @@
                                             .label(`${Math.round(scaleBar.distance())} km`))  
     }
 
-    // $: if (!isNaN($scaleDist)) {
-    //     select("g#scaleBar").call(scaleBar.distance($scaleDist)
-    //                                       .label(`${Math.round(scaleBar.distance())} km`))
-    // }
-
     // Déplacer l'échelle graphique
     function dragged(event) {
         scaleBar.left(event.x / width).top(event.y / height) // passer des pixels du svg au 0-1 de scaleBar.left et .top
