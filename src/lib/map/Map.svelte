@@ -82,7 +82,7 @@
         select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
 
         // ... changement de projection
-        select("g#scaleBar").call(scaleBar.projection($proj))
+        if ($canAddScale) { select("g#scaleBar").call(scaleBar.projection($proj)) }
 
         // ... zoom (comportement dynamique par défaut sinon utilisateur fixe une distance)
         isNaN($scaleDist)
