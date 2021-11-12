@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, mapTitle, dist, canAddScale } from '../../stores.js'
+    import { proj, regbbox, mapTitle, scaleDist, canAddScale } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -42,11 +42,9 @@
     // ---------------------------------------- //
 
     // --------------- SCALE BAR -------------- //
-    let scaleDist = 2000 // distance de l'échelle en km
-    const unsubscribeDist = dist.subscribe(value => { scaleDist = value })
-
-    let k = 1           // stock le facteur de zoom
-    let zx = 0, zy = 0  // stock le translate du zoom
+    let scaleInitDist = 2000 // distance de l'échelle en km
+    let k = 1                // stock le facteur de zoom
+    let zx = 0, zy = 0       // stock le translate du zoom
     // centre du cadrage
     $: cx = rx + rw / 2
     $: cy = ry + rh / 2
@@ -60,14 +58,14 @@
     const scaleBar = geoScaleBar()
         .projection($proj)
         .extent([[0, mapMargin], [width, mapHeight]])
+        .distance(scaleInitDist)
         .radius(6371.0088)
-        .distance(scaleDist)
         .labelAnchor("middle")
         .tickSize(null)
         .tickValues(null)
         .zoomFactor(k)
 
-    // initialise l'échelle graphique quand le toggle est activé
+    // Initialise l'échelle graphique quand le toggle est activé
     // appliquer une seule fois !
     let i = true
     $: if ($canAddScale && i) {
@@ -77,18 +75,31 @@
             .call(scaleBar.left(left).top(top))
             .call(dragScaleBar)
     }
+    // Relancer l'échelle si...
     $: {
-        // Relancer l'échelle pour chaque variable dynamique (projection et facteur de zoom)
-        select("g#scaleBar").call(scaleBar.projection($proj)
-                                          .distance(scaleDist / k)
-                                          .label(`${Math.round(scaleBar.distance())} km`))
+        // Taille et épaisseur constante en pompensant le zoom
         select("g#scaleBar .label").attr("font-size", 12 / k)
         select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
+
+        // ... changement de projection
+        select("g#scaleBar").call(scaleBar.projection($proj))
+
+        // ... zoom (comportement dynamique par défaut sinon utilisateur fixe une distance)
+        isNaN($scaleDist)
+        ? select("g#scaleBar").call(scaleBar.distance(scaleInitDist / k)
+                                            .label(`${Math.round(scaleBar.distance())} km`))
+        : select("g#scaleBar").call(scaleBar.distance($scaleDist)
+                                            .label(`${Math.round(scaleBar.distance())} km`))  
     }
+
+    // $: if (!isNaN($scaleDist)) {
+    //     select("g#scaleBar").call(scaleBar.distance($scaleDist)
+    //                                       .label(`${Math.round(scaleBar.distance())} km`))
+    // }
 
     // Déplacer l'échelle graphique
     function dragged(event) {
-        scaleBar.left(event.x / width).top(event.y / mapHeight) // passer des pixels du svg au 0-1 de scaleBar.left et .top
+        scaleBar.left(event.x / width).top(event.y / height) // passer des pixels du svg au 0-1 de scaleBar.left et .top
         select("g#scaleBar").attr("cursor", "grabbing").call(scaleBar)
     }
     const dragScaleBar = drag()
@@ -105,7 +116,8 @@
             .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
             .on("zoom", ({ transform }) => {
                 select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
-                k = transform.k // utiliser par scaleBar
+                // utiliser par scaleBar
+                k = transform.k
                 zx = transform.x
                 zy = transform.y
             })

@@ -1,7 +1,7 @@
 <script>
     import { select } from 'd3-selection'
     import { onMount } from 'svelte'
-    import { mapTitle, dist, canAddScale } from '../../stores.js'
+    import { mapTitle, scaleDist, canAddScale } from '../../stores.js'
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
@@ -19,15 +19,13 @@
     $: mapTitle.set(map_title)
 
     // Ajouter l'échelle graphique
-    
     $: if (lyr_selected.includes("scaleBar")) {
         let checked = document.getElementById('scale').checked
         if (checked) { canAddScale.set(checked) }
-        console.log("true")
     }
     // Taille de l'échelle graphique
-    let scaleDist = 2000
-    $: dist.set(scaleDist)
+    let scale_dist
+    $: scaleDist.set(scale_dist)
 
     //Tips message
     let m1 = "Ajouter si besoin des informations supplémentaires"
@@ -73,7 +71,7 @@
     
 
     <hr>
-    <form id="title-scale">
+    <form id="habillage">
         <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
         <input type="submit" disabled style="display: none" aria-hidden="true" />
         <h3>Habillage</h3>
@@ -81,13 +79,17 @@
                 <li>
                     <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
                     {#if lyr_selected.includes("scaleBar")}
-                        <input type="text" bind:value={scaleDist}>
+                    <div class="habillage-style">
+                        <input type="text" bind:value={scale_dist} placeholder="distance en km">
+                    </div>
                     {/if}
                 </li>
                 <li>
                     <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={lyr_selected} />
                     {#if lyr_selected.includes("mapTitle")}
+                    <div class="habillage-style">
                         <input type="text" bind:value={map_title}>
+                    </div>
                     {/if}
                 </li>
         </ul>
@@ -100,20 +102,26 @@
 {/if}
 
 <style>
-    #layers-select ul, #title-scale ul {
+    #layers-select ul, #habillage ul {
         list-style-type: none;
         padding: 0;
+        width: 100%;
     }
-    #layers-select li, #title-scale li {
+    #layers-select li, #habillage li {
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
         gap: 1rem;
     }
-    :global(#layers-select .Toggle__label, #title-scale .Toggle__label) {
+    :global(#layers-select .Toggle__label, #habillage .Toggle__label) {
         /* Taille du label */
         /* flex: 1; */
         width: 9rem;
         font-size: var(--text-medium);
+    }
+    .habillage-style {
+        background-color: var(--grey);
+        padding: 1rem;
+        width: 100%;
     }
 </style>
