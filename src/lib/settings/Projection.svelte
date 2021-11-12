@@ -108,15 +108,16 @@
     }
     #proj-rotate li {
         display: flex;
-        justify-content: flex-end;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1ch;
     }
     #proj-rotate label {
         /* Taille du label */
         flex: 1;
         font-size: var(--text-medium);
     }
-    #proj-rotate input {
-        /* Taille de l'input par rapport au label (1x, 2x...) */
-        flex: 1;
-    }
+    input[type="range"] { width: 8rem; }
+    input[type="number"] { width: 2rem; font-size: var(--text-small);}
 </style>
