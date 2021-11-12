@@ -1,7 +1,8 @@
 <script>
-    import { select } from 'd3-selection'
     import { onMount } from 'svelte'
     import { mapTitle, scaleDist, canAddScale } from '../../stores.js'
+    import { slide } from "svelte/transition";
+    import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
@@ -79,7 +80,7 @@
                 <li>
                     <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
                     {#if lyr_selected.includes("scaleBar")}
-                    <div class="habillage-style">
+                    <div class="habillage-style" transition:slide={{ duration: 300 }}>
                         <input type="text" bind:value={scale_dist} placeholder="distance en km">
                     </div>
                     {/if}
@@ -87,8 +88,8 @@
                 <li>
                     <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={lyr_selected} />
                     {#if lyr_selected.includes("mapTitle")}
-                    <div class="habillage-style">
-                        <input type="text" bind:value={map_title}>
+                    <div class="habillage-style" transition:slide={{ duration: 300 }}>
+                        <input type="text" bind:value={map_title} style="width: 90%;">
                     </div>
                     {/if}
                 </li>
@@ -105,13 +106,12 @@
     #layers-select ul, #habillage ul {
         list-style-type: none;
         padding: 0;
-        width: 100%;
     }
     #layers-select li, #habillage li {
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: .5rem;
     }
     :global(#layers-select .Toggle__label, #habillage .Toggle__label) {
         /* Taille du label */
@@ -121,7 +121,10 @@
     }
     .habillage-style {
         background-color: var(--grey);
-        padding: 1rem;
         width: 100%;
+        padding: .5rem 1rem;
+        margin-bottom: .5rem;
+        border-left: 2px solid var(--dark-grey);
     }
+    input[type="text"] { font-size: var(--text-small); }
 </style>

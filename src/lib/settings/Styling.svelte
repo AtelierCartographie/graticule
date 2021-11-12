@@ -53,7 +53,7 @@
 {#if isOpen}
 <section class="panel" transition:slide={{ duration: 300 }}>
     {#if style.includes("fill")}
-    <form class="form-style">
+    <form class="form-style fill">
         <h3>Fond</h3>
         <ul>
             <li>
@@ -70,7 +70,7 @@
     {/if}
 
     {#if style.includes("stroke")}
-    <form class="form-style">
+    <form class="form-style stroke">
         <h3>Contour</h3>
         <ul>
             <li>
@@ -95,8 +95,11 @@
 
 <style>
     section {
-        padding: 1rem;
         background-color: var(--grey);
+        width: 100%;
+        padding: .5rem 1rem;
+        margin-bottom: .5rem;
+        border-left: 2px solid var(--dark-grey);
     }
 
     button {
@@ -108,7 +111,7 @@
     button[aria-expanded="true"] { color: var(--accent-color-medium);}
     button:disabled { color: var(--grey); }
 
-    .form-style:first-of-type {
+    .form-style.fill {
         margin-bottom: 1rem;
     }
     .form-style h3 {
@@ -124,6 +127,7 @@
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
+        gap: 1ch;
     }
     .form-style label {
         /* Taille du label */
@@ -134,4 +138,7 @@
         /* Taille de l'input par rapport au label (1x, 2x...) */
         /* flex: 1; */
     }
+    input[type="range"] { width: 5rem; }
+    input[type="number"] { width: 2rem; font-size: var(--text-small);}
+    input[type="color"] { width: 2.5rem; }
 </style>
