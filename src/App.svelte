@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte'
+  import { mapReady } from './stores';
   import Header from './lib/Header.svelte'
   import Settings from './lib/settings/Settings.svelte'
   import Map from './lib/map/Map.svelte'
@@ -9,6 +10,7 @@
   let width, height
   onMount( () => {
     canRender = true
+    mapReady.set(canRender)
     width = document.getElementById('svg-container').clientWidth
     height = document.getElementById('svg-container').clientHeight
   })

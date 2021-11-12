@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { mapTitle, scaleDist, canAddScale } from '../../stores.js'
+    import { lyr, mapTitle, scaleDist, canAddScale } from '../../stores.js'
     import { slide } from "svelte/transition";
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
@@ -13,8 +13,10 @@
 
     export let canRender
 
+    // Couches actives
     let lyr_selected = ['ocean', 'land', 'borders']
-
+    $: lyr.set(lyr_selected)
+    
     // Titre de la carte
     let map_title = "Titre de la carte"
     $: mapTitle.set(map_title)
