@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, mapTitle, scaleDist, canAddScale } from '../../stores.js'
+    import { proj, regbbox, zTransform, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -107,11 +107,12 @@
 
     // paramètres du pan and zoom
     const zoom2 = zoom()
-            .scaleExtent([0.5, 10]) // min, max du zoom
+            .scaleExtent([0.5, 15]) // min, max du zoom
             .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
             .on("zoom", ({ transform }) => {
                 select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
                 // utiliser par scaleBar
+                zTransform.set(transform)
                 k = transform.k
                 zx = transform.x
                 zy = transform.y
@@ -151,7 +152,7 @@
 
     onMount( () => {
         isReady = true
-
+        mapReady.set(isReady)
         // BRUSH ----- initialise le cadrage avec d3-brush
         let gBrush = select('#gBrush')
         gBrush

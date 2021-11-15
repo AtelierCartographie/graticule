@@ -39,9 +39,13 @@
         base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
         lyr.forEach(e => select("g#basemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
-        // Cas particuliers
-        lyr.includes("scaleBar") ? select("g#scaleBar").style("visibility", "visible") : select("g#scaleBar").style("visibility", "hidden")
-        lyr.includes("mapTitle") ? select("#mapTitle").style("visibility", "visible") : select("#mapTitle").style("visibility", "hidden")
+        // Cas particuliers (titre et échelle)
+        lyr.includes("scaleBar") 
+            ? select("g#scaleBar").style("visibility", "visible").classed("hidden", false)
+            : select("g#scaleBar").style("visibility", "hidden").classed("hidden", true)
+        lyr.includes("mapTitle")
+            ? select("#mapTitle").style("visibility", "visible").classed("hidden", false)
+            : select("#mapTitle").style("visibility", "hidden").classed("hidden", true)
     }
 
     $: addLayer(lyr_selected)
