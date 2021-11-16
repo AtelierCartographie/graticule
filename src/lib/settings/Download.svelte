@@ -1,5 +1,5 @@
 <script>
-    import { zTransform, proj, lyr, mapReady } from '../../stores.js'
+    import { proj, lyr, mapReady } from '../../stores.js'
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
     import inView from '../../assets/inView.js'
@@ -59,21 +59,21 @@
     function SVGtoPNG(svg) {
         let resolve, reject;
         const promise = new Promise((y, n) => (resolve = y, reject = n))
-            const image = new Image
-            image.onerror = reject
-            image.onload = () => {
-                const rect = svg.viewBox.baseVal
-                const canvas = document.createElement("canvas")
-                canvas.width = rect.width
-                canvas.height = rect.height
-                canvas.style.width = rect.width + "px"
-                const context = canvas.getContext("2d")
-                context.drawImage(image, 0, 0, rect.width, rect.height)
-                canvas.toBlob(resolve)
-                }
-            image.src = URL.createObjectURL(serialize(svg))
+        const image = new Image
+        image.onerror = reject
+        image.onload = () => {
+            const rect = svg.viewBox.baseVal
+            const canvas = document.createElement("canvas")
+            canvas.width = rect.width
+            canvas.height = rect.height
+            canvas.style.width = rect.width + "px"
+            const context = canvas.getContext("2d")
+            context.drawImage(image, 0, 0, rect.width, rect.height)
+            canvas.toBlob(resolve)
+            }
+        image.src = URL.createObjectURL(serialize(svg))
 
-            return promise
+        return promise
     }
 
     // ----------------- PRINT ----------------- //
@@ -84,18 +84,23 @@
         win.print()
     }
 
-    // --------------- DOWNLOAD --------------- // 
-    // idée de faire un download commun qui s'adapte selon les paramètres de la fonction
-    // à la sortie SVG ou PNG
-    // et MAJ le lien de <a>
-    async function downloadMap(svg, type) {
+    // --------------- DOWNLOAD --------------- //
+    // d'après https://github.com/observablehq/stdlib/blob/main/src/dom/download.js
+    // https://fr.javascript.info/blob
+    // param1: svg de la carte = appel de cleaningSVG()
+    // param2: format de fichier (svg, png ou pdf)
+    function downloadMap(svg, type, event) {
         const a = select(`#download_${type}`).node()
 
         // reset href et URL
-        if (a.href) {
+        async function reset() {
+            https://developer.mozilla.org/fr/docs/Web/API/Window/requestAnimationFrame
+            await new Promise(requestAnimationFrame);
             URL.revokeObjectURL(a.href)
             a.removeAttribute("href")
-        } 
+        }
+        if (a.href) return reset()
+
         switch (type) {
             case 'svg': {
                 const blob = serialize(svg)
@@ -106,18 +111,24 @@
                 break
             }
             case 'png': {
-                const blob = await SVGtoPNG(svg).then( blob => blob)
-                //     blob => {
-                //         const url = URL.createObjectURL(blob)
-                //         const size = (blob.size / 1024).toFixed(0) // octet => Ko
-                //         blobPNG = {blob, size, url}
-                //         // a.href = url
-                //     }
-                // )
-                const url = URL.createObjectURL(blob)
-                const size = (blob.size / 1024).toFixed(0) // octet => Ko
-                blobPNG = {size, url}
-                a.href = url
+                // !!!! asynchronicité pose problème. Le téléchargement ne se lance pas...
+                // Par contre le lien est bien généré et est bon.
+                SVGtoPNG(svg).then( //blob => blob)
+                    blob => {
+                        const url = URL.createObjectURL(blob)
+                        const size = (blob.size / 1024).toFixed(0) // octet => Ko
+                        blobPNG = {size, url}
+                        a.href = url
+                        console.log(a.href)
+                    }
+                )
+                // await new Promise(requestAnimationFrame);
+                // await blob
+                // const url = URL.createObjectURL(blob)
+                // const size = (blob.size / 1024).toFixed(0) // octet => Ko
+                // blobPNG = {size, url}
+                // a.href = url
+                console.log(a.href)
                 break
             }
             case 'pdf': {
@@ -127,6 +138,7 @@
                 break
             }
         }
+        if (event) {if (event.eventPhase) return reset()}
     }
 
     // ----------------- FILE SIZE ----------------- //
@@ -148,17 +160,17 @@
     <h2><span class="material-icons">download</span> Télécharger</h2>
 
     <Tip message={m1} />
-    <a id="download_svg" download={`basemap-${today}.svg`} on:click={() => downloadMap(cleaningSVG(), 'svg')}>
+    <a id="download_svg" download={`basemap-${today}.svg`} on:click={(event) => downloadMap(cleaningSVG(), 'svg', event)}>
         <button><span class="material-icons">download_for_offline</span> SVG ({blobSVG.size} Mo)</button>
     </a>
 
     <Tip message={m2} />
-    <a id="download_png" download={`basemap-${today}.png`} on:click={() => downloadMap(cleaningSVG(), 'png')}>
+    <a id="download_png" download={`basemap-${today}.png`} on:click={async (event) => await downloadMap(cleaningSVG(), 'png', event)}>
         <button><span class="material-icons">download_for_offline</span> PNG ({blobPNG.size} Ko)</button>
     </a>
 
     <Tip message={m3} />
-    <a id="download_pdf" on:click={() => downloadMap(cleaningSVG(), 'pdf')}>
+    <a id="download_pdf" on:click={(event) => downloadMap(cleaningSVG(), 'pdf', event)}>
         <button><span class="material-icons">print</span> Imprimer</button>
     </a>
 </section>
