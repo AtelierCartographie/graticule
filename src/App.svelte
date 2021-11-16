@@ -47,7 +47,7 @@
     --light-grey: #f9f9f9;
 
     --accent-color: #ff3b00;
-    --accent-color-medium: rgb(255, 169, 143);
+    --accent-color-medium: #ffa98f;
     --accent-color-light: #ffd8cc;
   }
 
@@ -118,4 +118,16 @@
     font-feature-settings: 'liga';
   }
   /* -------------------------- */
+
+  /* -------------------------- */
+  /*  TIPPY.JS TOOLTIP THEMING  */
+  :global(.tippy-box[data-theme~='accent']) {
+    background-color: var(--accent-color-medium);
+    color: var(--dark-grey);
+    font-size: var(--text-small)
+  }
+  :global(.material-icons.tooltip) { font-size: 20px; cursor: help; }
+  :global(.material-icons.tooltip:hover) { color: var(--accent-color); }
+  /* -------------------------- */
+
 </style>

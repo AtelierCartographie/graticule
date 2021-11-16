@@ -5,6 +5,7 @@
     import proj_list from '../../assets/proj_list.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
+    import tooltip from '../../assets/tooltip.js'
 
     let proj_selected = "Natural Earth 2"
 
@@ -45,6 +46,7 @@
                 <option value={d.name}>{d.name}</option>
             {/each}
         </select>
+        <span use:tooltip title="Cliquer pour en savoir plus" class="material-icons tooltip">help_outline</span>
     </form>
 
 
@@ -119,5 +121,5 @@
         font-size: var(--text-medium);
     }
     input[type="range"] { width: 8rem; }
-    input[type="number"] { width: 2rem; font-size: var(--text-small);}
+    input[type="number"] { width: 2rem; font-size: var(--text-small); }
 </style>

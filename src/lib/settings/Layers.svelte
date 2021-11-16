@@ -9,9 +9,12 @@
     import layers_list from '../../assets/layers_list.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
+    import tooltip from '../../assets/tooltip.js'
     
 
     export let canRender
+
+    const tp1 = "Sauf mention contraire, ces informations sont extraites de la source Natural Earth"
 
     // Couches actives
     let lyr_selected = ['ocean', 'land', 'borders']
@@ -65,7 +68,10 @@
     <Tip message={m1} />
 
     <form id="layers-select">
-        <h3>Informations géographiques</h3>
+        <h3>Informations géographiques
+            <span use:tooltip title={tp1} class="material-icons tooltip">help_outline</span>
+        </h3>
+        
         <ul>
             {#each layers_list as {id, name, style} }
                 <li>
