@@ -4,6 +4,8 @@
   import Settings from './lib/settings/Settings.svelte'
   import Map from './lib/map/Map.svelte'
   import Footer from './lib/Footer.svelte'
+  import Modal from './lib/Modal.svelte'  
+  import HelpProjection from './lib/help/HelpProjection.svelte'
 
   let canRender = false
   let width, height
@@ -26,6 +28,10 @@
 </main>
 
 <Footer />
+
+<Modal>
+  <HelpProjection />
+</Modal>
 
 <style>
   :root {
@@ -129,5 +135,4 @@
   :global(.material-icons.tooltip) { font-size: 20px; cursor: help; }
   :global(.material-icons.tooltip:hover) { color: var(--accent-color); }
   /* -------------------------- */
-
 </style>

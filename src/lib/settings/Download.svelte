@@ -119,7 +119,7 @@
                         const size = (blob.size / 1024).toFixed(0) // octet => Ko
                         blobPNG = {size, url}
                         a.href = url
-                        console.log(a.href)
+                        // console.log(a.href)
                     }
                 )
                 // await new Promise(requestAnimationFrame);
@@ -128,7 +128,7 @@
                 // const size = (blob.size / 1024).toFixed(0) // octet => Ko
                 // blobPNG = {size, url}
                 // a.href = url
-                console.log(a.href)
+                // console.log(a.href)
                 break
             }
             case 'pdf': {
