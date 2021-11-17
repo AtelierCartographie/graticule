@@ -1,10 +1,11 @@
-<h2>Liste des projections</h2>
+<script>
+    import fs from 'fs';
+    import path from 'path';
+    import { marked } from 'marked'
 
-<h3>Natural Earth 2</h3>
-<p>Exemple d'image</p>
-<p>Descrition de la projection</p>
-<br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br>
-<p>Créateur, date</p>
+    let markdown = fs.readFileSync('./helpProjection.md', 'utf-8')
+    let html = marked.parse(markdown)
+
+</script>
+
+{@html markdown}

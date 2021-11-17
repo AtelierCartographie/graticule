@@ -49,15 +49,15 @@
         pointer-events: none;
     }
     .contents {
+        max-height: 80vh;
+        overflow-y: auto;
         min-width: 240px;
         border-radius: 6px;
         padding: 16px;
         background: white;
-        display: flex;
+        /* display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: space-between; */
         pointer-events: auto;
-        height: 80vh;
-        overflow-y: auto;
     }
 </style>

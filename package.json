@@ -18,6 +18,7 @@
     "d3-geo-polygon": "^1.12.1",
     "d3-geo-projection": "^4.0.0",
     "d3-geo-scale-bar": "^1.1.1",
+    "marked": "^4.0.3",
     "tippy.js": "^6.3.7",
     "topojson-client": "^3.1.0"
   }
