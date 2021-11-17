@@ -1,11 +1,10 @@
 <script>
-    import fs from 'fs';
-    import path from 'path';
     import { marked } from 'marked'
+    
+    //https://vitejs.dev/guide/assets.html#importing-asset-as-string
+    import markdown from './helpProjection.md?raw'
 
-    let markdown = fs.readFileSync('./helpProjection.md', 'utf-8')
     let html = marked.parse(markdown)
-
 </script>
 
-{@html markdown}
+{@html html}

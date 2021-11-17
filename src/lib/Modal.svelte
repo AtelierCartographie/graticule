@@ -59,5 +59,6 @@
         flex-direction: column;
         justify-content: space-between; */
         pointer-events: auto;
+        font-size: var(--text-medium);
     }
 </style>
