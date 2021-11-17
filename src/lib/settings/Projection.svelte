@@ -39,7 +39,7 @@
     <Tip message={m2} />
 
     <form id="proj-select">
-        <label for="proj-select">Sélectionner une projection</label>
+        <label for="proj-select" class="fontTitle">Sélectionner une projection</label>
 
         <select bind:value={proj_selected} name="projection" id="proj-select">
             {#each proj_list as d}

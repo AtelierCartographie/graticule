@@ -6,7 +6,7 @@
 <header role="banner">
     <nav role="navigation" id="topbar">
         <h1><a href="./">#Cartofond</a></h1>
-        <ol>
+        <ol class="fontTitle">
             <li id="headerFrame" class="navSteps inView"> <a href="#frame" class="header-steps"><span class="material-icons">crop</span> Cadrer</a> </li>
             <li id="headerProjection" class="navSteps inView"> <a href="#projection"class="header-steps" ><span class="material-icons">language</span> Projeter</a> </li>
             <li id="headerLayers" class="navSteps inView"> <a href="#layers" class="header-steps"><span class="material-icons">layers</span> Alimenter</a> </li>

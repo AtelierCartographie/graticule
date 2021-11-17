@@ -1,4 +1,10 @@
 <script>
+  import "@fontsource/fira-code/latin-700.css"
+  import "@fontsource/open-sans/latin-400.css"
+  import "@fontsource/open-sans/latin-400-italic.css"
+  import "@fontsource/open-sans/latin-700.css"
+  import "@fontsource/open-sans/latin-700-italic.css"
+  
   import { onMount } from 'svelte'
   import Header from './lib/Header.svelte'
   import Settings from './lib/settings/Settings.svelte'
@@ -35,8 +41,7 @@
 
 <style>
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: "Open sans", sans-serif;
 
     --nav-h: 3.5rem;
     --content-h: calc(100vh - var(--nav-h));
@@ -58,6 +63,10 @@
   }
 
   :global(body) { margin: 0;}
+
+  :global(h1,h2,h3,h4, .fontTitle) {
+    font-family: "Fira Code", serif;
+  }
   :global(h2) {
     margin-bottom: 0.5rem;
     font-size: var(--text-big);
