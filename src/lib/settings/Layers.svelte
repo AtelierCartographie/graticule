@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { lyr, mapTitle, scaleDist, canAddScale } from '../../stores.js'
+    import { lyr, mapTitle, scaleDist, canAddScale, urbanSize } from '../../stores.js'
     import { slide } from "svelte/transition";
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
@@ -52,6 +52,11 @@
     }
 
     $: addLayer(lyr_selected)
+
+    // Filtre de la couche des villes selon la population
+    function filterUrban(size) {
+
+    }
     
     onMount( () => {
         // applique la couche par défaut au démarrage
@@ -74,10 +79,39 @@
         
         <ul>
             {#each layers_list as {id, name, style} }
+                {#if id == 'urban'}
+                <li>
+                    <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
+                    <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
+                        {#if lyr_selected.includes("urban")}
+                        <div class="habillage-style" transition:slide={{ duration: 300 }}>
+                                <button on:click={() => urbanSize.set(50000)}
+                                        class:active="{$urbanSize === 50000}"
+                                        use:tooltip={{ placement: 'top' }} title="> 50 000 hab." 
+                                        type="button" class="badge">50k</button>
+                                <button on:click={() => urbanSize.set(100000)}
+                                        class:active="{$urbanSize === 100000}"
+                                        use:tooltip={{ placement: 'top' }} 
+                                        title="> 100 000 hab."
+                                        type="button" class="badge">100k</button>
+                                <button on:click={() => urbanSize.set(250000)}
+                                        class:active="{$urbanSize === 250000}"
+                                        use:tooltip={{ placement: 'top' }} title="> 250 000 hab." 
+                                        type="button" class="badge">250k</button>
+                                <button on:click={() => urbanSize.set(500000)}
+                                        class:active="{$urbanSize === 500000}"
+                                        use:tooltip={{ placement: 'top' }} title="> 500 000 hab." 
+                                        type="button" class="badge">500k</button>
+                        </div>
+                        {/if}
+                    </Styling>
+                </li>
+                {:else}
                 <li>
                     <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
                     <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true} />
                 </li>
+                {/if}
             {/each} 
         </ul>
     </form>
@@ -107,7 +141,7 @@
                 </li>
         </ul>
     </form>
-    <a href="#resolution" class="next-section">
+    <a href="#resolution" class="next-section fonTitle">
         <p>continuer</p>
         <span class="material-icons">expand_more</span>
     </a>
@@ -137,6 +171,25 @@
         padding: .5rem 1rem;
         margin-bottom: .5rem;
         border-left: 2px solid var(--dark-grey);
+        font-size: var(--text-small);
     }
     input[type="text"] { font-size: var(--text-small); }
+
+    /* Badge styling */
+    .badge {
+        display: inline-block;
+        /* min-zwidth: 1em; */
+        padding: .3rem .7rem; /* em unit */
+        border-radius: 2em;
+        font-size: var(--text-small);
+        text-align: center;
+        background: var(--light-grey);
+        color: var(--dark-grey);
+        border: 1px solid var(--dark-grey);;
+    }
+    .badge.active, .badge:hover {
+        background: var(--accent-color-light);
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+    }
 </style>

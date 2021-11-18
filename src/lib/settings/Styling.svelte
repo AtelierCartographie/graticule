@@ -50,6 +50,8 @@
     <span class="material-icons">settings</span>
 </button>
 
+<slot></slot>
+
 {#if isOpen}
 <section class="panel" transition:slide={{ duration: 300 }}>
     {#if style.includes("fill")}

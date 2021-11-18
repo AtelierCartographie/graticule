@@ -2,8 +2,19 @@
     import { blur } from "svelte/transition";
     import { geoGraticule10 } from 'd3-geo'
     import geo from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
+    import { urbanSize } from '../../stores.js'
 
     export let path, outline
+
+
+    // Filtre la couche urban selon un seuil d'habitants 
+    // défini par des boutons dans Layers.svelte
+    // Le résultat est remis dans une 'FeatureCollection' = 1 seul path
+    // Sinon le navigateur ne pourrait pas afficher les >130000 path de chaque ville
+    $: urbanFilter = {
+        type: "FeatureCollection",
+        features: geo.urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+    }
 
     // Par défaut les transitions ne se font qu'à l'apparition/création de l'élément dans le DOM
     // pour les activers quand une valeur de variable change il faut utiliser #key
@@ -17,9 +28,11 @@
         <path id='graticule' d="{path(geoGraticule10())}" style="visibility: hidden"></path>
 
         {#each Object.entries(geo) as [name, fn]}
-
+            {#if name == 'urban'}
+            <path transition:blur="{{ duration: 1500}}" id='{name}' d="{path(urbanFilter)}" style="visibility: hidden"></path>
+            {:else}
             <path transition:blur="{{ duration: 1500}}" id='{name}' d="{path(fn)}" style="visibility: hidden"></path>
-
+            {/if}
         {/each}
     </g>
 {/if}
