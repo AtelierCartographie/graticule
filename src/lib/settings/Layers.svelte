@@ -6,6 +6,7 @@
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
+    import UrbanFilter from './UrbanFilter.svelte'
     import layers_list from '../../assets/layers_list.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -83,27 +84,7 @@
                 <li>
                     <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
                     <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
-                        {#if lyr_selected.includes("urban")}
-                        <div class="habillage-style" transition:slide={{ duration: 300 }}>
-                                <button on:click={() => urbanSize.set(50000)}
-                                        class:active="{$urbanSize === 50000}"
-                                        use:tooltip={{ placement: 'top' }} title="> 50 000 hab." 
-                                        type="button" class="badge">50k</button>
-                                <button on:click={() => urbanSize.set(100000)}
-                                        class:active="{$urbanSize === 100000}"
-                                        use:tooltip={{ placement: 'top' }} 
-                                        title="> 100 000 hab."
-                                        type="button" class="badge">100k</button>
-                                <button on:click={() => urbanSize.set(250000)}
-                                        class:active="{$urbanSize === 250000}"
-                                        use:tooltip={{ placement: 'top' }} title="> 250 000 hab." 
-                                        type="button" class="badge">250k</button>
-                                <button on:click={() => urbanSize.set(500000)}
-                                        class:active="{$urbanSize === 500000}"
-                                        use:tooltip={{ placement: 'top' }} title="> 500 000 hab." 
-                                        type="button" class="badge">500k</button>
-                        </div>
-                        {/if}
+                        <UrbanFilter />
                     </Styling>
                 </li>
                 {:else}
@@ -165,7 +146,7 @@
         width: 9rem;
         font-size: var(--text-medium);
     }
-    .habillage-style {
+    :global(.habillage-style) {
         background-color: var(--grey);
         width: 100%;
         padding: .5rem 1rem;

@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, zTransform, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
+    import { proj, regbbox, zTransform, lyr, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -15,7 +15,10 @@
     const mapMargin = (height * 0.05) / 2
     const mapHeight = height - mapMargin
 
-    let mapCredit = "Source : Natural Earth. Réalisé avec #Cartofond"
+    let mapCredit
+    $: { mapCredit = $lyr.includes('urban') 
+                        ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
+                        : "Source : Natural Earth. Réalisé avec #Cartofond." }
 
     // --------------- PROJECTION -------------- //
     let outline = ({type: "Sphere"})
