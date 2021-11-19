@@ -52,8 +52,11 @@
     #topbar li {
         font-size: var(--text-medium);
         font-weight: bold;
-        background-color: var(--grey);
-        padding: .5rem 1rem .5rem .5rem;
+        background-color: var(--light-grey);
+        border: 1px solid var(--dark-grey);
+        /* padding: .5rem 1rem .5rem .5rem; */
+        border-radius: 2em;
+        padding: .3rem .7rem;
     }
     a.header-steps {
         display: block;
@@ -63,6 +66,9 @@
     #topbar li.inView, #topbar li.inView a.header-steps, #topbar li:hover, #topbar li:hover a.header-steps {
         background-color: var(--accent-color-light);
         color: var(--accent-color);
+    }
+    #topbar li.inView, #topbar li:hover {
+        border: 1px solid var(--accent-color);
     }
 
     @media (max-width: 1040px) {

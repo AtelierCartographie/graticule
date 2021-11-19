@@ -47,13 +47,13 @@
     .badge {
         display: inline-block;
         /* min-zwidth: 1em; */
-        padding: .3rem .7rem; /* em unit */
+        padding: .3rem .7rem;
         border-radius: 2em;
         font-size: var(--text-small);
         text-align: center;
         background: var(--light-grey);
         color: var(--dark-grey);
-        border: 1px solid var(--dark-grey);;
+        border: 1px solid var(--dark-grey);
     }
     .badge.active, .badge:hover {
         background: var(--accent-color-light);

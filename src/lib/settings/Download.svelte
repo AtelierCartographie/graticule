@@ -179,4 +179,19 @@
     section#download a {
         margin-bottom: 1rem;
     }
+    button {
+        border: 1px solid var(--dark-grey);
+        border-radius: 2em;
+        padding: .3rem .7rem;
+        background-color: var(--light-grey);
+        /* box-shadow: 0 4px 4px rgb(0 0 0 / 20%); */
+        /* color: var(--dark-grey); */
+        /* padding: .2rem; */
+    }
+    button:hover {
+        border: 1px solid var(--accent-color);
+        background-color: var(--accent-color-light);
+        color: var(--accent-color);
+        cursor: pointer;
+    }
 </style>
