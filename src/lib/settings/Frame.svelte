@@ -19,9 +19,9 @@
     <h2><span class="material-icons">crop</span> Cadrer</h2>
     <Tip message={m1} />
     <form id="reg-select">
-        <label for="reg-select" class="fontTitle">Régions du monde</label>
+        <label for="input_regSelect" class="fontTitle">Régions du monde</label>
 
-        <select bind:value={reg_selected} name="projection" id="reg-select">
+        <select bind:value={reg_selected} name="projection" id="input_regSelect">
             {#each reg_bbox as d}
                 <option value={d.id}>{d.name}</option>
             {/each}

@@ -22,12 +22,12 @@
 </script>
 
 
-<label class="Toggle" for={id}>
+<label class="Toggle" for={`input_${id}`}>
   
   <span class="Toggle__label">{label}</span> 
 
   <input type="checkbox" class="Toggle__input"
-          {name} {id} {value}
+          {name} id={`input_${id}`} {value}
           checked={bindGroup.includes(value)}
           on:change={onChange} />
 

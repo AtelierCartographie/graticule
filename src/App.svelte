@@ -57,6 +57,7 @@
     --grey: #E5E5E5;
     --light-grey: #f9f9f9;
 
+    --accent-color-dark: #BD2C00;
     --accent-color: #ff3b00;
     --accent-color-medium: #ffa98f;
     --accent-color-light: #ffd8cc;
