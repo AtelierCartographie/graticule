@@ -106,7 +106,7 @@
     font-display: block;
     src: local('Material Icons'),
       local('MaterialIcons-Regular'),
-      url("/MaterialIcons-Regular.woff2") format('woff2');
+      url("./assets/MaterialIcons-Regular.woff2") format('woff2');
   }
 
   :global(.material-icons) {
