@@ -34,7 +34,7 @@
     </a>
 
     <Download />
-    <a class="next-section fontTitle" style="visibility: hidden;">
+    <a href="#download" class="next-section fontTitle" style="visibility: hidden;">
         <p>continuer</p>
         <p><span class="material-icons">expand_more</span></p>
     </a>

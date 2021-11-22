@@ -6,7 +6,7 @@
     <div id="logo">
         <p>Cartofond est un projet open source développé par</p>
         <a href="https://www.sciencespo.fr/cartographie/" title="Sciences Po - Atelier de cartographie">
-            <img src="./logo-Atelier-NB.svg" alt="Logo de Sciences Po - Atelier de cartographie">
+            <img width="160" src="./logo-Atelier-NB.svg" alt="Logo de Sciences Po - Atelier de cartographie">
         </a>
     </div>
     <div id="version">

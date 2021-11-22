@@ -103,6 +103,7 @@
     font-family: 'Material Icons';
     font-style: normal;
     font-weight: 400;
+    font-display: block;
     src: local('Material Icons'),
       local('MaterialIcons-Regular'),
       url("/MaterialIcons-Regular.woff2") format('woff2');
@@ -113,8 +114,8 @@
     font-weight: normal;
     font-style: normal;
     font-size: 24px;  /* Preferred icon size */
-    display:inline-flex;
-    vertical-align:middle;
+    display: inline-flex;
+    vertical-align: middle;
     line-height: 1;
     text-transform: none;
     letter-spacing: normal;
