@@ -186,8 +186,10 @@
         </clipPath>
     </defs>
 
+    {#if isReady}
     <text id="mapTitle" x={rx} y={ry} dy=-5>{$mapTitle}</text>
     <text id="mapCredit" x={rx + rw} y={ry + rh} dy=10>{mapCredit}</text>
+    {/if}
     <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
         <g id="zoom" >        
             <Basemap {path} {outline} />
