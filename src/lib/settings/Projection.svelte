@@ -31,7 +31,7 @@
 </script>
 
 <section id="projection" class="settings-section" 
-    use:inView 
+    use:inView
     on:enter={() => stepEnter("headerProjection")}
 >
     <h2><span class="material-icons">language</span> Projeter</h2>
