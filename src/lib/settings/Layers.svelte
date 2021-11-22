@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { lyr, mapTitle, scaleDist, canAddScale, urbanSize } from '../../stores.js'
+    import { lyr, mapTitle, scaleDist, canAddScale, isModalOpen, modalContent } from '../../stores.js'
     import { slide } from "svelte/transition";
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
@@ -106,9 +106,15 @@
         <ul>
                 <li>
                     <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
+                    <span 
+                        use:tooltip title="Cliquer pour en savoir plus"
+                        on:click={() => modalContent.set('scale')}
+                        on:click={isModalOpen.set(!$isModalOpen)}
+                        class="material-icons tooltip">help_outline</span>
                     {#if lyr_selected.includes("scaleBar")}
                     <div class="habillage-style" transition:slide={{ duration: 300 }}>
                         <input type="text" bind:value={scale_dist} placeholder="distance en km">
+                        <p>Cliquer sur l'échelle pour la déplacer</p>
                     </div>
                     {/if}
                 </li>
@@ -134,6 +140,7 @@
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
+        align-items: center;
         gap: .5rem;
     }
     :global(#layers-select .Toggle__label, #habillage .Toggle__label) {
@@ -152,21 +159,5 @@
     }
     input[type="text"] { font-size: var(--text-small); }
 
-    /* Badge styling */
-    .badge {
-        display: inline-block;
-        /* min-zwidth: 1em; */
-        padding: .3rem .7rem; /* em unit */
-        border-radius: 2em;
-        font-size: var(--text-small);
-        text-align: center;
-        background: var(--light-grey);
-        color: var(--dark-grey);
-        border: 1px solid var(--dark-grey);;
-    }
-    .badge.active, .badge:hover {
-        background: var(--accent-color-light);
-        color: var(--accent-color);
-        border: 1px solid var(--accent-color);
-    }
+    p { margin-bottom: 0; }
 </style>

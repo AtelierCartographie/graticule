@@ -11,7 +11,7 @@
   import Map from './lib/map/Map.svelte'
   import Footer from './lib/Footer.svelte'
   import Modal from './lib/Modal.svelte'  
-  import HelpProjection from './lib/help/HelpProjection.svelte'
+  import Help from './lib/help/Help.svelte'
 
   let canRender = false
   let width, height
@@ -36,7 +36,7 @@
 <Footer />
 
 <Modal>
-  <HelpProjection />
+  <Help />
 </Modal>
 
 <style>

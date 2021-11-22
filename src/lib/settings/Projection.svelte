@@ -1,6 +1,6 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { proj, isModalOpen } from '../../stores.js'
+    import { proj, isModalOpen, modalContent } from '../../stores.js'
     import Tip from './Tip.svelte'
     import proj_list from '../../assets/proj_list.js'
     import inView from '../../assets/inView.js'
@@ -48,6 +48,7 @@
         </select>
         <span 
             use:tooltip title="Cliquer pour en savoir plus"
+            on:click={() => modalContent.set('proj')}
             on:click={isModalOpen.set(!$isModalOpen)}
             class="material-icons tooltip">help_outline</span>
     </form>
