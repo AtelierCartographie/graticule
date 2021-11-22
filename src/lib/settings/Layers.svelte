@@ -27,7 +27,7 @@
 
     // Ajouter l'échelle graphique
     $: if (lyr_selected.includes("scaleBar")) {
-        let checked = document.getElementById('scale').checked
+        let checked = document.getElementById('input_scale').checked
         if (checked) { canAddScale.set(checked) }
     }
     // Taille de l'échelle graphique
