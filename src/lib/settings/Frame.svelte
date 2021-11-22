@@ -27,10 +27,6 @@
             {/each}
         </select>
     </form>
-    <a href="#projection" class="next-section fontTitle">
-        <p>continuer</p>
-        <span class="material-icons">expand_more</span>
-    </a>
 </section>
 
 

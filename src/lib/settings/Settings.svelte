@@ -10,15 +10,34 @@
 
 <div id="settings">
     <Frame />
+    <a href="#projection" class="next-section fontTitle">
+        <p>continuer</p>
+        <p><span class="material-icons">expand_more</span></p>
+    </a>
+
     <Projection />
+    <a href="#layers" class="next-section fontTitle">
+        <p>continuer</p>
+        <p><span class="material-icons">expand_more</span></p>
+    </a>
+
     <Layers {canRender} />
+    <a href="#resolution" class="next-section fontTitle">
+        <p>continuer</p>
+        <p><span class="material-icons">expand_more</span></p>
+    </a>
+
     <Resolution />
-    <!-- <section id="layout" class="settings-section">
-        <h2><span class="material-icons">grid_3x3</span> Mise en page</h2>
-        <a href="#download" class="next-section"><span class="material-icons">expand_more</span></a>
-    </section> -->
+    <a href="#download" class="next-section fontTitle">
+        <p>continuer</p>
+        <p><span class="material-icons">expand_more</span></p>
+    </a>
+
     <Download />
-    
+    <a class="next-section fontTitle" style="visibility: hidden;">
+        <p>continuer</p>
+        <p><span class="material-icons">expand_more</span></p>
+    </a>
 </div>
 
 
@@ -30,10 +49,28 @@
         overflow: -moz-scrollbars-none;
         padding: 0 1rem 0 1rem;
         background-color:var(--light-grey);
-        height: calc(100vh - var(--nav-h) - var(--footer-height));
+        height: calc(100% - var(--footer-height));
     }
-   
     #settings::-webkit-scrollbar { width: 0 !important; }
+
+    :global(.settings-section){
+        margin-bottom: var(--step-gap);
+        min-height: calc(100% - 12rem);
+        padding-top: 1rem;
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    a.next-section {
+        text-decoration: none;
+        text-align: center;
+        color: var(--dark-grey);
+    }
+    a.next-section p { margin: 0; }
+    a.next-section .material-icons { font-size: 54px; }
+    a.next-section:hover,
+    a.next-section:hover .material-icons { color: var(--accent-color); }
+
     /* #settings::after {
         content: "";
         position: fixed;
@@ -43,31 +80,4 @@
         height: 4rem;
         background: linear-gradient(to bottom,rgba(249, 249, 249, 0) 0%,rgba(249, 249, 249, .7) 50%,rgba(249, 249, 249, 1) 100%);
     } */
-
-    :global(.settings-section){
-        margin-bottom: var(--step-gap);
-        height: calc(100% - 2rem);
-        padding-top: 1rem;
-        display: flex;
-        flex-flow: column nowrap;
-        flex: 1;
-    }
-    :global(.settings-section a.next-section) {
-        align-self: center;
-        margin-top: auto;
-        text-decoration: none;
-        text-align: center;
-        color: var(--dark-grey);
-    }
-    :global(.settings-section a.next-section p) {
-        margin: 0;
-        font-weight: bold;
-    }
-    :global(.settings-section a.next-section .material-icons) {
-        font-size: 54px;
-        color: var(--dark-grey);
-    }
-    :global(.settings-section a.next-section:hover, .settings-section a.next-section:hover .material-icons) {
-        color: var(--accent-color);
-    }
 </style>

@@ -122,10 +122,6 @@
                 </li>
         </ul>
     </form>
-    <a href="#resolution" class="next-section fonTitle">
-        <p>continuer</p>
-        <span class="material-icons">expand_more</span>
-    </a>
 </section>
 {/if}
 
