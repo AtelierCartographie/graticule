@@ -2,6 +2,7 @@
     import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
     import rgb2hex from '../../assets/rgb2hex.js'
+    import { zTransform } from '../../stores.js'
 
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
@@ -31,7 +32,7 @@
             .style("fill-opacity", fillOpacity)
             .style("stroke", strokeColor)
             .style("stroke-opacity", strokeOpacity)
-            .style("stroke-width", `${strokeWidth}px`)
+            .style("stroke-width", `${strokeWidth / $zTransform.k}px`)
     }
 
     // 2. le faire une fois à l'ouverture de la boite de stylage
