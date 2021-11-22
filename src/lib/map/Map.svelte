@@ -242,4 +242,6 @@
         color: var(--accent-color);
         cursor: pointer;
     }
+
+    #scaleBar:hover { color: var(--accent-color); }
 </style>
