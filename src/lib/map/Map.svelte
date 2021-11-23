@@ -208,8 +208,8 @@
         #borders { fill: none; stroke: white; stroke-width: 0.5; }
         #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
         #urban { fill: black; stroke: none; }
-        #mapTitle { font-size: var(--text-big); font-weight: bold; fill: var(--dark-grey); visibility: hidden; }
-        #mapCredit { font-size: var(--text-small); text-anchor: end; fill: var(--dark-grey); }
+        #mapTitle { font-size: var(--text-big); font-family: "Fira Code", monospace; fill: var(--dark-grey); visibility: hidden; }
+        #mapCredit { font-size: var(--text-small); font-family: "Open sans", sans-serif; text-anchor: end; fill: var(--dark-grey); }
     </style>
 </svg>
 

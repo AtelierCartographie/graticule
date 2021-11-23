@@ -108,8 +108,9 @@
                 blobSVG = {size, url}
                 if (dl) {
                     a.href = url
-                    a.setAttribute("download", `basemap-${today}.png`)
-                    a.click()
+                    a.setAttribute("download", `basemap-${today}.svg`)
+                    // Pas besoin, le téléchargement se lance déjà, pourquoi ?
+                    // a.click()
                 }
                 break
             }
