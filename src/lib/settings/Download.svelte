@@ -50,7 +50,8 @@
 
     // ----------------- PNG ----------------- //
     // d'après https://observablehq.com/@mbostock/saving-svg
-    function SVGtoPNG(svg) {
+    function SVGtoPNG(svg, dpi) {
+        if (dpi == null) dpi = devicePixelRatio;
         let resolve, reject;
         const promise = new Promise((y, n) => (resolve = y, reject = n))
         const image = new Image
@@ -58,10 +59,11 @@
         image.onload = () => {
             const rect = svg.viewBox.baseVal
             const canvas = document.createElement("canvas")
-            canvas.width = rect.width
-            canvas.height = rect.height
+            canvas.width = rect.width * dpi
+            canvas.height = rect.height * dpi
             canvas.style.width = rect.width + "px"
             const context = canvas.getContext("2d")
+            context.scale(dpi, dpi)
             context.drawImage(image, 0, 0, rect.width, rect.height)
             canvas.toBlob(resolve)
             }
@@ -115,7 +117,7 @@
                 break
             }
             case 'png': {
-                SVGtoPNG(svg).then( //blob => blob)
+                SVGtoPNG(svg, 4).then( //blob => blob)
                     blob => {
                         const url = URL.createObjectURL(blob)
                         const size = (blob.size / 1024).toFixed(0) // octet => Ko
