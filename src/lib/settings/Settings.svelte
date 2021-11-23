@@ -54,8 +54,7 @@
     #settings::-webkit-scrollbar { width: 0 !important; }
 
     :global(.settings-section){
-        margin-bottom: var(--step-gap);
-        min-height: calc(100% - 12rem);
+        min-height: calc(100% - 6rem);
         padding-top: 1rem;
         display: flex;
         flex-flow: column nowrap;

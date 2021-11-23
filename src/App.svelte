@@ -47,7 +47,6 @@
     --content-h: calc(100vh - var(--nav-h) - .5rem);
     --settings-width: 16rem;
     --footer-height: 7rem;
-    --step-gap: 6rem;
 
     --text-big: 16px;
     --text-medium: 14px;
