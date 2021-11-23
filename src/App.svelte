@@ -65,7 +65,7 @@
   :global(body) { margin: 0;}
 
   :global(h1,h2,h3,h4, .fontTitle) {
-    font-family: "Fira Code", serif;
+    font-family: "Fira Code", monospace;
   }
   :global(h2) {
     margin-bottom: 0.5rem;
