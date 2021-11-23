@@ -30,13 +30,22 @@
         d3svg.selectAll("#gBrush").remove()
 
         // stock le zoom appliqué par l'utilisateur
-        let transform = d3svg.select('g#zoom').attr('transform')
-
+        const zTransform = d3svg.select('g#zoom').attr('transform')
+        
+        // zoom transform + scale bar transform
+        let zsTransform
+        if (d3svg.select('g#scaleBar').size() != 0) { // si la scale bar est présente
+            const sTransform = d3svg.select('g#scaleBar').attr('transform')
+            zsTransform = zTransform + " " + sTransform
+        }
+        
         // dégrouper g#zoom =>  puis les ré-inserts dans g#gCadrage
         const zoomChildren = d3svg.select('g#zoom').selectChildren().remove().nodes()   // sélectionner tous les enfants
         d3svg.select('g#zoom').remove()                                                 // supprimer g#zoom
         zoomChildren.forEach( node => d3svg.select('g#gCadrage').append(() => node))    // réinsérer les enfants
-        d3svg.select('g#basemap').attr('transform', transform)                          // réapplique le zoom utilisateur
+        // réappliquer les transformations sur les sous-groupes
+        d3svg.select('g#basemap').attr('transform', zTransform)                         // réapplique le zoom utilisateur
+        d3svg.select('g#scaleBar').attr('transform', zsTransform)                       // applique le transform zoom + scaleBar
         
         return svg
     }
