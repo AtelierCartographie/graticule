@@ -129,7 +129,7 @@
             const [[x0, y0], [x1, y1]] = path.bounds(b)
 
             // Voir exemple : https://observablehq.com/@d3/zoom-to-bounding-box
-            select("g#zoom").transition().duration(750).call(
+            select("#map-svg").transition().duration(750).call(
                 zoom2.transform,
                 zoomIdentity
                     .translate(width / 2, mapHeight / 2)
@@ -145,12 +145,12 @@
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
-    const zoomIn = () => select("g#zoom").transition().call(zoom2.scaleBy, 1.5)
-    const zoomOut = () => select("g#zoom").transition().call(zoom2.scaleBy, 1/1.5)
-    const zoomReset = () => select("g#zoom").transition().duration(750).call(
+    const zoomIn = () => select("#map-svg").transition().call(zoom2.scaleBy, 1.5)
+    const zoomOut = () => select("#map-svg").transition().call(zoom2.scaleBy, 1/1.5)
+    const zoomReset = () => select("#map-svg").transition().duration(750).call(
         zoom2.transform,
         zoomIdentity,
-        zoomTransform(select("g#zoom").node()).invert([width / 2, mapHeight / 2]))
+        zoomTransform(select("#map-svg").node()).invert([width / 2, mapHeight / 2]))
     // ---------------------------------------- //
 
     onMount( () => {
@@ -172,7 +172,7 @@
 
         // ZOOM ----- applique le zoom sur "g#zoom" plutôt que l'ensemble du svg
         // => limite le zoom à l'intérieur du cadrage (via d3-brush)
-        select("g#zoom")
+        select("#map-svg")
             .attr("cursor", "grab")
             .call(zoom2)
     })
