@@ -207,6 +207,7 @@
         #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
         #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
         #land { fill: lightgrey; stroke: none; }
+        #countries { fill: lightgrey; stroke: none; }
         #borders { fill: none; stroke: white; stroke-width: 0.5; }
         #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
         #urban { fill: black; stroke: none; }

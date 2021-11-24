@@ -42,7 +42,11 @@
         // Couches hidden par défault
         base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
-        lyr.forEach(e => select("g#basemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
+        lyr.forEach(e => 
+            e != 'countries'
+            ? select(`g#basemap #${e}`).style("visibility", "visible").classed("hidden", false)
+            : select(`g#basemap #${e}`).selectChildren().style("visibility", "visible").classed("hidden", false)
+        )
         // Cas particuliers (titre et échelle)
         lyr.includes("scaleBar") 
             ? select("g#scaleBar").style("visibility", "visible").classed("hidden", false)

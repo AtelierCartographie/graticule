@@ -3,6 +3,7 @@
     import { geoGraticule10 } from 'd3-geo'
     import geo from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
     import { urbanSize } from '../../stores.js'
+    import tooltip from '../../assets/tooltip.js'
 
     export let path, outline
 
@@ -30,9 +31,25 @@
         {#each Object.entries(geo) as [name, fn]}
             {#if name == 'urban'}
             <path transition:blur="{{ duration: 1500}}" id='{name}' d="{path(urbanFilter)}" style="visibility: hidden"></path>
+            {:else if name == 'countries'}
+            <g id="countries">
+                {#each fn.features as country}
+                <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right'}} 
+                        transition:blur="{{ duration: 1500}}"
+                        id='{country.properties.id}' class="countries"
+                        d="{path(country)}"
+                        style="visibility: hidden"></path>
+                {/each}
+            </g>
             {:else}
             <path transition:blur="{{ duration: 1500}}" id='{name}' d="{path(fn)}" style="visibility: hidden"></path>
             {/if}
         {/each}
     </g>
 {/if}
+
+<style>
+    .countries:hover {
+        fill: var(--accent-color-light);
+    }
+</style>

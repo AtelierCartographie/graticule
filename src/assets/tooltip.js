@@ -1,5 +1,5 @@
 // https://atomiks.github.io/tippyjs
-import tippy from 'tippy.js';
+import tippy, {followCursor} from 'tippy.js';
 import 'tippy.js/dist/tippy.css'; // optional for styling 
 
 export default function tooltip(node, params = {}) {
@@ -31,6 +31,7 @@ export default function tooltip(node, params = {}) {
         delay: [0,100],
         maxWidth: 200,
         theme: 'accent',
+        plugins: [followCursor],
         ...params });
   
     return {
