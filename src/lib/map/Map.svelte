@@ -147,10 +147,12 @@
     // voir https://observablehq.com/@d3/programmatic-zoom
     const zoomIn = () => select("#map-svg").transition().call(zoom2.scaleBy, 1.5)
     const zoomOut = () => select("#map-svg").transition().call(zoom2.scaleBy, 1/1.5)
-    const zoomReset = () => select("#map-svg").transition().duration(750).call(
-        zoom2.transform,
-        zoomIdentity,
-        zoomTransform(select("#map-svg").node()).invert([width / 2, mapHeight / 2]))
+    const zoomReset = () => $regbbox == null 
+            ?  select("#map-svg").transition().duration(750).call(
+                zoom2.transform,
+                zoomIdentity,
+                zoomTransform(select("#map-svg").node()).invert([width / 2, mapHeight / 2]))
+            : zoomRegion($regbbox)
     // ---------------------------------------- //
 
     onMount( () => {
