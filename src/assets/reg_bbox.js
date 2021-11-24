@@ -1,5 +1,5 @@
 const reg_bbox = [
-    { id: "world", name: "-", bbox: null },
+    { id: null, name: "-", bbox: null },
     { id: "africa", name: "Afrique", bbox: { "type": "Feature", "geometry": { "type": "Polygon",
         "coordinates": [[ [-25, -35], [-25, 35], [50, 35], [50, -35], [-25, -35] ]] }} },
     { id: "am_lat", name: "Amérique latine", bbox: { "type": "Feature", "geometry": { "type": "Polygon",

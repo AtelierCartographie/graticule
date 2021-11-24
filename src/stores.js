@@ -7,6 +7,7 @@ export const zTransform = writable({ k: 1, x: 0, y: 0})
 // SETTINGS
 // Frame
 export const regbbox = writable()
+export const countrybbox = writable()
 // Projection
 export const proj = writable()
 // Layers

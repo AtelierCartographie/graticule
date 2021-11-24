@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, zTransform, lyr, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, lyr, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -107,10 +107,12 @@
 
     // ----------------- ZOOM ----------------- //
     let isReady = false
+    let zmin = 0.5,
+        zmax = 100
 
     // paramètres du pan and zoom
     const zoom2 = zoom()
-            .scaleExtent([0.5, 15]) // min, max du zoom
+            .scaleExtent([zmin, zmax]) // min, max du zoom
             .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
             .on("zoom", ({ transform }) => {
                 select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
@@ -133,7 +135,7 @@
                 zoom2.transform,
                 zoomIdentity
                     .translate(width / 2, mapHeight / 2)
-                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / mapHeight)))
+                    .scale(Math.min(zmax, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / mapHeight)))
                     .translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
             ) 
         }
@@ -141,18 +143,19 @@
 
     $: if (isReady) { 
         $proj
-        zoomRegion($regbbox) }
+        zoomRegion($regbbox)
+        zoomRegion($countrybbox) }
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
     const zoomIn = () => select("#map-svg").transition().call(zoom2.scaleBy, 1.5)
     const zoomOut = () => select("#map-svg").transition().call(zoom2.scaleBy, 1/1.5)
-    const zoomReset = () => $regbbox == null 
+    const zoomReset = () => $regbbox == null && $countrybbox == null
             ?  select("#map-svg").transition().duration(750).call(
                 zoom2.transform,
                 zoomIdentity,
                 zoomTransform(select("#map-svg").node()).invert([width / 2, mapHeight / 2]))
-            : zoomRegion($regbbox)
+            : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
     // ---------------------------------------- //
 
     onMount( () => {
