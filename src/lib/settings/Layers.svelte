@@ -18,7 +18,7 @@
     const tp1 = "Sauf mention contraire, ces informations sont extraites de la source Natural Earth"
 
     // Couches actives
-    let lyr_selected = ['ocean', 'land', 'borders']
+    let lyr_selected = ['ocean', 'countries', 'borders']
     $: lyr.set(lyr_selected)
     
     // Titre de la carte

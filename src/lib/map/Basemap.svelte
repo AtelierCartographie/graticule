@@ -34,7 +34,7 @@
             {:else if name == 'countries'}
             <g id="countries">
                 {#each fn.features as country}
-                <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right'}} 
+                <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }} 
                         transition:blur="{{ duration: 1500}}"
                         id='{country.properties.id}' class="countries"
                         d="{path(country)}"
@@ -49,7 +49,6 @@
 {/if}
 
 <style>
-    .countries:hover {
-        fill: var(--accent-color-light);
-    }
+    .countries:hover { fill: var(--accent-color-light); }
+    .countries:focus { outline: none; }
 </style>
