@@ -21,13 +21,13 @@
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
     // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb3hex voir mon notebook utils observable)
     
-    $: fillColor     = rgb2hex( select(`g#basemap #${lyr}`).style("fill") )
-    $: fillOpacity   = select(`g#basemap #${lyr}`).style("fill-opacity")
-    $: strokeColor   = rgb2hex( select(`g#basemap #${lyr}`).style("stroke") )
-    $: strokeOpacity = select(`g#basemap #${lyr}`).style("stroke-opacity")
-    $: strokeWidth   = parseFloat( select(`g#basemap #${lyr}`).style("stroke-width") )
+    $: fillColor     = rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )
+    $: fillOpacity   = select(`#gBasemap #${lyr}`).style("fill-opacity")
+    $: strokeColor   = rgb2hex( select(`#gBasemap #${lyr}`).style("stroke") )
+    $: strokeOpacity = select(`#gBasemap #${lyr}`).style("stroke-opacity")
+    $: strokeWidth   = parseFloat( select(`#gBasemap #${lyr}`).style("stroke-width") )
     $: {
-        select(`g#basemap #${lyr}`)
+        select(`#gBasemap #${lyr}`)
             .style("fill", fillColor)
             .style("fill-opacity", fillOpacity)
             .style("stroke", strokeColor)
@@ -38,11 +38,11 @@
     // 2. le faire une fois à l'ouverture de la boite de stylage
     // 3. lier les valeurs des inputs au style de la carte
     function addStyling(lyr, value) {
-        const base = select("g#basemap")
+        const base = select("#gBasemap")
         // Couches hidden par défault
         base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
-        lyr.forEach(e => select("g#basemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
+        lyr.forEach(e => select("#gBasemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
     }
 
 </script>

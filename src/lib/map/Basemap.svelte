@@ -23,7 +23,7 @@
 </script>
 
 {#if geo}
-    <g id='basemap' style="clip-path: url(#clip)">
+    <g id='gBasemap' style="clip-path: url(#clip)">
 
         <path id="ocean" d="{path(outline)}" transition:blur="{{ duration: 1500 }}" style="visibility: hidden"/>
         <path id='graticule' d="{path(geoGraticule10())}" style="visibility: hidden"></path>

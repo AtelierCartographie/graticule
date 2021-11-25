@@ -22,7 +22,7 @@
     // https://github.com/AtelierCartographie/Khartis/blob/master/app/utils/svg-exporter.js
     function cleaningSVG() {
         // supprime les couches masquées
-        const svg = select('#map-svg').node().cloneNode(true)
+        const svg = select('#mapSvg').node().cloneNode(true)
         const d3svg = select(svg)
         d3svg.selectAll(".hidden").remove()
 
@@ -30,22 +30,22 @@
         d3svg.selectAll("#gBrush").remove()
 
         // stock le zoom appliqué par l'utilisateur
-        const zTransform = d3svg.select('g#zoom').attr('transform')
+        const zTransform = d3svg.select('#gZoom').attr('transform')
         
         // zoom transform + scale bar transform
         let zsTransform
-        if (d3svg.select('g#scaleBar').size() != 0) { // si la scale bar est présente
-            const sTransform = d3svg.select('g#scaleBar').attr('transform')
+        if (d3svg.select('#gScaleBar').size() != 0) { // si la scale bar est présente
+            const sTransform = d3svg.select('#gScaleBar').attr('transform')
             zsTransform = zTransform + " " + sTransform
         }
         
         // dégrouper g#zoom =>  puis les ré-inserts dans g#gCadrage
-        const zoomChildren = d3svg.select('g#zoom').selectChildren().remove().nodes()   // sélectionner tous les enfants
-        d3svg.select('g#zoom').remove()                                                 // supprimer g#zoom
-        zoomChildren.forEach( node => d3svg.select('g#gCadrage').append(() => node))    // réinsérer les enfants
+        const zoomChildren = d3svg.select('#gZoom').selectChildren().remove().nodes()   // sélectionner tous les enfants
+        d3svg.select('#gZoom').remove()                                                 // supprimer g#zoom
+        zoomChildren.forEach( node => d3svg.select('#gCadrage').append(() => node))    // réinsérer les enfants
         // réappliquer les transformations sur les sous-groupes
-        d3svg.select('g#basemap').attr('transform', zTransform)                         // réapplique le zoom utilisateur
-        d3svg.select('g#scaleBar').attr('transform', zsTransform)                       // applique le transform zoom + scaleBar
+        d3svg.select('#gBasemap').attr('transform', zTransform)                         // réapplique le zoom utilisateur
+        d3svg.select('#gScaleBar').attr('transform', zsTransform)                       // applique le transform zoom + scaleBar
         
         return svg
     }

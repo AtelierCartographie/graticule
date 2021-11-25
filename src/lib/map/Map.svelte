@@ -73,7 +73,7 @@
     let i = true
     $: if ($canAddScale && i) {
         i = !i
-        select("g#scaleBar")
+        select("#gScaleBar")
             .attr("cursor", "move")
             .call(scaleBar.left(left).top(top))
             .call(dragScaleBar)
@@ -81,48 +81,50 @@
     // Relancer l'échelle si...
     $: {
         // Taille et épaisseur constante en pompensant le zoom
-        select("g#scaleBar .label").attr("font-size", 12 / k)
-        select("g#scaleBar .domain").attr("stroke-width", 1.5 / k)
+        select("#gScaleBar .label").attr("font-size", 12 / k)
+        select("#gScaleBar .domain").attr("stroke-width", 1.5 / k)
 
         // ... changement de projection
-        if ($canAddScale) { select("g#scaleBar").call(scaleBar.projection($proj)) }
+        if ($canAddScale) { select("#gScaleBar").call(scaleBar.projection($proj)) }
 
         // ... zoom (comportement dynamique par défaut sinon utilisateur fixe une distance)
         isNaN($scaleDist)
-        ? select("g#scaleBar").call(scaleBar.distance(scaleInitDist / k)
+        ? select("#gScaleBar").call(scaleBar.distance(scaleInitDist / k)
                                             .label(`${Math.round(scaleBar.distance())} km`))
-        : select("g#scaleBar").call(scaleBar.distance($scaleDist)
+        : select("#gScaleBar").call(scaleBar.distance($scaleDist)
                                             .label(`${Math.round(scaleBar.distance())} km`))  
     }
 
     // Déplacer l'échelle graphique
     function dragged(event) {
         scaleBar.left(event.x / width).top(event.y / height) // passer des pixels du svg au 0-1 de scaleBar.left et .top
-        select("g#scaleBar").attr("cursor", "grabbing").call(scaleBar)
+        select("#gScaleBar").attr("cursor", "grabbing").call(scaleBar)
     }
     const dragScaleBar = drag()
         .on("drag", dragged)
-        .on("end", () => select("g#scaleBar").attr("cursor", "move")) // retour au curseur d'origine
+        .on("end", () => select("#gScaleBar").attr("cursor", "move")) // retour au curseur d'origine
     // ---------------------------------------- //
 
     // ----------------- ZOOM ----------------- //
     let isReady = false
     let zmin = 0.5,
-        zmax = 100
+        zmax = 100,
+        zCall = "#gCadrage",
+        zApply = "#gZoom"
 
     // paramètres du pan and zoom
-    const zoom2 = zoom()
+    const d3zoom = zoom()
             .scaleExtent([zmin, zmax]) // min, max du zoom
             .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
             .on("zoom", ({ transform }) => {
-                select("g#zoom").attr("transform", transform).attr("cursor", "grabbing")
+                select(zApply).attr("transform", transform).attr("cursor", "grabbing")
                 // utiliser par scaleBar
                 zTransform.set(transform)
                 k = transform.k
                 zx = transform.x
                 zy = transform.y
             })
-            .on("end", () => select("g#zoom").attr("cursor", "grab"))
+            .on("end", () => select(zApply).attr("cursor", "grab"))
     
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
     function zoomRegion(b) {
@@ -131,8 +133,8 @@
             const [[x0, y0], [x1, y1]] = path.bounds(b)
 
             // Voir exemple : https://observablehq.com/@d3/zoom-to-bounding-box
-            select("#map-svg").transition().duration(750).call(
-                zoom2.transform,
+            select(zCall).transition().duration(750).call(
+                d3zoom.transform,
                 zoomIdentity
                     .translate(width / 2, mapHeight / 2)
                     .scale(Math.min(zmax, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / mapHeight)))
@@ -153,13 +155,13 @@
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
-    const zoomIn = () => select("#map-svg").transition().call(zoom2.scaleBy, 1.5)
-    const zoomOut = () => select("#map-svg").transition().call(zoom2.scaleBy, 1/1.5)
+    const zoomIn = () => select(zCall).transition().call(d3zoom.scaleBy, 1.5)
+    const zoomOut = () => select(zCall).transition().call(d3zoom.scaleBy, 1/1.5)
     const zoomReset = () => $regbbox == null && $countrybbox == null
-            ?  select("#map-svg").transition().duration(750).call(
-                zoom2.transform,
+            ?  select(zCall).transition().duration(750).call(
+                d3zoom.transform,
                 zoomIdentity,
-                zoomTransform(select("#map-svg").node()).invert([width / 2, mapHeight / 2]))
+                zoomTransform(select(zCall).node()).invert([width / 2, mapHeight / 2]))
             : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
     // ---------------------------------------- //
 
@@ -180,15 +182,16 @@
             .attr("cursor", "auto")         // rétablit valeur par défaut
             .attr("pointer-events", "none") // ne bloque/cache pas les events en dessous (ici le zoom)
 
-        // ZOOM ----- applique le zoom sur "g#zoom" plutôt que l'ensemble du svg
+        // ZOOM ----- applique le zoom sur "g#gCadrage" plutôt que l'ensemble du svg
         // => limite le zoom à l'intérieur du cadrage (via d3-brush)
-        select("#map-svg")
+        // => évite les conflits d'event avec 
+        select(zCall)
             .attr("cursor", "grab")
-            .call(zoom2)
+            .call(d3zoom)
     })
 </script>
 
-<svg id="map-svg" width="100%" height="100%" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="mapSvg" width="100%" height="100%" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
         <clipPath id="clip-cadrage">
@@ -201,16 +204,16 @@
     <text id="mapCredit" x={rx + rw} y={ry + rh} dy=10>{mapCredit}</text>
     {/if}
     <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
-        <g id="zoom" >        
+        <g id="gZoom" >        
             <Basemap {path} {outline} />
-            <g id="scaleBar" style="visibility: hidden"></g>
+            <g id="gScaleBar" style="visibility: hidden"></g>
         </g>
     </g>
     
     <g id="gBrush"></g>
         
     <style>
-        #map-svg { background-color: white; }
+        #mapSvg { background-color: white; }
         #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
         #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
         #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
@@ -254,5 +257,5 @@
         cursor: pointer;
     }
 
-    #scaleBar:hover { color: var(--accent-color); }
+    #gScaleBar:hover { color: var(--accent-color); }
 </style>

@@ -38,19 +38,19 @@
     let m1 = "Ajouter si besoin des informations supplémentaires"
 
     function addLayer(lyr) {
-        const base = select("g#basemap")
+        const base = select("#gBasemap")
         // Couches hidden par défault
         base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
         lyr.forEach(e => 
             e != 'countries'
-            ? select(`g#basemap #${e}`).style("visibility", "visible").classed("hidden", false)
-            : select(`g#basemap #${e}`).selectChildren().style("visibility", "visible").classed("hidden", false)
+            ? select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false)
+            : select(`#gBasemap #${e}`).selectChildren().style("visibility", "visible").classed("hidden", false)
         )
         // Cas particuliers (titre et échelle)
         lyr.includes("scaleBar") 
-            ? select("g#scaleBar").style("visibility", "visible").classed("hidden", false)
-            : select("g#scaleBar").style("visibility", "hidden").classed("hidden", true)
+            ? select("#gScaleBar").style("visibility", "visible").classed("hidden", false)
+            : select("#gScaleBar").style("visibility", "hidden").classed("hidden", true)
         lyr.includes("mapTitle")
             ? select("#mapTitle").style("visibility", "visible").classed("hidden", false)
             : select("#mapTitle").style("visibility", "hidden").classed("hidden", true)
