@@ -144,7 +144,12 @@
     $: if (isReady) { 
         $proj
         zoomRegion($regbbox)
-        zoomRegion($countrybbox) }
+        zoomRegion($countrybbox)
+        // Color selected country differently
+        // if ($countrybbox != null) {
+        //     select(`#${$countrybbox.properties.id}`).attr('fill', '#cccccc')
+        // }
+    }
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
