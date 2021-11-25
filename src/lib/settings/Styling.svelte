@@ -48,7 +48,7 @@
 </script>
 
 <button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
-    <span class="material-icons">settings</span>
+    <span class="material-icons">edit</span>
 </button>
 
 <slot></slot>

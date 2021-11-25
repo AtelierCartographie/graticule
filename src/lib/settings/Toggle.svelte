@@ -32,7 +32,7 @@
           on:change={onChange} />
 
   <span class="Toggle__display" hidden>
-    <svg
+    <!-- <svg
       aria-hidden="true"
       focusable="false"
       class="Toggle__icon Toggle__icon--checkmark"
@@ -62,7 +62,7 @@
         d="M11.167 0L6.5 4.667L1.833 0L0 1.833L4.667 6.5L0 11.167L1.833 13L6.5 8.333L11.167 13L13 11.167L8.333 6.5L13 1.833L11.167 0Z"
         fill="currentcolor"
       />
-    </svg>
+    </svg> -->
   </span>
 </label>
 
@@ -121,16 +121,19 @@
         height: calc(var(--diameter) + var(--offset) * 2); /* 2 */
         box-sizing: content-box; /* 2 */
 
-        border: 0.1em solid rgb(0 0 0 / 0.2); /* 3 */
+        border: 1px solid var(--dark-grey); /* 3 */
 
         position: relative; /* 4 */
         border-radius: 100vw; /* 5 */
-        background-color: var(--grey); /* 6 */
+        background-color: var(--light-grey); /* 6 */
 
         transition: 250ms;
         cursor: pointer;
     }
-
+    .Toggle__display:hover, .Toggle__display:hover::before { 
+      background-color: var(--accent-color-light);
+      border: 1px solid var(--accent-color); 
+    }
     /**
     * 1. Size the round handle according to the diameter custom property.
     * 2. For the handle to be visible in Windows High-Contrast Mode, we apply a
@@ -150,7 +153,7 @@
         border-radius: 50%; /* 1 */
 
         box-sizing: border-box; /* 2 */
-        border: 0.1 solid rgb(0 0 0 / 0.2); /* 2 */
+        border: 1px solid var(--dark-grey); /* 2 */
 
         position: absolute; /* 3 */
         z-index: 2; /* 3 */
@@ -158,7 +161,7 @@
         left: var(--offset); /* 3 */
         transform: translate(0, -50%); /* 3 */
 
-        background-color: #fff; /* 4 */
+        background-color: var(--grey); /* 4 */
         transition: inherit;
     }
 
@@ -194,6 +197,7 @@
     */
     .Toggle__input:checked + .Toggle__display {
         background-color: var(--accent-color-light); /* 1 */
+        border-color: var(--accent-color);
     }
 
     /**
@@ -202,6 +206,8 @@
     */
     .Toggle__input:checked + .Toggle__display::before {
         transform: translate(100%, -50%); /* 1 */
+        background-color: var(--accent-color-medium);
+        border-color: var(--accent-color);
     }
 
     /**
@@ -214,25 +220,25 @@
         cursor: not-allowed; /* 1 */
     }
 
-    .Toggle__icon {
+    /* .Toggle__icon {
         display: inline-block;
         width: .7em;
         height: 1em;
         color: inherit;
         fill: currentcolor;
         vertical-align: middle;
-    }
+    } */
 
     /**
     * 1. The cross looks visually bigger than the checkmark so we adjust its
     *    size. This might not be needed depending on the icons.
     */
-    .Toggle__icon--cross {
+    /* .Toggle__icon--cross {
         color: var(--dark-grey);
-        font-size: 85%; /* 1 */
+        font-size: 85%;
     }
 
     .Toggle__icon--checkmark {
         color: var(--accent-color);
-    }
+    } */
 </style>

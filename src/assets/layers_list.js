@@ -1,6 +1,6 @@
 const layers_list = [
     {id: "ocean", name: "Mers et océans", style: ["fill", "stroke"] },
-    {id: "graticule", name: "Méridiens et parallèles", style: ["stroke"] },
+    {id: "graticule", name: "Graticules", style: ["stroke"] },
     {id: "land", name: "Continents", style: ["fill", "stroke"] },
     {id: "countries", name: "Pays", style: ["fill", "stroke"] },
     {id: "borders", name: "Frontières", style: ["stroke"] },

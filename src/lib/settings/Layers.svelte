@@ -135,6 +135,9 @@
     #layers-select ul, #habillage ul {
         list-style-type: none;
         padding: 0;
+        display: flex;
+        flex-flow: column nowrap;
+        gap: .2rem;
     }
     #layers-select li, #habillage li {
         display: flex;
