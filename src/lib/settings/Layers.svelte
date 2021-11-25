@@ -38,13 +38,10 @@
     function addLayer(lyr) {
         const base = select("#gBasemap")
         // Couches hidden par défault
-        base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
+        base.selectChildren().style("visibility", "hidden").classed("hidden", true)
+
         // Pour chaque bouton radio sélectionné => rendre visible le layer
-        lyr.forEach(e => 
-            e != 'countries'
-            ? select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false)
-            : select(`#gBasemap #${e}`).selectChildren().style("visibility", "visible").classed("hidden", false)
-        )
+        lyr.forEach(e => select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false))
         // Cas particuliers (titre et échelle)
         lyr.includes("scaleBar") 
             ? select("#gScaleBar").style("visibility", "visible").classed("hidden", false)
@@ -55,11 +52,6 @@
     }
 
     $: addLayer(lyr_selected)
-
-    // Filtre de la couche des villes selon la population
-    function filterUrban(size) {
-
-    }
     
     onMount( () => {
         // applique la couche par défaut au démarrage

@@ -37,8 +37,7 @@
                 <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }} 
                         transition:blur="{{ duration: 1500}}"
                         id='{country.properties.id}' class="countries"
-                        d="{path(country)}"
-                        style="visibility: hidden"></path>
+                        d="{path(country)}"></path>
                 {/each}
             </g>
             {:else}
