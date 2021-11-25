@@ -38,7 +38,6 @@
                     class="badge">
                 500k
             </button>
-            <p>Source : European Commission, JRC, Global Human Settlement, 2019</p>
     </div>
 {/if}
 

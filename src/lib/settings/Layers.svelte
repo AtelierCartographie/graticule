@@ -15,8 +15,6 @@
 
     export let canRender
 
-    const tp1 = "Sauf mention contraire, ces informations sont extraites de la source Natural Earth"
-
     // Couches actives
     let lyr_selected = ['ocean', 'countries', 'borders']
     $: lyr.set(lyr_selected)
@@ -78,9 +76,7 @@
     <Tip message={m1} />
 
     <form id="layers-select">
-        <h3>Informations géographiques
-            <span use:tooltip title={tp1} class="material-icons tooltip">help_outline</span>
-        </h3>
+        <h3>Informations géographiques</h3>
         
         <ul>
             {#each layers_list as {id, name, style} }
