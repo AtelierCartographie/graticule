@@ -72,7 +72,7 @@
     use:inView 
     on:enter={() => stepEnter("headerLayers")}
 >
-    <h2><span class="material-icons">layers</span> Alimenter</h2>
+    <h2><span class="material-icons">layers</span> Personnaliser</h2>
     <Tip message={m1} />
 
     <form id="layers-select">

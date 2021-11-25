@@ -9,7 +9,7 @@
         <ol class="fontTitle">
             <li id="headerFrame" class="navSteps inView"> <a href="#frame" class="header-steps"><span class="material-icons">crop</span> Cadrer</a> </li>
             <li id="headerProjection" class="navSteps inView"> <a href="#projection"class="header-steps" ><span class="material-icons">language</span> Projeter</a> </li>
-            <li id="headerLayers" class="navSteps inView"> <a href="#layers" class="header-steps"><span class="material-icons">layers</span> Alimenter</a> </li>
+            <li id="headerLayers" class="navSteps inView"> <a href="#layers" class="header-steps"><span class="material-icons">layers</span> Personnaliser</a> </li>
             <li id="headerResolution" class="navSteps inView"> <a href="#resolution" class="header-steps"><span class="material-icons">timeline</span> Simplifier</a> </li>
             <li id="headerDownload" class="navSteps inView"> <a href="#download" class="header-steps"><span class="material-icons">file_download</span> Télécharger</a> </li>
         </ol>
