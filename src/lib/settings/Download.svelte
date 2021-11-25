@@ -36,7 +36,9 @@
         let zsTransform
         if (d3svg.select('#gScaleBar').size() != 0) { // si la scale bar est présente
             const sTransform = d3svg.select('#gScaleBar').attr('transform')
-            zsTransform = zTransform + " " + sTransform
+            zsTransform = (sTransform == null) 
+                ? zTransform
+                : zTransform + " " + sTransform
         }
         
         // dégrouper g#zoom =>  puis les ré-inserts dans g#gCadrage
