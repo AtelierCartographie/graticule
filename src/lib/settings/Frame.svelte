@@ -1,7 +1,7 @@
 <script>
     import { regbbox, countrybbox } from '../../stores.js'
     import Tip from './Tip.svelte'
-    import regionsBbox from '../../assets/regionsBbox.js'            //cadrage régionaux
+    import regionsBbox from '../../assets/regionsBbox.js'         //cadrage régionaux
     import countriesBbox from '../../assets/countriesBbox.json'   // cadrage nationaux
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -16,10 +16,15 @@
     $: regbbox.set(regionsBbox.find( d => d.id === reg_selected).bbox)
     $: countrybbox.set(countries.find( d => d == null ? null : d.properties.id === country_selected))
 
-    // Comment rendre les deux <select> exclusive
-    // touché à un reset l'autre
-    // $: if ($regbbox != null) { country_selected = null }
-    // $: if ($countrybbox != null) { reg_selected = null }
+    // Rendre exclusif les deux select
+    function resetSelect(el) {
+        const a = document.getElementById(el)
+        const b = el == "input_regSelect" ? "input_countrySelect" : "input_regSelect"
+        if (a.value != null) { 
+            document.getElementById(b).value = null
+            el == "input_regSelect" ? country_selected = null : reg_selected = null
+        }
+    }
     
 </script>
 
@@ -32,15 +37,16 @@
     <form id="frame-select">
         <!-- <label for="input_regSelect" class="fontTitle">Régions du monde</label> -->
         <h3>Régions du monde</h3>
-        <select bind:value={reg_selected} name="regions" id="input_regSelect">
+        <select bind:value={reg_selected} on:change="{() => resetSelect("input_regSelect")}" name="regions" id="input_regSelect">
             {#each regionsBbox as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </select>
 
+        <p><strong>ou</strong></p>
         <!-- <label for="input_countrySelect" class="fontTitle">Pays du monde</label> -->
         <h3>Pays du monde</h3>
-        <select bind:value={country_selected} name="countries" id="input_countrySelect">
+        <select bind:value={country_selected} on:change="{() => resetSelect("input_countrySelect")}" name="countries" id="input_countrySelect">
             {#each countries as d}
                 {#if d == null}
                 <option value={null}>-</option>
@@ -49,6 +55,8 @@
                 {/if}
             {/each}
         </select>
+        <p><strong>ou</strong></p>
+        <h3 id="freeFrame">Cadrage libre <span class="material-icons">east</span></h3>
     </form>
 </section>
 
@@ -60,7 +68,14 @@
         font-weight: bold;
         color: var(--dark-grey);
     } */
-    h3 {
-        margin-bottom: 0;
+    h3 { margin-bottom: 0; }
+    p { font-size: var(--text-medium); }
+    #freeFrame > .material-icons { color: var(--dark-grey); }
+    #freeFrame:hover > .material-icons { 
+        animation-duration: .5s;
+        animation-name: toTheRight;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
     }
+    @keyframes toTheRight { to { transform: translate(50%,0); } }
 </style>
