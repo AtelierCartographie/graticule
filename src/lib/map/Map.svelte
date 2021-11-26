@@ -177,6 +177,7 @@
         gBrush.select(".overlay").remove()  // empêche la création d'un nouveau brush
         gBrush.select(".selection")
             .attr("id", "cadrage")
+            .classed("inView", true)
             .attr("fill", "none")
             .attr("stroke", "none")
             .attr("cursor", "auto")         // rétablit valeur par défaut
@@ -214,7 +215,8 @@
         
     <style>
         #mapSvg { background-color: white; }
-        #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0 6; }
+        #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-dasharray: 0 6; stroke-linecap: round; transition-property: stroke, stroke-width, stroke-dasharray; transition-duration: .5s; }
+        #cadrage.inView { stroke-width: 4; stroke-dasharray: 0 10; }
         #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
         #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
         #land { fill: lightgrey; stroke: none; }
