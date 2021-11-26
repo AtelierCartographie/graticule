@@ -42,6 +42,13 @@
           && !select(event.target).classed("selection"))
         .handleSize(24)
         .on("brush", brushed)
+
+    // Positions des symboles de flèche 
+    // pour mettre en avant le recadrage utilisateur
+    $: xyCropTop = "translate(" + (rx + rw / 2) + "," + (ry + 5) + ")"
+    $: xyCropRight = "translate(" + (rx + rw - 28) + "," + (ry + rh / 2) + ")"
+    $: xyCropBottom = "translate(" + (rx + rw / 2) + "," + (ry + rh - 28) + ")"
+    $: xyCropLeft = "translate(" + (rx + 5) + "," + (ry + rh / 2) + ")"
     // ---------------------------------------- //
 
     // --------------- SCALE BAR -------------- //
@@ -211,12 +218,21 @@
         </g>
     </g>
     
-    <g id="gBrush"></g>
+    <g id="gBrush">
+        {#if isReady}
+        <path id="cropTop" class="crop" transform={xyCropTop} d="M19,15l-1.41-1.41L13,18.17V2H11v16.17l-4.59-4.59L5,15l7,7L19,15z"/>
+        <path id="cropRight" class="crop" transform={xyCropRight} d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z"/>
+        <path id="cropBottom" class="crop" transform={xyCropBottom} d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z"/>
+        <path id="cropLeft" class="crop" transform={xyCropLeft} d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z"/>
+        {/if}
+    </g>
         
     <style>
         #mapSvg { background-color: white; }
         #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-dasharray: 0 6; stroke-linecap: round; transition-property: stroke, stroke-width, stroke-dasharray; transition-duration: .5s; }
-        #cadrage.inView { stroke-width: 4; stroke-dasharray: 0 10; }
+        #cadrage.inView { stroke-width: 3; stroke-dasharray: none; }
+        .crop { fill: var(--accent-color); opacity: 0; transition: opacity .5s; }
+        #cadrage.inView ~ .crop { opacity: 1; }
         #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
         #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
         #land { fill: lightgrey; stroke: none; }
