@@ -15,6 +15,8 @@ export const lyr = writable()
 export const mapTitle = writable()
 export const canAddScale = writable()
 export const scaleDist = writable()
+export const gratType = writable()
+export const gratStep = writable()
 export const urbanSize = writable(50000)
 
 // MODAL

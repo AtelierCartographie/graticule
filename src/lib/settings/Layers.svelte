@@ -7,6 +7,7 @@
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
     import UrbanFilter from './UrbanFilter.svelte'
+    import GraticuleFilter from './GraticuleFilter.svelte'
     import layers_list from '../../assets/layers_list.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -68,23 +69,22 @@
     <Tip message={m1} />
 
     <form id="layers-select">
+        <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
+        <input type="submit" disabled style="display: none" aria-hidden="true" />
         <h3>Informations géographiques</h3>
         
         <ul>
             {#each layers_list as {id, name, style} }
-                {#if id == 'urban'}
                 <li>
                     <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
                     <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
+                        {#if id == 'urban'}
                         <UrbanFilter />
+                        {:else if id == 'graticule'}
+                        <GraticuleFilter />
+                        {/if}
                     </Styling>
                 </li>
-                {:else}
-                <li>
-                    <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
-                    <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true} />
-                </li>
-                {/if}
             {/each} 
         </ul>
     </form>

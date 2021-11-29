@@ -1,11 +1,50 @@
 <script>
     import { blur } from "svelte/transition";
-    import { geoGraticule10 } from 'd3-geo'
+    import { range } from 'd3'
+    import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import geo from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
-    import { urbanSize } from '../../stores.js'
+    import { gratType, gratStep, urbanSize } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     export let path, outline
+
+    // GRATICULES
+    const geoLine = (value, direction, precision = "2.5") => {
+        const v = parseFloat(value)
+        const step = parseFloat(precision)
+        switch (direction) {
+            case 'latitude':
+            case 'lat':
+                return range(-180, 180, step).concat(180).map(x => [x,v])
+                
+            case 'longitude':
+            case 'long':
+            case 'lon':
+                return range(-90, 90, step).concat(90).map(y => [v,y])
+                
+            default:
+                return console.log(`'${direction}' n'est pas une valeur de direction possible. 'lat' ou 'long' attendu`)
+        }
+    }
+    const geographicLines = {
+        type: "MultiLineString",
+        coordinates: [
+            geoLine(66.563, 'lat'),            // Cercle polaire arctique
+            geoLine(23.436, 'lat'),            // Tropique du Cancer
+            [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]],   // Équateur
+            geoLine(-23.436, 'lat'),           // Tropique du Capricorne
+            geoLine(-66.563, 'lat'),           // Cercle polaire antarctique
+            [[0, -90], [0, 0], [0, 90]]        // Méridien de Greenwitch
+        ]
+    }
+
+    $: graticule = (
+        $gratType == 'top'
+        ? geographicLines
+        : $gratStep == 10 
+            ? geoGraticule10() 
+            : geoGraticule().step([$gratStep, $gratStep])()
+    )
 
 
     // Filtre la couche urban selon un seuil d'habitants 
@@ -26,7 +65,7 @@
     <g id='gBasemap' style="clip-path: url(#clip)">
 
         <path id="ocean" d="{path(outline)}" transition:blur="{{ duration: 1500 }}" style="visibility: hidden"/>
-        <path id='graticule' d="{path(geoGraticule10())}" style="visibility: hidden"></path>
+        <path id='graticule' d="{path(graticule)}" style="visibility: hidden"></path>
 
         {#each Object.entries(geo) as [name, fn]}
             {#if name == 'urban'}
