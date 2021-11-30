@@ -34,7 +34,7 @@
             [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]],   // Équateur
             geoLine(-23.436, 'lat'),           // Tropique du Capricorne
             geoLine(-66.563, 'lat'),           // Cercle polaire antarctique
-            [[0, -90], [0, 0], [0, 90]]        // Méridien de Greenwitch
+            [[0, -90], [0, 0], [0, 90], [180,0], [180,-90]]        // Méridien de Greenwitch
         ]
     }
 

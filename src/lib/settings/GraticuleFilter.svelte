@@ -15,18 +15,18 @@
         <button on:click={() => gratType.set('top')}
                 class:active="{ $gratType === 'top' }"
                 use:tooltip={{ placement: 'top' }} 
-                title="Lignes imaginaires essentielles" 
+                title="Équateur, Tropiques, Cercles polaires, Greenwitch" 
                 type="button" 
                 class="badge">
-            essentiels
+            remarquables
         </button>
         <button on:click={() => gratType.set('all')}
                 class:active="{ $gratType === 'all' }"
                 use:tooltip={{ placement: 'top' }} 
-                title="Ensemble des méridiens et parallèles" 
+                title="Grille à espacement régulié" 
                 type="button" 
                 class="badge">
-            complet
+            réguliés
         </button>
 
         {#if $gratType == 'all'}

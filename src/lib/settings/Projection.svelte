@@ -81,6 +81,7 @@
                 <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
                 <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
             </li>
+
             {#if parallel || parallel == 0}
             <li>
                 <label for="parallel">Parallèle</label>
@@ -88,6 +89,7 @@
                 <input type="number" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
             </li>
             {/if}
+            
             {#if distance}
             <li>
                 <label for="alt">Altitude en km</label>
