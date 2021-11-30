@@ -34,7 +34,11 @@
 >
     <h2><span class="material-icons">crop</span> Cadrer</h2>
     <Tip message={m1} />
+
     <form id="frame-select">
+        <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
+        <input type="submit" disabled style="display: none" aria-hidden="true" />
+
         <!-- <label for="input_regSelect" class="fontTitle">Régions du monde</label> -->
         <h3>Régions du monde</h3>
         <select bind:value={reg_selected} on:change="{() => resetSelect("input_regSelect")}" name="regions" id="input_regSelect">
@@ -44,9 +48,14 @@
         </select>
 
         <p><strong>ou</strong></p>
-        <!-- <label for="input_countrySelect" class="fontTitle">Pays du monde</label> -->
+
         <h3>Pays du monde</h3>
-        <select bind:value={country_selected} on:change="{() => resetSelect("input_countrySelect")}" name="countries" id="input_countrySelect">
+        <input list="countryList"
+                id="input_countrySelect"
+                name="country"
+                bind:value={country_selected}
+                on:change="{() => resetSelect("input_countrySelect")}" />
+        <datalist id="countryList" name="countries" >
             {#each countries as d}
                 {#if d == null}
                 <option value={null}>-</option>
@@ -54,8 +63,10 @@
                 <option value={d.properties.id}>{d.properties.name}</option>
                 {/if}
             {/each}
-        </select>
+        </datalist>
+
         <p><strong>ou</strong></p>
+        
         <h3 id="freeFrame">Cadrage libre <span class="material-icons">east</span></h3>
     </form>
 </section>
