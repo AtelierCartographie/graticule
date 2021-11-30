@@ -7,7 +7,7 @@
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
 
-    let proj_selected = "Natural Earth 2"
+    let proj_selected = "Equal Earth"
 
     // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
     $: lambda = proj_list.find( d => d.name === proj_selected).lambda
@@ -42,9 +42,17 @@
         <label for="input_projSelect" class="fontTitle">Sélectionner une projection</label>
 
         <select bind:value={proj_selected} name="projection" id="input_projSelect">
-            {#each proj_list as d}
-                <option value={d.name}>{d.name}</option>
-            {/each}
+            <optgroup label="Incontournables">
+                {#each proj_list.filter(d => d.top == true) as d}
+                    <option value={d.name}>{d.name}</option>
+                {/each}
+            </optgroup>
+            <optgroup label="Autres">
+                {#each proj_list.filter(d => d.top == false) as d}
+                    <option value={d.name}>{d.name}</option>
+                {/each}
+            </optgroup>
+            
         </select>
         <span 
             use:tooltip title="Cliquer pour en savoir plus"
