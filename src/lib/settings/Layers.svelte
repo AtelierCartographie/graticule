@@ -77,7 +77,7 @@
             {#each layers_list as {id, name, style} }
                 <li>
                     <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
-                    <Styling lyr={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
+                    <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
                         {#if id == 'urban'}
                         <UrbanFilter />
                         {:else if id == 'graticule'}

@@ -2,49 +2,36 @@
     import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
     import rgb2hex from '../../assets/rgb2hex.js'
-    import { zTransform } from '../../stores.js'
+    import { zTransform, lyr } from '../../stores.js'
 
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
     // https://svelte.dev/repl/0aff293b94e44574a83a8271ba457136?version=3.29.4
     // https://svelte.dev/repl/74ff0da7cb074d4788b996e2d91258d3?version=3.23.0
 
-    export let lyr, style, disabled
+    export let layer, style, disabled
 
     let isOpen = false
     const toggle = () => isOpen = !isOpen
     let fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth
 
-    // select("#basemap").append('rect').attr('id', "test").attr('x', 50).attr('y', 50).attr('width', 100).attr('height', 100)
-
     // 1. charger les inputs des styles de la carte
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
     // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb3hex voir mon notebook utils observable)
     
-    $: fillColor     = rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )
-    $: fillOpacity   = select(`#gBasemap #${lyr}`).style("fill-opacity")
-    $: strokeColor   = rgb2hex( select(`#gBasemap #${lyr}`).style("stroke") )
-    $: strokeOpacity = select(`#gBasemap #${lyr}`).style("stroke-opacity")
-    $: strokeWidth   = parseFloat( select(`#gBasemap #${lyr}`).style("stroke-width") )
+    $: fillColor     = rgb2hex( select(`#gBasemap #${layer}`).style("fill") )
+    $: fillOpacity   = select(`#gBasemap #${layer}`).style("fill-opacity")
+    $: strokeColor   = rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )
+    $: strokeOpacity = select(`#gBasemap #${layer}`).style("stroke-opacity")
+    $: strokeWidth   = parseFloat( select(`#gBasemap #${layer}`).style("stroke-width") )
     $: {
-        select(`#gBasemap #${lyr}`)
+        select(`#gBasemap #${layer}`)
             .style("fill", fillColor)
             .style("fill-opacity", fillOpacity)
             .style("stroke", strokeColor)
             .style("stroke-opacity", strokeOpacity)
             .style("stroke-width", `${strokeWidth / $zTransform.k}px`)
     }
-
-    // 2. le faire une fois à l'ouverture de la boite de stylage
-    // 3. lier les valeurs des inputs au style de la carte
-    function addStyling(lyr, value) {
-        const base = select("#gBasemap")
-        // Couches hidden par défault
-        base.selectChildren().style("visibility", "hidden").classed("hidden", true) 
-        // Pour chaque bouton radio sélectionné => rendre visible le layer
-        lyr.forEach(e => select("#gBasemap").select(`#${e}`).style("visibility", "visible").classed("hidden", false))
-    }
-
 </script>
 
 <button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
@@ -53,7 +40,7 @@
 
 <slot></slot>
 
-{#if isOpen}
+{#if isOpen && $lyr.includes(layer)}
 <section class="panel" transition:slide={{ duration: 300 }}>
     {#if style.includes("fill")}
     <form class="form-style fill">
