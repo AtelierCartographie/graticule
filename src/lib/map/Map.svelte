@@ -113,6 +113,10 @@
     // ---------------------------------------- //
 
     // ----------------- ZOOM ----------------- //
+    // Fix bug webkit: Wheel event is not fired on a SVG group element in Safari
+    // https://stackoverflow.com/a/67925459
+    select(document.body).on('wheel.body', e => {})
+
     let isReady = false
     let zmin = 0.5,
         zmax = 100,
