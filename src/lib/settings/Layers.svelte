@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte'
     import { lyr, mapTitle, scaleDist, canAddScale, isModalOpen, modalContent } from '../../stores.js'
-    import { slide } from "svelte/transition";
+    import { slide } from "svelte/transition"
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'

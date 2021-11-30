@@ -33,6 +33,7 @@
             <!-- <label for="gratStep">Espacement</label> -->
             <!-- <input type="range" bind:value={step} id="gratStep" min="0" max="60" step="5"> -->
             <input use:tooltip={{ content: 'Espacement en degré', placement: 'top' }} 
+                transition:slide={{ duration: 300 }}
                 type="number"
                 bind:value={step} 
                 id="gratStep"
