@@ -11,6 +11,7 @@ export const countrybbox = writable()
 // Projection
 export const proj = writable()
 // Layers
+export const mapTheme = writable('colorMode')
 export const lyr = writable()
 export const mapTitle = writable()
 export const canAddScale = writable()

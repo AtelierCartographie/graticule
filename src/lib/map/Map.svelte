@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, lyr, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -203,7 +203,9 @@
     })
 </script>
 
-<svg id="mapSvg" width="100%" height="100%" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="mapSvg" class={$mapTheme}
+    width="100%" height="100%" viewBox="0 0 {width} {height}" 
+    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
         <clipPath id="clip-cadrage">
@@ -232,20 +234,55 @@
     </g>
         
     <style>
-        #mapSvg { background-color: white; }
         #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-dasharray: 0 6; stroke-linecap: round; transition-property: stroke, stroke-width, stroke-dasharray; transition-duration: .5s; }
         #cadrage.inView { stroke-width: 3; stroke-dasharray: none; }
         .crop { fill: var(--accent-color); opacity: 0; transition: opacity .5s; }
         #cadrage.inView ~ .crop { opacity: 1; }
-        #ocean { fill: AliceBlue; stroke: #ccc; stroke-width: 1; }
-        #graticule { fill: none; stroke: #ccc; stroke-width: 0.5; }
-        #land { fill: lightgrey; stroke: none; }
-        #countries { fill: lightgrey; stroke: none; }
-        #borders { fill: none; stroke: white; stroke-width: 0.5; }
-        #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
-        #urban { fill: black; stroke: none; }
+        #mapSvg { background-color: white; }
         #mapTitle { font-size: 16px; font-weight: bold; font-family: "Fira Code", monospace; fill: var(--dark-grey); visibility: hidden; }
         #mapCredit { font-size: 12px; font-family: "Open sans", sans-serif; text-anchor: end; fill: var(--dark-grey); }
+
+        #mapSvg.colorMode { 
+            --ocean-fill: AliceBlue;
+            --ocean-stroke: #ccc;
+            --ocean-stroke-w: 1;
+            --graticule-fill: none;
+            --graticule-stroke: #ccc;
+            --graticule-stroke-w: 0.5;
+            --countries-fill: lightgrey;
+            --countries-stroke: none;
+            --countries-stroke-w: none;
+            --borders-fill: none;
+            --borders-stroke: white;
+            --borders-stroke-w: 0.5;
+            --urban-fill: black;
+            --urban-stroke: none;
+            --urban-stroke-w: none;
+        }
+        #mapSvg.outlineMode { 
+            --ocean-fill: white;
+            --ocean-stroke: #ccc;
+            --ocean-stroke-w: 1;
+            --graticule-fill: none;
+            --graticule-stroke: black;
+            --graticule-stroke-w: 0.5;
+            --countries-fill: white;
+            --countries-stroke: black;
+            --countries-stroke-w: none;
+            --borders-fill: none;
+            --borders-stroke: black;
+            --borders-stroke-w: 0.5;
+            --urban-fill: black;
+            --urban-stroke: none;
+            --urban-stroke-w: none;
+        }
+        #ocean { fill: var(--ocean-fill); stroke: var(--ocean-stroke); stroke-width: var(--ocean-stroke-w); }
+        #graticule { fill: var(--graticule-fill); stroke: var(--graticule-stroke); stroke-width: var(--graticule-stroke-w); }
+        /* #land { fill: lightgrey; stroke: none; } */
+        #countries { fill: var(--countries-fill); stroke: var(--countries-stroke); stroke-width: var(--countries-stroke-w); }
+        #borders { fill: var(--borders-fill); stroke: var(--borders-stroke); stroke-width: var(--borders-stroke-w); }
+        #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
+        #urban { fill: var(--urban-fill); stroke: var(--urban-stroke); stroke-width: var(--urban-stroke-w); }
     </style>
 </svg>
 

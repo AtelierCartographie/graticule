@@ -2,7 +2,7 @@
     import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
     import rgb2hex from '../../assets/rgb2hex.js'
-    import { zTransform, lyr } from '../../stores.js'
+    import { zTransform, mapTheme, lyr } from '../../stores.js'
 
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
@@ -15,22 +15,36 @@
     const toggle = () => isOpen = !isOpen
     let fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth
 
-    // 1. charger les inputs des styles de la carte
-    // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
-    // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb3hex voir mon notebook utils observable)
+
     
+    // 1. Reset des styles aux changement de thème
+    // 2. Récupérer les 'computed styles' de la carte
+    // 3. Appliquer les valeurs des inputs en style dans la carte
+    // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
+    // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb2hex voir mon notebook utils observable)
+    // 1. ----------
+    $: { $mapTheme
+        select(`#gBasemap #${layer}`)
+            .style("fill", null)
+            .style("fill-opacity", null)
+            .style("stroke", null)
+            .style("stroke-opacity", null)
+            .style("stroke-width", null)
+    }
+    // 2. ----------
     $: fillColor     = rgb2hex( select(`#gBasemap #${layer}`).style("fill") )
     $: fillOpacity   = select(`#gBasemap #${layer}`).style("fill-opacity")
     $: strokeColor   = rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )
     $: strokeOpacity = select(`#gBasemap #${layer}`).style("stroke-opacity")
     $: strokeWidth   = parseFloat( select(`#gBasemap #${layer}`).style("stroke-width") )
+    // 3. ----------
     $: {
         select(`#gBasemap #${layer}`)
             .style("fill", fillColor)
             .style("fill-opacity", fillOpacity)
             .style("stroke", strokeColor)
             .style("stroke-opacity", strokeOpacity)
-            .style("stroke-width", `${strokeWidth / $zTransform.k}px`)
+            .style("stroke-width", `${strokeWidth / $zTransform.k}px`) // compense le facteur de zoom
     }
 </script>
 

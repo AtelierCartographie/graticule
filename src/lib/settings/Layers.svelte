@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { lyr, mapTitle, scaleDist, canAddScale, isModalOpen, modalContent } from '../../stores.js'
+    import { lyr, mapTheme, mapTitle, scaleDist, canAddScale, isModalOpen, modalContent } from '../../stores.js'
     import { slide } from "svelte/transition"
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
@@ -68,13 +68,9 @@
     <h2><span class="material-icons">layers</span> Personnaliser</h2>
     <!-- <Tip message={m1} /> -->
 
-
-
-
-    <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
+    <!-- Prevent implicit submission of the form = ne recharge pas la page si 'form > input' + Enter -->
     <!-- <input type="submit" disabled style="display: none" aria-hidden="true" /> -->
     <h3>Informations géographiques</h3>
-    
     <ul>
         {#each layers_list as {id, name, style} }
             <li>
@@ -89,13 +85,25 @@
             </li>
         {/each} 
     </ul>
+
+    <h3>Thèmes</h3>
+    <div id="themes">
+        <button on:click={() => mapTheme.set('colorMode')}
+                class:active="{ $mapTheme === 'colorMode' }"
+                type="button" 
+                class="badge">
+            Couleurs
+        </button>
+        <button on:click={() => mapTheme.set('outlineMode')}
+                class:active="{ $mapTheme === 'outlineMode' }"
+                type="button" 
+                class="badge">
+            Noir et blanc
+        </button>
+    </div>
     
 
-    <hr>
 
-
-    <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
-    <!-- <input type="submit" disabled style="display: none" aria-hidden="true" /> -->
     <h3>Habillage</h3>
     <ul>
         <li>
@@ -155,6 +163,27 @@
         font-size: var(--text-small);
     }
     input[type="text"] { font-size: var(--text-small); }
+
+    #themes {
+        display: flex;
+        gap: .5rem;
+    }
+    .badge {
+        display: inline-block;
+        /* min-zwidth: 1em; */
+        padding: .3rem .7rem;
+        border-radius: 2em;
+        font-size: var(--text-small);
+        text-align: center;
+        background: var(--light-grey);
+        color: var(--dark-grey);
+        border: 1px solid var(--dark-grey);
+    }
+    .badge.active, .badge:hover {
+        background: var(--accent-color-light);
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+    }
 
     p { margin-bottom: 0; }
 </style>
