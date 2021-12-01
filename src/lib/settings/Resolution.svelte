@@ -21,31 +21,30 @@
 >
     <h2><span class="material-icons">timeline</span> Simplifier</h2>
     <Tip message={m1} />
-    <form id="res-select">
-        <h3>Détail des tracés</h3>
-        <ul>
-            {#each Object.entries(res_list) as [name, value] }
-                <li>
-                    <label for={value}>{name}</label>
-                    <input type="radio" bind:group={res_selected} id={value} {value} {name}>
-                </li>
-                
-            {/each}
-        </ul>
-    </form>
+    <h3>Détail des tracés</h3>
+    <ul>
+        {#each Object.entries(res_list) as [name, value] }
+            <li>
+                <label for={value}>{name}</label>
+                <input type="radio" bind:group={res_selected} id={value} {value} {name}>
+            </li>
+            
+        {/each}
+    </ul>
 </section>
 
 
 <style>
-    #res-select ul {
+    ul {
         list-style-type: none;
         padding: 0;
+        margin: 0;
     }
-    #res-select li {
+    li {
         display: flex;
         justify-content: flex-end;
     }
-    #res-select label {
+    label {
         /* Taille du label */
         flex: 1;
         font-size: var(--text-medium);

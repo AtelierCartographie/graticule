@@ -35,97 +35,97 @@
     on:enter={() => stepEnter("headerProjection")}
 >
     <h2><span class="material-icons">language</span> Projeter</h2>
-
     <Tip message={m2} />
 
-    <form id="proj-select">
-        <label for="input_projSelect" class="fontTitle">Sélectionner une projection</label>
-
-        <select bind:value={proj_selected} name="projection" id="input_projSelect">
-            <optgroup label="Incontournables">
-                {#each proj_list.filter(d => d.top == true) as d}
-                    <option value={d.name}>{d.name}</option>
-                {/each}
-            </optgroup>
-            <optgroup label="Autres">
-                {#each proj_list.filter(d => d.top == false) as d}
-                    <option value={d.name}>{d.name}</option>
-                {/each}
-            </optgroup>
-            
-        </select>
+    <label for="input_projSelect" class="fontTitle">
+        Sélectionner une projection
         <span 
-            use:tooltip title="Cliquer pour en savoir plus"
-            on:click={() => modalContent.set('proj')}
-            on:click={isModalOpen.set(!$isModalOpen)}
-            class="material-icons tooltip">help_outline</span>
-    </form>
+        use:tooltip title="Cliquer pour en savoir plus"
+        on:click={() => modalContent.set('proj')}
+        on:click={isModalOpen.set(!$isModalOpen)}
+        class="material-icons tooltip">help_outline</span>
+    </label>
+
+    
+
+    <select bind:value={proj_selected} name="projection" id="input_projSelect">
+        <optgroup label="Incontournables">
+            {#each proj_list.filter(d => d.top == true) as d}
+                <option value={d.name}>{d.name}</option>
+            {/each}
+        </optgroup>
+        <optgroup label="Autres">
+            {#each proj_list.filter(d => d.top == false) as d}
+                <option value={d.name}>{d.name}</option>
+            {/each}
+        </optgroup>
+    </select>
+    
 
 
+    <h3>Paramétrage de la projection</h3>
+    <ul>
+        <li>
+            <label for="lon">Longitude</label>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
+            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
+        </li>
+        <li>
+            <label for="lat">Latitude</label>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
+            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
+        </li>
+        <li>
+            <label for="rot">Rotation</label>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
+            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
+        </li>
 
-    <form id="proj-rotate">
-        <h3>Paramétrage de la projection</h3>
-        <ul>
-            <li>
-                <label for="lon">Longitude</label>
-                <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
-                <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
-            </li>
-            <li>
-                <label for="lat">Latitude</label>
-                <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
-                <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
-            </li>
-            <li>
-                <label for="rot">Rotation</label>
-                <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
-                <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
-            </li>
-
-            {#if parallel || parallel == 0}
-            <li>
-                <label for="parallel">Parallèle</label>
-                <input type="range" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
-                <input type="number" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
-            </li>
-            {/if}
-            
-            {#if distance}
-            <li>
-                <label for="alt">Altitude en km</label>
-                <input type="range" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
-                <input type="number" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
-            </li>
-            <li>
-                <label for="tilt">Inclinaison en degré</label>
-                <input type="range" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
-                <input type="number" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
-            </li>
-            {/if}
-        </ul>
-    </form>
+        {#if parallel || parallel == 0}
+        <li>
+            <label for="parallel">Parallèle</label>
+            <input type="range" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
+            <input type="number" bind:value={parallel} id="parallel" min="-90" max="90" step="1" >
+        </li>
+        {/if}
+        
+        {#if distance}
+        <li>
+            <label for="alt">Altitude en km</label>
+            <input type="range" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
+            <input type="number" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
+        </li>
+        <li>
+            <label for="tilt">Inclinaison en degré</label>
+            <input type="range" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
+            <input type="number" bind:value={tilt} id="tilt" min="0" max="90" step="1" >
+        </li>
+        {/if}
+    </ul>
 </section>
 
 
 
 <style>
-    #proj-select label {
+    label.fontTitle {
         font-size: var(--text-medium);
         font-weight: bold;
         color: var(--dark-grey);
+        margin-bottom: .5rem;
     }
-    #proj-rotate ul {
+    ul {
         list-style-type: none;
         padding: 0;
+        margin: 0;
     }
-    #proj-rotate li {
+    li {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
         gap: 1ch;
     }
-    #proj-rotate label {
+    li label {
         /* Taille du label */
         flex: 1;
         font-size: var(--text-medium);

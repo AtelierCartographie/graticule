@@ -43,8 +43,7 @@
 {#if isOpen && $lyr.includes(layer)}
 <section class="panel" transition:slide={{ duration: 300 }}>
     {#if style.includes("fill")}
-    <form class="form-style fill">
-        <h3>Fond</h3>
+        <h3 class='fill'>Fond</h3>
         <ul>
             <li>
                 <label for="fillColor">Couleur</label>
@@ -56,12 +55,10 @@
                 <input type="number" bind:value={fillOpacity} id="fillOpacity" min="0" max="1" step="0.1" >
             </li>
         </ul>
-    </form>
     {/if}
 
     {#if style.includes("stroke")}
-    <form class="form-style stroke">
-        <h3>Contour</h3>
+        <h3 class='stroke'>Contour</h3>
         <ul>
             <li>
                 <label for="strokeColor">Couleur</label>
@@ -78,7 +75,6 @@
                 <input type="number" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
             </li>
         </ul>
-    </form>
     {/if}
 </section>
 {/if}
@@ -101,32 +97,26 @@
     button[aria-expanded="true"] { color: var(--accent-color-medium);}
     button:disabled { color: var(--grey); }
 
-    .form-style.fill {
-        margin-bottom: 1rem;
-    }
-    .form-style h3 {
+    h3 {
         font-size: var(--text-small);
         margin: 0;
     }
-    .form-style ul {
+    h3.fill ~ h3.stroke { margin-top: 1rem; }
+    ul {
         list-style-type: none;
         padding: 0;
     }
-    .form-style li {
+    li {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
         align-items: center;
         gap: 1ch;
     }
-    .form-style label {
+    label {
         /* Taille du label */
         flex: 1;
         font-size: var(--text-small);
-    }
-    .form-style input {
-        /* Taille de l'input par rapport au label (1x, 2x...) */
-        /* flex: 1; */
     }
     input[type="range"] { width: 5rem; }
     input[type="number"] { width: 2rem; font-size: var(--text-small);}

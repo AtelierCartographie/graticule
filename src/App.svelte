@@ -75,6 +75,8 @@
   :global(h3) {
     font-size: var(--text-medium);
     color: var(--dark-grey);
+    margin-top: 1rem;
+    margin-bottom: .5rem;
   }
 
   :global(input) {

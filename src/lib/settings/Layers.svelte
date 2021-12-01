@@ -66,79 +66,81 @@
     on:enter={() => stepEnter("headerLayers")}
 >
     <h2><span class="material-icons">layers</span> Personnaliser</h2>
-    <Tip message={m1} />
+    <!-- <Tip message={m1} /> -->
 
-    <form id="layers-select">
-        <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
-        <input type="submit" disabled style="display: none" aria-hidden="true" />
-        <h3>Informations géographiques</h3>
-        
-        <ul>
-            {#each layers_list as {id, name, style} }
-                <li>
-                    <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
-                    <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
-                        {#if id == 'urban'}
-                        <UrbanFilter />
-                        {:else if id == 'graticule'}
-                        <GraticuleFilter />
-                        {/if}
-                    </Styling>
-                </li>
-            {/each} 
-        </ul>
-    </form>
+
+
+
+    <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
+    <!-- <input type="submit" disabled style="display: none" aria-hidden="true" /> -->
+    <h3>Informations géographiques</h3>
+    
+    <ul>
+        {#each layers_list as {id, name, style} }
+            <li>
+                <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
+                <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
+                    {#if id == 'urban'}
+                    <UrbanFilter />
+                    {:else if id == 'graticule'}
+                    <GraticuleFilter />
+                    {/if}
+                </Styling>
+            </li>
+        {/each} 
+    </ul>
     
 
     <hr>
-    <form id="habillage">
-        <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
-        <input type="submit" disabled style="display: none" aria-hidden="true" />
-        <h3>Habillage</h3>
-        <ul>
-                <li>
-                    <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
-                    <span 
-                        use:tooltip title="Cliquer pour en savoir plus"
-                        on:click={() => modalContent.set('scale')}
-                        on:click={isModalOpen.set(!$isModalOpen)}
-                        class="material-icons tooltip">help_outline</span>
-                    {#if lyr_selected.includes("scaleBar")}
-                    <div class="habillage-style" transition:slide={{ duration: 300 }}>
-                        <input type="text" bind:value={scale_dist} placeholder="distance en km">
-                        <p>Cliquer sur l'échelle pour la déplacer</p>
-                    </div>
-                    {/if}
-                </li>
-                <li>
-                    <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={lyr_selected} />
-                    {#if lyr_selected.includes("mapTitle")}
-                    <div class="habillage-style" transition:slide={{ duration: 300 }}>
-                        <input type="text" bind:value={map_title} style="width: 90%;">
-                    </div>
-                    {/if}
-                </li>
-        </ul>
-    </form>
+
+
+    <!-- Prevent implicit submission of the form = ne recharge pas la page si input mapTitle + Enter -->
+    <!-- <input type="submit" disabled style="display: none" aria-hidden="true" /> -->
+    <h3>Habillage</h3>
+    <ul>
+        <li>
+            <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
+            <span 
+                use:tooltip title="Cliquer pour en savoir plus"
+                on:click={() => modalContent.set('scale')}
+                on:click={isModalOpen.set(!$isModalOpen)}
+                class="material-icons tooltip">help_outline</span>
+            {#if lyr_selected.includes("scaleBar")}
+            <div class="habillage-style" transition:slide={{ duration: 300 }}>
+                <input type="text" bind:value={scale_dist} placeholder="distance en km">
+                <p>Cliquer sur l'échelle pour la déplacer</p>
+            </div>
+            {/if}
+        </li>
+        <li>
+            <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={lyr_selected} />
+            {#if lyr_selected.includes("mapTitle")}
+            <div class="habillage-style" transition:slide={{ duration: 300 }}>
+                <input type="text" bind:value={map_title} style="width: 90%;">
+            </div>
+            {/if}
+        </li>
+    </ul>
 </section>
 {/if}
 
 <style>
-    #layers-select ul, #habillage ul {
+    ul {
         list-style-type: none;
         padding: 0;
+        margin: 0;
         display: flex;
         flex-flow: column nowrap;
         gap: .2rem;
     }
-    #layers-select li, #habillage li {
+    li {
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
         align-items: center;
         gap: .5rem;
     }
-    :global(#layers-select .Toggle__label, #habillage .Toggle__label) {
+    :global(.Toggle__label) {
         /* Taille du label */
         /* flex: 1; */
         width: 9rem;
