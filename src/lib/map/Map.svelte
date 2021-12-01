@@ -244,45 +244,65 @@
 
         #mapSvg.colorMode { 
             --ocean-fill: AliceBlue;
+            --ocean-fill-o: 1;
             --ocean-stroke: #ccc;
+            --ocean-stroke-o: 1;
             --ocean-stroke-w: 1;
-            --graticule-fill: none;
-            --graticule-stroke: #ccc;
-            --graticule-stroke-w: 0.5;
-            --countries-fill: lightgrey;
-            --countries-stroke: none;
-            --countries-stroke-w: none;
-            --borders-fill: none;
+            
+            --grat-stroke: #ccc;
+            --grat-stroke-o: 1;
+            --grat-stroke-w: 0.5;
+
+            --pays-fill: lightgrey;
+            --pays-fill-o: 1;
+            --pays-stroke: none;
+            --pays-stroke-o: 1;
+            --pays-stroke-w: none;
+
             --borders-stroke: white;
+            --borders-stroke-o: 1;
             --borders-stroke-w: 0.5;
+
             --urban-fill: black;
+            --urban-fill-o: 1;
             --urban-stroke: none;
+            --urban-stroke-o: 1;
             --urban-stroke-w: none;
         }
         #mapSvg.outlineMode { 
             --ocean-fill: white;
+            --ocean-fill-o: 1;
             --ocean-stroke: #ccc;
+            --ocean-stroke-o: 1;
             --ocean-stroke-w: 1;
-            --graticule-fill: none;
-            --graticule-stroke: black;
-            --graticule-stroke-w: 0.5;
-            --countries-fill: white;
-            --countries-stroke: black;
-            --countries-stroke-w: none;
-            --borders-fill: none;
+
+            --grat-stroke: black;
+            --grat-stroke-o: 1;
+            --grat-stroke-w: 0.5;
+            
+            --pays-fill: white;
+            --pays-fill-o: 1;
+            --pays-stroke: black;
+            --pays-stroke-o: 1;
+            --pays-stroke-w: none;
+
             --borders-stroke: black;
+            --borders-stroke-o: 1;
             --borders-stroke-w: 0.5;
+
             --urban-fill: black;
+            --urban-fill-o: 1;
             --urban-stroke: none;
+            --urban-stroke-o: 1;
             --urban-stroke-w: none;
         }
-        #ocean { fill: var(--ocean-fill); stroke: var(--ocean-stroke); stroke-width: var(--ocean-stroke-w); }
-        #graticule { fill: var(--graticule-fill); stroke: var(--graticule-stroke); stroke-width: var(--graticule-stroke-w); }
+        #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w); }
+        #graticule { fill: none; stroke: var(--grat-stroke); stroke-opacity: var(--grat-stroke-o); stroke-width: var(--grat-stroke-w); }
         /* #land { fill: lightgrey; stroke: none; } */
-        #countries { fill: var(--countries-fill); stroke: var(--countries-stroke); stroke-width: var(--countries-stroke-w); }
-        #borders { fill: var(--borders-fill); stroke: var(--borders-stroke); stroke-width: var(--borders-stroke-w); }
-        #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; }
-        #urban { fill: var(--urban-fill); stroke: var(--urban-stroke); stroke-width: var(--urban-stroke-w); }
+        #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: var(--pays-stroke); stroke-opacity: var(--pays-stroke-o); stroke-width: var(--pays-stroke-w); }
+        #borders { fill: none; stroke: var(--borders-stroke); stroke-opacity: var(--borders-stroke-o); stroke-width: var(--borders-stroke-w); }
+        /* #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; } */
+        #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); }
     </style>
 </svg>
 

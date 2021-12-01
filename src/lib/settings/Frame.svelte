@@ -69,7 +69,10 @@
 
 
 <style>
-    p { font-size: var(--text-medium); }
+    p { 
+        font-size: var(--text-medium);
+        margin-bottom: 0;
+    }
     #freeFrame > .material-icons { color: var(--dark-grey); }
     #freeFrame:hover > .material-icons { 
         animation-duration: .5s;

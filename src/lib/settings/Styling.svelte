@@ -15,36 +15,41 @@
     const toggle = () => isOpen = !isOpen
     let fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth
 
-
-    
-    // 1. Reset des styles aux changement de thème
-    // 2. Récupérer les 'computed styles' de la carte
-    // 3. Appliquer les valeurs des inputs en style dans la carte
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
     // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb2hex voir mon notebook utils observable)
-    // 1. ----------
+    // Stock les styles courants de chaque couche
+    let mapStyle = {}
+    const getMapStyle = (lyr) => {
+        const fillColor     = rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )
+        const fillOpacity   = select(`#gBasemap #${lyr}`).style("fill-opacity")
+        const strokeColor   = rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )
+        const strokeOpacity = select(`#gBasemap #${layer}`).style("stroke-opacity")
+        const strokeWidth   = parseFloat( select(`#gBasemap #${layer}`).style("stroke-width") )
+        return mapStyle = {fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth}
+    }
+
+    // À chaque changement de thème
     $: { $mapTheme
+        // Reset des styles inlines
         select(`#gBasemap #${layer}`)
             .style("fill", null)
             .style("fill-opacity", null)
             .style("stroke", null)
             .style("stroke-opacity", null)
             .style("stroke-width", null)
+        // Styles par variables CSS deviennent prioritaires
+        // Stock styles du nouveau thème  ('computed styles' = variables CSS)
+        getMapStyle(layer)
     }
-    // 2. ----------
-    $: fillColor     = rgb2hex( select(`#gBasemap #${layer}`).style("fill") )
-    $: fillOpacity   = select(`#gBasemap #${layer}`).style("fill-opacity")
-    $: strokeColor   = rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )
-    $: strokeOpacity = select(`#gBasemap #${layer}`).style("stroke-opacity")
-    $: strokeWidth   = parseFloat( select(`#gBasemap #${layer}`).style("stroke-width") )
-    // 3. ----------
+
+    // Applique sur chaque couche les changements de style provenant d'inputs
     $: {
         select(`#gBasemap #${layer}`)
-            .style("fill", fillColor)
-            .style("fill-opacity", fillOpacity)
-            .style("stroke", strokeColor)
-            .style("stroke-opacity", strokeOpacity)
-            .style("stroke-width", `${strokeWidth / $zTransform.k}px`) // compense le facteur de zoom
+            .style("fill", mapStyle.fillColor)
+            .style("fill-opacity", mapStyle.fillOpacity)
+            .style("stroke", mapStyle.strokeColor)
+            .style("stroke-opacity", mapStyle.strokeOpacity)
+            .style("stroke-width", `${mapStyle.strokeWidth / $zTransform.k}px`) // compense le facteur de zoom
     }
 </script>
 
@@ -61,12 +66,12 @@
         <ul>
             <li>
                 <label for="fillColor">Couleur</label>
-                <input type="color" bind:value={fillColor} id="fillColor" >
+                <input type="color" bind:value={mapStyle.fillColor} id="fillColor" >
             </li>
             <li>
                 <label for="fillOpacity">Transparence</label>
-                <input type="range" bind:value={fillOpacity} id="fillOpacity" min="0" max="1" step="0.1" >
-                <input type="number" bind:value={fillOpacity} id="fillOpacity" min="0" max="1" step="0.1" >
+                <input type="range" bind:value={mapStyle.fillOpacity} id="fillOpacity" min="0" max="1" step="0.1" >
+                <input type="number" bind:value={mapStyle.fillOpacity} id="fillOpacity" min="0" max="1" step="0.1" >
             </li>
         </ul>
     {/if}
@@ -76,17 +81,17 @@
         <ul>
             <li>
                 <label for="strokeColor">Couleur</label>
-                <input type="color" bind:value={strokeColor} id="strokeColor" >
+                <input type="color" bind:value={mapStyle.strokeColor} id="strokeColor" >
             </li>
             <li>
                 <label for="strokeOpacity">Transparence</label>
-                <input type="range" bind:value={strokeOpacity} id="strokeOpacity" min="0" max="1" step="0.1" >
-                <input type="number" bind:value={strokeOpacity} id="strokeOpacity" min="0" max="1" step="0.1" >
+                <input type="range" bind:value={mapStyle.strokeOpacity} id="strokeOpacity" min="0" max="1" step="0.1" >
+                <input type="number" bind:value={mapStyle.strokeOpacity} id="strokeOpacity" min="0" max="1" step="0.1" >
             </li>
             <li>
                 <label for="strokeWidth">Épaisseur</label>
-                <input type="range" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
-                <input type="number" bind:value={strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
+                <input type="range" bind:value={mapStyle.strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
+                <input type="number" bind:value={mapStyle.strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
             </li>
         </ul>
     {/if}

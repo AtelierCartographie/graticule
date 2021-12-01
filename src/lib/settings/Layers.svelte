@@ -70,21 +70,6 @@
 
     <!-- Prevent implicit submission of the form = ne recharge pas la page si 'form > input' + Enter -->
     <!-- <input type="submit" disabled style="display: none" aria-hidden="true" /> -->
-    <h3>Informations géographiques</h3>
-    <ul>
-        {#each layers_list as {id, name, style} }
-            <li>
-                <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
-                <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
-                    {#if id == 'urban'}
-                    <UrbanFilter />
-                    {:else if id == 'graticule'}
-                    <GraticuleFilter />
-                    {/if}
-                </Styling>
-            </li>
-        {/each} 
-    </ul>
 
     <h3>Thèmes</h3>
     <div id="themes">
@@ -101,8 +86,22 @@
             Noir et blanc
         </button>
     </div>
-    
 
+    <h3>Informations géographiques</h3>
+    <ul>
+        {#each layers_list as {id, name, style} }
+            <li>
+                <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
+                <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
+                    {#if id == 'urban'}
+                    <UrbanFilter />
+                    {:else if id == 'graticule'}
+                    <GraticuleFilter />
+                    {/if}
+                </Styling>
+            </li>
+        {/each} 
+    </ul>
 
     <h3>Habillage</h3>
     <ul>
