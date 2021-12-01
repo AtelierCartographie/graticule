@@ -10,36 +10,30 @@
     $: gratType.set(type)
 </script>
 
-{#if $lyr.includes("graticule")}
-    <div class="habillage-style" transition:slide={{ duration: 300 }}>
-        <button on:click={() => gratType.set('top')}
-                class:active="{ $gratType === 'top' }"
-                use:tooltip={{ placement: 'top' }} 
-                title="Équateur, Tropiques, Cercles polaires, Greenwitch" 
-                type="button" 
-                class="badge">
-            remarquables
-        </button>
-        <button on:click={() => gratType.set('all')}
-                class:active="{ $gratType === 'all' }"
-                use:tooltip={{ placement: 'top' }} 
-                title="Grille à espacement régulié" 
-                type="button" 
-                class="badge">
-            réguliés
-        </button>
+<button on:click={() => gratType.set('top')}
+        class:active="{ $gratType === 'top' }"
+        use:tooltip={{ placement: 'top' }} 
+        title="Équateur, Tropiques, Cercles polaires, Greenwitch" 
+        type="button" 
+        class="badge">
+    remarquables
+</button>
 
-        {#if $gratType == 'all'}
-            <!-- <label for="gratStep">Espacement</label> -->
-            <!-- <input type="range" bind:value={step} id="gratStep" min="0" max="60" step="5"> -->
-            <input use:tooltip={{ content: 'Espacement en degré', placement: 'top' }} 
-                transition:slide={{ duration: 300 }}
-                type="number"
-                bind:value={step} 
-                id="gratStep"
-                min="0" max="60" step="5">
-        {/if}
-    </div>
+<button on:click={() => gratType.set('all')}
+        class:active="{ $gratType === 'all' }"
+        use:tooltip={{ placement: 'top' }} 
+        title="Grille à espacement régulié" 
+        type="button" 
+        class="badge">
+    réguliés
+</button>
+{#if $gratType == 'all'}
+    <input use:tooltip={{ content: 'Espacement en degré', placement: 'top' }} 
+        transition:slide={{ duration: 300 }}
+        type="number"
+        bind:value={step} 
+        id="gratStep"
+        min="0" max="60" step="5">
 {/if}
 
 

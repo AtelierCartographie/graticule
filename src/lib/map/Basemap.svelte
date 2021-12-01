@@ -1,5 +1,5 @@
 <script>
-    import { blur } from "svelte/transition";
+    import { blur, draw } from "svelte/transition";
     import { range } from 'd3'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import geo from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
@@ -9,32 +9,51 @@
     export let path, outline
 
     // GRATICULES
-    const geoLine = (value, direction, precision = "2.5") => {
+    const geoLine = (value, direction, name, precision = "2.5") => {
         const v = parseFloat(value)
         const step = parseFloat(precision)
+        const geojson = {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": []
+            },
+            "properties": {
+                "name": name
+            }
+        }
         switch (direction) {
             case 'latitude':
             case 'lat':
-                return range(-180, 180, step).concat(180).map(x => [x,v])
-                
+                v == 0
+                ? geojson.geometry.coordinates = [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]] // Équateur
+                : geojson.geometry.coordinates = range(-180, 180, step).concat(180).map(x => [x,v])
+                break
             case 'longitude':
             case 'long':
             case 'lon':
-                return range(-90, 90, step).concat(90).map(y => [v,y])
-                
+                v == 0
+                ? geojson.geometry.coordinates = [[0, 90], [0, 0], [0, -90]] // Greenwitch
+                : v == 180
+                ? geojson.geometry.coordinates = [[180, 90], [180,0], [180,-90]] // Antiméridien
+                : geojson.geometry.coordinates = range(-90, 90, step).concat(90).map(y => [v,y])
+                break
             default:
                 return console.log(`'${direction}' n'est pas une valeur de direction possible. 'lat' ou 'long' attendu`)
         }
+        return geojson
     }
+
     const geographicLines = {
-        type: "MultiLineString",
-        coordinates: [
-            geoLine(66.563, 'lat'),            // Cercle polaire arctique
-            geoLine(23.436, 'lat'),            // Tropique du Cancer
-            [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]],   // Équateur
-            geoLine(-23.436, 'lat'),           // Tropique du Capricorne
-            geoLine(-66.563, 'lat'),           // Cercle polaire antarctique
-            [[0, -90], [0, 0], [0, 90], [180,0], [180,-90]]        // Méridien de Greenwitch
+        type: "FeatureCollection",
+        features: [
+            geoLine(66.563, 'lat', "Cercle polaire arctique"),      // Cercle polaire arctique
+            geoLine(23.436, 'lat', "Tropique du Cancer"),           // Tropique du Cancer
+            geoLine(0, 'lat', "Équateur"),                          // Équateur
+            geoLine(-23.436, 'lat', "Tropique du Capricorne"),      // Tropique du Capricorne
+            geoLine(-66.563, 'lat', "Cercle polaire antarctique"),  // Cercle polaire antarctique
+            geoLine(0, 'lon', "Méridien de Greenwitch"),            // Méridien de Greenwitch
+            geoLine(180, 'lon', "Antiméridien"),                    // Antiméridien
         ]
     }
 
@@ -45,7 +64,6 @@
             ? geoGraticule10() 
             : geoGraticule().step([$gratStep, $gratStep])()
     )
-
 
     // Filtre la couche urban selon un seuil d'habitants 
     // défini par des boutons dans Layers.svelte
@@ -64,23 +82,34 @@
 {#if geo}
     <g id='gBasemap' style="clip-path: url(#clip)">
 
-        <path id="ocean" d="{path(outline)}" transition:blur="{{ duration: 1500 }}" style="visibility: hidden"/>
+        <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
+        {#if $gratType == 'top'}
+        <g id='graticule'>
+            {#each graticule.features as d}
+                <path use:tooltip={{content: d.properties.name, followCursor: true, placement: 'right' }} 
+                        transition:draw="{{ duration: 4000 }}"
+                        class="gratTop"
+                        d="{path(d)}"></path>
+            {/each}
+        </g>
+        {:else}
         <path id='graticule' d="{path(graticule)}" style="visibility: hidden"></path>
+        {/if}
 
         {#each Object.entries(geo) as [name, fn]}
             {#if name == 'urban'}
-            <path transition:blur="{{ duration: 1500}}" id='{name}' d="{path(urbanFilter)}" style="visibility: hidden"></path>
+            <path transition:draw="{{ duration: 4000 }}" id='{name}' d="{path(urbanFilter)}" style="visibility: hidden"></path>
             {:else if name == 'countries'}
             <g id="countries">
                 {#each fn.features as country}
                 <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }} 
-                        transition:blur="{{ duration: 1500}}"
+                        transition:draw="{{ duration: 4000 }}"
                         id='{country.properties.id}' class="countries"
                         d="{path(country)}"></path>
                 {/each}
             </g>
             {:else}
-            <path transition:blur="{{ duration: 1500}}" id='{name}' d="{path(fn)}" style="visibility: hidden"></path>
+            <path transition:draw="{{ duration: 10000 }}" id='{name}' d="{path(fn)}" style="visibility: hidden"></path>
             {/if}
         {/each}
     </g>
@@ -88,5 +117,6 @@
 
 <style>
     .countries:hover { fill: var(--accent-color-light); }
-    .countries:focus { outline: none; }
+    .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }
+    .countries:focus, .gratTop:hover { outline: none; }
 </style>

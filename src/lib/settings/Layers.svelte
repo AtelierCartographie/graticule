@@ -7,7 +7,6 @@
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
     import UrbanFilter from './UrbanFilter.svelte'
-    import GraticuleFilter from './GraticuleFilter.svelte'
     import layers_list from '../../assets/layers_list.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -17,7 +16,7 @@
     export let canRender
 
     // Couches actives
-    let lyr_selected = ['ocean', 'countries', 'borders']
+    let lyr_selected = ['ocean', 'graticule', 'countries', 'borders']
     $: lyr.set(lyr_selected)
     
     // Titre de la carte
@@ -95,8 +94,6 @@
                 <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
                     {#if id == 'urban'}
                     <UrbanFilter />
-                    {:else if id == 'graticule'}
-                    <GraticuleFilter />
                     {/if}
                 </Styling>
             </li>

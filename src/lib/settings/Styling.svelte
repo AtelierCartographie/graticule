@@ -3,6 +3,7 @@
     import { slide } from 'svelte/transition'
     import rgb2hex from '../../assets/rgb2hex.js'
     import { zTransform, mapTheme, lyr } from '../../stores.js'
+    import GraticuleFilter from './GraticuleFilter.svelte'
 
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
@@ -61,6 +62,10 @@
 
 {#if isOpen && $lyr.includes(layer)}
 <section class="panel" transition:slide={{ duration: 300 }}>
+    {#if layer == 'graticule'}
+        <GraticuleFilter />
+    {/if}
+
     {#if style.includes("fill")}
         <h3 class='fill'>Fond</h3>
         <ul>
