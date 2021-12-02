@@ -1,6 +1,6 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { proj, isModalOpen, modalContent } from '../../stores.js'
+    import { projName, proj, isModalOpen, modalContent } from '../../stores.js'
     import Tip from './Tip.svelte'
     import proj_list from '../../assets/proj_list.js'
     import inView from '../../assets/inView.js'
@@ -8,16 +8,16 @@
     import tooltip from '../../assets/tooltip.js'
 
     // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
-    $: lambda = proj_list.find( d => d.name === $proj).lambda
-    $: phi = proj_list.find( d => d.name === $proj).phi
-    $: gamma = proj_list.find( d => d.name === $proj).gamma
-    $: parallel = proj_list.find( d => d.name === $proj).parallel
-    $: distance = proj_list.find( d => d.name === $proj).distance
-    $: tilt = proj_list.find( d => d.name === $proj).tilt
+    $: lambda = proj_list.find( d => d.name === $projName).lambda
+    $: phi = proj_list.find( d => d.name === $projName).phi
+    $: gamma = proj_list.find( d => d.name === $projName).gamma
+    $: parallel = proj_list.find( d => d.name === $projName).parallel
+    $: distance = proj_list.find( d => d.name === $projName).distance
+    $: tilt = proj_list.find( d => d.name === $projName).tilt
     $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
 
     $: {
-        let p = proj_list.find( d => d.name === $proj).fn.rotate([lambda, phi, gamma])
+        let p = proj_list.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
         proj.set(p)
@@ -46,7 +46,7 @@
 
     
 
-    <select bind:value={$proj} name="projection" id="input_projSelect">
+    <select bind:value={$projName} name="projection" id="input_projSelect">
         <optgroup label="Incontournables">
             {#each proj_list.filter(d => d.top == true) as d}
                 <option value={d.name}>{d.name}</option>
@@ -65,18 +65,18 @@
     <ul>
         <li>
             <label for="lon">Longitude</label>
-            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $proj == "Bertin 1953"}>
-            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $proj == "Bertin 1953"}>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $projName == "Bertin 1953"}>
+            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $projName == "Bertin 1953"}>
         </li>
         <li>
             <label for="lat">Latitude</label>
-            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $proj == "Bertin 1953"}>
-            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $proj == "Bertin 1953"}>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $projName == "Bertin 1953"}>
+            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $projName == "Bertin 1953"}>
         </li>
         <li>
             <label for="rot">Rotation</label>
-            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $proj == "Bertin 1953"}>
-            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $proj == "Bertin 1953"}>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $projName == "Bertin 1953"}>
+            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $projName == "Bertin 1953"}>
         </li>
 
         {#if parallel || parallel == 0}

@@ -9,7 +9,8 @@ export const zTransform = writable({ k: 1, x: 0, y: 0})
 export const regbbox = writable()
 export const countrybbox = writable()
 // Projection
-export const proj = writable('Equal Earth')
+export const projName = writable('Equal Earth')
+export const proj = writable()
 // Layers
 export const mapTheme = writable('colorMode')       // colorMode ou outlineMode
 export const lyr = writable(['ocean', 'graticule', 'countries', 'borders'])
