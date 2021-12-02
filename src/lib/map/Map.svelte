@@ -17,8 +17,8 @@
 
     let mapCredit
     $: { mapCredit = $lyr.includes('urban') 
-                        ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
-                        : "Source : Natural Earth. Réalisé avec #Cartofond." }
+            ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
+            : "Source : Natural Earth. Réalisé avec #Cartofond." }
 
     // --------------- PROJECTION -------------- //
     let outline = ({type: "Sphere"})

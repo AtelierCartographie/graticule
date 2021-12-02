@@ -3,11 +3,11 @@
     import tooltip from '../../assets/tooltip.js'
     import { slide } from "svelte/transition";
 
-    let step = 10
-    $: gratStep.set(step)
+    // let step = 10
+    // $: gratStep.set(step)
 
-    let type = 'top'
-    $: gratType.set(type)
+    // let type
+    // $: gratType.set(type)
 </script>
 
 <button on:click={() => gratType.set('top')}
@@ -31,7 +31,7 @@
     <input use:tooltip={{ content: 'Espacement en degré', placement: 'top' }} 
         transition:slide={{ duration: 300 }}
         type="number"
-        bind:value={step} 
+        bind:value={$gratStep} 
         id="gratStep"
         min="0" max="60" step="5">
 {/if}

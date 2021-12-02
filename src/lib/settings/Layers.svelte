@@ -15,47 +15,36 @@
 
     export let canRender
 
-    // Couches actives
-    let lyr_selected = ['ocean', 'graticule', 'countries', 'borders']
-    $: lyr.set(lyr_selected)
-    
-    // Titre de la carte
-    let map_title = "Titre de la carte"
-    $: mapTitle.set(map_title)
-
     // Ajouter l'échelle graphique
-    $: if (lyr_selected.includes("scaleBar")) {
+    $: if ($lyr.includes("scaleBar")) {
         let checked = document.getElementById('input_scale').checked
         if (checked) { canAddScale.set(checked) }
     }
-    // Taille de l'échelle graphique
-    let scale_dist
-    $: scaleDist.set(scale_dist)
 
     //Tips message
     let m1 = "Ajouter si besoin des informations supplémentaires"
 
-    function addLayer(lyr) {
+    function addLayer(layer) {
         const base = select("#gBasemap")
         // Couches hidden par défault
         base.selectChildren().style("visibility", "hidden").classed("hidden", true)
 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
-        lyr.forEach(e => select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false))
+        layer.forEach(e => select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false))
         // Cas particuliers (titre et échelle)
-        lyr.includes("scaleBar") 
+        layer.includes("scaleBar") 
             ? select("#gScaleBar").style("visibility", "visible").classed("hidden", false)
             : select("#gScaleBar").style("visibility", "hidden").classed("hidden", true)
-        lyr.includes("mapTitle")
+        layer.includes("mapTitle")
             ? select("#mapTitle").style("visibility", "visible").classed("hidden", false)
             : select("#mapTitle").style("visibility", "hidden").classed("hidden", true)
     }
 
-    $: addLayer(lyr_selected)
+    $: addLayer($lyr)
     
     onMount( () => {
         // applique la couche par défaut au démarrage
-        addLayer(lyr_selected)
+        addLayer($lyr)
     })
 </script>
 
@@ -90,8 +79,8 @@
     <ul>
         {#each layers_list as {id, name, style} }
             <li>
-                <Toggle label={name} {id} {name} value={id} bind:bindGroup={lyr_selected} />
-                <Styling layer={id} {style} disabled={lyr_selected.includes(id) ? false : true}>
+                <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
+                <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
                     {#if id == 'urban'}
                     <UrbanFilter />
                     {/if}
@@ -103,24 +92,24 @@
     <h3>Habillage</h3>
     <ul>
         <li>
-            <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={lyr_selected} />
+            <Toggle label="Échelle" id="scale" name="Échelle" value="scaleBar" bind:bindGroup={$lyr} />
             <span 
                 use:tooltip title="Cliquer pour en savoir plus"
                 on:click={() => modalContent.set('scale')}
                 on:click={isModalOpen.set(!$isModalOpen)}
                 class="material-icons tooltip">help_outline</span>
-            {#if lyr_selected.includes("scaleBar")}
+            {#if $lyr.includes("scaleBar")}
             <div class="habillage-style" transition:slide={{ duration: 300 }}>
-                <input type="text" bind:value={scale_dist} placeholder="distance en km">
+                <input type="text" bind:value={$scaleDist} placeholder="distance en km">
                 <p>Cliquer sur l'échelle pour la déplacer</p>
             </div>
             {/if}
         </li>
         <li>
-            <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={lyr_selected} />
-            {#if lyr_selected.includes("mapTitle")}
+            <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={$lyr} />
+            {#if $lyr.includes("mapTitle")}
             <div class="habillage-style" transition:slide={{ duration: 300 }}>
-                <input type="text" bind:value={map_title} style="width: 90%;">
+                <input type="text" bind:value={$mapTitle} style="width: 90%;">
             </div>
             {/if}
         </li>

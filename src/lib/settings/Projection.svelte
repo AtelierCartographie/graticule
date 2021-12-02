@@ -7,19 +7,17 @@
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
 
-    let proj_selected = "Equal Earth"
-
     // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
-    $: lambda = proj_list.find( d => d.name === proj_selected).lambda
-    $: phi = proj_list.find( d => d.name === proj_selected).phi
-    $: gamma = proj_list.find( d => d.name === proj_selected).gamma
-    $: parallel = proj_list.find( d => d.name === proj_selected).parallel
-    $: distance = proj_list.find( d => d.name === proj_selected).distance
-    $: tilt = proj_list.find( d => d.name === proj_selected).tilt
+    $: lambda = proj_list.find( d => d.name === $proj).lambda
+    $: phi = proj_list.find( d => d.name === $proj).phi
+    $: gamma = proj_list.find( d => d.name === $proj).gamma
+    $: parallel = proj_list.find( d => d.name === $proj).parallel
+    $: distance = proj_list.find( d => d.name === $proj).distance
+    $: tilt = proj_list.find( d => d.name === $proj).tilt
     $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
 
     $: {
-        let p = proj_list.find( d => d.name === proj_selected).fn.rotate([lambda, phi, gamma])
+        let p = proj_list.find( d => d.name === $proj).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
         proj.set(p)
@@ -48,7 +46,7 @@
 
     
 
-    <select bind:value={proj_selected} name="projection" id="input_projSelect">
+    <select bind:value={$proj} name="projection" id="input_projSelect">
         <optgroup label="Incontournables">
             {#each proj_list.filter(d => d.top == true) as d}
                 <option value={d.name}>{d.name}</option>
@@ -67,18 +65,18 @@
     <ul>
         <li>
             <label for="lon">Longitude</label>
-            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
-            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || proj_selected == "Bertin 1953"}>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $proj == "Bertin 1953"}>
+            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $proj == "Bertin 1953"}>
         </li>
         <li>
             <label for="lat">Latitude</label>
-            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
-            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || proj_selected == "Bertin 1953"}>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $proj == "Bertin 1953"}>
+            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $proj == "Bertin 1953"}>
         </li>
         <li>
             <label for="rot">Rotation</label>
-            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
-            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || proj_selected == "Bertin 1953"}>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $proj == "Bertin 1953"}>
+            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $proj == "Bertin 1953"}>
         </li>
 
         {#if parallel || parallel == 0}

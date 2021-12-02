@@ -83,18 +83,19 @@
     <g id='gBasemap' style="clip-path: url(#clip)">
 
         <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
-        {#if $gratType == 'top'}
         <g id='graticule'>
-            {#each graticule.features as d}
-                <path use:tooltip={{content: d.properties.name, followCursor: true, placement: 'right' }} 
-                        transition:draw="{{ duration: 4000 }}"
-                        class="gratTop"
-                        d="{path(d)}"></path>
-            {/each}
+            {#if $gratType == 'top'}
+                {#each graticule.features as d}
+                    <path use:tooltip={{content: d.properties.name, followCursor: true, placement: 'right' }}
+                            class="gratTop"
+                            d="{path(d)}"></path>
+                {/each}
+            {:else}
+            <path class="gratAll" d="{path(graticule)}"></path>
+            {/if}
         </g>
-        {:else}
-        <path id='graticule' d="{path(graticule)}" style="visibility: hidden"></path>
-        {/if}
+       
+        
 
         {#each Object.entries(geo) as [name, fn]}
             {#if name == 'urban'}

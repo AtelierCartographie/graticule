@@ -9,15 +9,15 @@ export const zTransform = writable({ k: 1, x: 0, y: 0})
 export const regbbox = writable()
 export const countrybbox = writable()
 // Projection
-export const proj = writable()
+export const proj = writable('Equal Earth')
 // Layers
-export const mapTheme = writable('colorMode')
-export const lyr = writable()
-export const mapTitle = writable()
+export const mapTheme = writable('colorMode')       // colorMode ou outlineMode
+export const lyr = writable(['ocean', 'graticule', 'countries', 'borders'])
+export const mapTitle = writable("Titre de la carte")
 export const canAddScale = writable()
 export const scaleDist = writable()
-export const gratType = writable()
-export const gratStep = writable()
+export const gratType = writable('top')             // top ou all
+export const gratStep = writable(10)
 export const urbanSize = writable(50000)
 
 // MODAL
