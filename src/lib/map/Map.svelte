@@ -154,14 +154,14 @@
         }
     }
 
+    // Applique le zoom sur une zone à la sélection
+    // et au changement de projection
     $: if (isReady) { 
         $proj
         zoomRegion($regbbox)
         zoomRegion($countrybbox)
-        // Color selected country differently
-        // if ($countrybbox != null) {
-        //     select(`#${$countrybbox.properties.id}`).attr('fill', '#cccccc')
-        // }
+
+        if ($regbbox == null) zoomReset() // = zoom monde si region null ou pays null
     }
 
     // Boutons de contrôle du zoom
