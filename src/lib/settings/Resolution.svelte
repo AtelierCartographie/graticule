@@ -17,9 +17,6 @@
         "Normal": "50m",
         "Détaillé": "10m"
     }
-
-    $: console.log($resType)
-    // let res_selected = ["Normal"]
 </script>
 
 <section id="resolution" class="settings-section"

@@ -6,19 +6,6 @@
     import { zTransform, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
-    // async function getGeo_50m() {
-    //     const { geo_50m } = await import('../../assets/geo.js')
-    //     return geo_50m
-    // }
-    // const geo_50m = getGeo_50m()
-    // console.log(geo_50m)
-
-    // async function getGeo_10m() {
-    //     const { geo_10m } = await import('../../assets/geo.js')
-    //     return geo_10m
-    // }
-    // const geo_10m = getGeo_10m()
-
     export let path, outline
 
     // GRATICULES
@@ -90,7 +77,10 @@
 
     // LAYERS with 3 resolutions
     // 3 catégories de facteur de zoom
-    $: zCat = $zTransform.k <= 5 ? 'low' : $zTransform.k <= 20 ? 'medium' : 'high'
+    $: zCat = $zTransform.k <= 4 
+                ? 'low' : $zTransform.k <= 17 
+                ? 'medium' 
+                : 'high'
 
     let geo
     $: { if ($resType == "dynamic") { 
@@ -115,24 +105,22 @@
                 break
               case '50m': geo = geo_50m
                 break
-              case '10m': geo = geo_10m
+              case '10m': 
+                console.log('start')
+                geo = geo_10m
+                console.log('end')
                 break
           }
       }
     }
-    // $: geo
-    $: console.log($zTransform.k)
-    $: console.log(zCat)
 
-    // $res == '110m' ? geo_110m : $res == '50m' ? geo_50m : geo_10m
-    // $: console.log(geo)
     // Par défaut les transitions ne se font qu'à l'apparition/création de l'élément dans le DOM
     // pour les activers quand une valeur de variable change il faut utiliser #key
     // https://svelte.dev/tutorial/key-blocks
 </script>
 
 <g id='gBasemap' style="clip-path: url(#clip)">
-{#await geo then lyr}
+{#if geo}
     <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
     
     <g id='graticule'>
@@ -148,18 +136,17 @@
     </g>
 
     <g id="countries">
-        {#each lyr.countries.features as country}
-        <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }} 
-                transition:draw="{{ duration: 4000 }}"
+        {#each geo.countries.features as country}
+        <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }}
                 id='{country.properties.id}' class="countries"
                 d="{path(country)}"></path>
         {/each}
     </g>
 
-    <path transition:draw="{{ duration: 4000 }}" id='borders' d="{path(lyr.borders)}" style="visibility: hidden"></path>
+    <path id='borders' d="{path(geo.borders)}" style="visibility: hidden"></path>
 
-    <path transition:draw="{{ duration: 4000 }}" id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
-{/await}
+    <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
+{/if}
 </g>
 
 <!-- {#if geo_110m}
