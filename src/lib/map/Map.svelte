@@ -255,9 +255,6 @@
 
             --pays-fill: lightgrey;
             --pays-fill-o: 1;
-            --pays-stroke: none;
-            --pays-stroke-o: 1;
-            --pays-stroke-w: none;
 
             --borders-stroke: white;
             --borders-stroke-o: 1;
@@ -282,9 +279,6 @@
             
             --pays-fill: white;
             --pays-fill-o: 1;
-            --pays-stroke: black;
-            --pays-stroke-o: 1;
-            --pays-stroke-w: none;
 
             --borders-stroke: black;
             --borders-stroke-o: 1;
@@ -299,7 +293,7 @@
         #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w); }
         #graticule { fill: none; stroke: var(--grat-stroke); stroke-opacity: var(--grat-stroke-o); stroke-width: var(--grat-stroke-w); }
         /* #land { fill: lightgrey; stroke: none; } */
-        #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: var(--pays-stroke); stroke-opacity: var(--pays-stroke-o); stroke-width: var(--pays-stroke-w); }
+        #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: none; }
         #borders { fill: none; stroke: var(--borders-stroke); stroke-opacity: var(--borders-stroke-o); stroke-width: var(--borders-stroke-w); }
         /* #borders_disputed { fill: none; stroke: red; stroke-width: 0.5; } */
         #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); }

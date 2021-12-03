@@ -2,9 +2,22 @@
     import { blur, draw } from "svelte/transition";
     import { range } from 'd3'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
-    import geo from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
-    import { gratType, gratStep, urbanSize } from '../../stores.js'
+    import { geo_110m, geo_50m, geo_10m, urban } from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
+    import { zTransform, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
+
+    // async function getGeo_50m() {
+    //     const { geo_50m } = await import('../../assets/geo.js')
+    //     return geo_50m
+    // }
+    // const geo_50m = getGeo_50m()
+    // console.log(geo_50m)
+
+    // async function getGeo_10m() {
+    //     const { geo_10m } = await import('../../assets/geo.js')
+    //     return geo_10m
+    // }
+    // const geo_10m = getGeo_10m()
 
     export let path, outline
 
@@ -65,21 +78,91 @@
             : geoGraticule().step([$gratStep, $gratStep])()
     )
 
+    // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
     // défini par des boutons dans Layers.svelte
     // Le résultat est remis dans une 'FeatureCollection' = 1 seul path
     // Sinon le navigateur ne pourrait pas afficher les >130000 path de chaque ville
     $: urbanFilter = {
         type: "FeatureCollection",
-        features: geo.urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+        features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
     }
 
+    // LAYERS with 3 resolutions
+    // 3 catégories de facteur de zoom
+    $: zCat = $zTransform.k <= 5 ? 'low' : $zTransform.k <= 20 ? 'medium' : 'high'
+
+    let geo
+    $: { if ($resType == "dynamic") { 
+        switch (zCat) {
+            case 'low':
+                geo = geo_110m
+                $res = '110m'
+                break
+            case 'medium':
+                geo = geo_50m
+                $res = '50m'
+                break
+            case 'high': 
+                geo = geo_10m
+                $res = '10m'
+                break
+        }
+      }
+      else {
+          switch ($res) {
+              case '110m': geo = geo_110m
+                break
+              case '50m': geo = geo_50m
+                break
+              case '10m': geo = geo_10m
+                break
+          }
+      }
+    }
+    // $: geo
+    $: console.log($zTransform.k)
+    $: console.log(zCat)
+
+    // $res == '110m' ? geo_110m : $res == '50m' ? geo_50m : geo_10m
+    // $: console.log(geo)
     // Par défaut les transitions ne se font qu'à l'apparition/création de l'élément dans le DOM
     // pour les activers quand une valeur de variable change il faut utiliser #key
     // https://svelte.dev/tutorial/key-blocks
 </script>
 
-{#if geo}
+<g id='gBasemap' style="clip-path: url(#clip)">
+{#await geo then lyr}
+    <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
+    
+    <g id='graticule'>
+        {#if $gratType == 'top'}
+            {#each graticule.features as d}
+                <path use:tooltip={{content: d.properties.name, followCursor: true, placement: 'right' }}
+                        class="gratTop"
+                        d="{path(d)}"></path>
+            {/each}
+        {:else}
+        <path class="gratAll" d="{path(graticule)}"></path>
+        {/if}
+    </g>
+
+    <g id="countries">
+        {#each lyr.countries.features as country}
+        <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }} 
+                transition:draw="{{ duration: 4000 }}"
+                id='{country.properties.id}' class="countries"
+                d="{path(country)}"></path>
+        {/each}
+    </g>
+
+    <path transition:draw="{{ duration: 4000 }}" id='borders' d="{path(lyr.borders)}" style="visibility: hidden"></path>
+
+    <path transition:draw="{{ duration: 4000 }}" id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
+{/await}
+</g>
+
+<!-- {#if geo_110m}
     <g id='gBasemap' style="clip-path: url(#clip)">
 
         <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
@@ -95,9 +178,7 @@
             {/if}
         </g>
        
-        
-
-        {#each Object.entries(geo) as [name, fn]}
+        {#each Object.entries(geo_110m) as [name, fn]}
             {#if name == 'urban'}
             <path transition:draw="{{ duration: 4000 }}" id='{name}' d="{path(urbanFilter)}" style="visibility: hidden"></path>
             {:else if name == 'countries'}
@@ -114,7 +195,7 @@
             {/if}
         {/each}
     </g>
-{/if}
+{/if} -->
 
 <style>
     .countries:hover { fill: var(--accent-color-light); }

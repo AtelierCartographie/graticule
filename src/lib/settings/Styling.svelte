@@ -94,8 +94,8 @@
             </li>
             <li>
                 <label for="strokeWidth">Épaisseur</label>
-                <input type="range" bind:value={mapStyle.strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
-                <input type="number" bind:value={mapStyle.strokeWidth} id="strokeWidth" min="0.1" max="2" step="0.1" >
+                <input type="range" bind:value={mapStyle.strokeWidth} id="strokeWidth" min="0" max="2" step="0.1" >
+                <input type="number" bind:value={mapStyle.strokeWidth} id="strokeWidth" min="0" max="2" step="0.1" >
             </li>
         </ul>
     {/if}
