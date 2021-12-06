@@ -3,6 +3,7 @@ import { writable } from 'svelte/store'
 // MAP
 export const mapReady = writable()
 export const zTransform = writable({ k: 1, x: 0, y: 0})
+export const zCat = writable()
 
 // SETTINGS
 // Frame

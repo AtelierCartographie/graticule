@@ -1,5 +1,5 @@
 <script>
-    import { proj, lyr, mapReady } from '../../stores.js'
+    import { zCat, proj, lyr, mapReady } from '../../stores.js'
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
     import inView from '../../assets/inView.js'
@@ -156,6 +156,7 @@
     // Mettre à jour le blob à chaque changement de couches actives
     // pour afficher le bon poids de fichier dans les boutons de téléchargement
     $: if ($mapReady) {
+        $zCat
         $proj
         $lyr
         downloadMap(cleaningSVG(), 'svg')

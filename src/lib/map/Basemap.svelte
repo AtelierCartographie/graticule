@@ -1,9 +1,10 @@
 <script>
     import { blur, draw } from "svelte/transition";
+    import { feature } from 'topojson-client'
     import { range } from 'd3'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
-    import { geo_110m, geo_50m, geo_10m, urban } from '../../assets/geo.js' // couches du fond de carte (topojson > geojson)
-    import { zTransform, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
+    import { geo_110m } from '../../assets/geo_110m.js'
+    import { zTransform, zCat, lyr, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     export let path, outline
@@ -65,26 +66,53 @@
             : geoGraticule().step([$gratStep, $gratStep])()
     )
 
+    // ASYNCHRONE geo_50m et geo_10m
+    let geo_50m
+    const getGeo50m = async () => {
+        let {geo_50m} = await import('../../assets/geo_50m.js')
+        return geo_50m
+    }
+    getGeo50m().then(d => geo_50m = d)
+
+    let geo_10m
+    const getGeo10m = async () => {
+        let {geo_10m} = await import('../../assets/geo_10m.js')
+        return geo_10m
+    }
+    getGeo10m().then(d => geo_10m = d)
+
     // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
     // défini par des boutons dans Layers.svelte
     // Le résultat est remis dans une 'FeatureCollection' = 1 seul path
     // Sinon le navigateur ne pourrait pas afficher les >130000 path de chaque ville
-    $: urbanFilter = {
-        type: "FeatureCollection",
-        features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+    let urbanFilter
+
+    // données récupérées lorsque la couche est activée
+    const getUrban = async () => {
+        let {default: urban} = await import('../../assets/basemap/urban.json')
+        return feature(urban, urban.objects.urban)
+    }
+
+    $: if ($lyr.includes('urban')) {
+        getUrban().then(urban => {
+            urbanFilter = {
+                type: "FeatureCollection",
+                features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+            }
+        })
     }
 
     // LAYERS with 3 resolutions
     // 3 catégories de facteur de zoom
-    $: zCat = $zTransform.k <= 4 
+    $: $zCat = $zTransform.k <= 4 
                 ? 'low' : $zTransform.k <= 17 
                 ? 'medium' 
                 : 'high'
 
     let geo
     $: { if ($resType == "dynamic") { 
-        switch (zCat) {
+        switch ($zCat) {
             case 'low':
                 geo = geo_110m
                 $res = '110m'
@@ -119,7 +147,7 @@
 
 <g id='gBasemap' style="clip-path: url(#clip)">
 {#if geo}
-    <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
+    <path id="ocean" d="{path(outline)}" transition:blur="{{ duration: 1500 }}" style="visibility: hidden"/>
     
     <g id='graticule'>
         {#if $gratType == 'top'}
@@ -151,41 +179,6 @@
     <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
 {/if}
 </g>
-
-<!-- {#if geo_110m}
-    <g id='gBasemap' style="clip-path: url(#clip)">
-
-        <path id="ocean" d="{path(outline)}" transition:draw="{{ duration: 4000 }}" style="visibility: hidden"/>
-        <g id='graticule'>
-            {#if $gratType == 'top'}
-                {#each graticule.features as d}
-                    <path use:tooltip={{content: d.properties.name, followCursor: true, placement: 'right' }}
-                            class="gratTop"
-                            d="{path(d)}"></path>
-                {/each}
-            {:else}
-            <path class="gratAll" d="{path(graticule)}"></path>
-            {/if}
-        </g>
-       
-        {#each Object.entries(geo_110m) as [name, fn]}
-            {#if name == 'urban'}
-            <path transition:draw="{{ duration: 4000 }}" id='{name}' d="{path(urbanFilter)}" style="visibility: hidden"></path>
-            {:else if name == 'countries'}
-            <g id="countries">
-                {#each fn.features as country}
-                <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }} 
-                        transition:draw="{{ duration: 4000 }}"
-                        id='{country.properties.id}' class="countries"
-                        d="{path(country)}"></path>
-                {/each}
-            </g>
-            {:else}
-            <path transition:draw="{{ duration: 10000 }}" id='{name}' d="{path(fn)}" style="visibility: hidden"></path>
-            {/if}
-        {/each}
-    </g>
-{/if} -->
 
 <style>
     .countries:hover { fill: var(--accent-color-light); }
