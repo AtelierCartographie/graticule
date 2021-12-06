@@ -106,9 +106,7 @@
               case '50m': geo = geo_50m
                 break
               case '10m': 
-                console.log('start')
                 geo = geo_10m
-                console.log('end')
                 break
           }
       }
@@ -141,6 +139,11 @@
                 id='{country.properties.id}' class="countries"
                 d="{path(country)}"></path>
         {/each}
+    </g>
+
+    <g id="hydro">
+        <path id='rivers' d="{path(geo.rivers)}"></path>
+        <path id='lakes' d="{path(geo.lakes)}"></path>
     </g>
 
     <path id='borders' d="{path(geo.borders)}" style="visibility: hidden"></path>

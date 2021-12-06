@@ -20,7 +20,7 @@
     // Stock les styles courants de chaque couche
     let mapStyle = {}
     const getMapStyle = (lyr) => {
-        const fillColor     = rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )
+        let fillColor     = rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )
         const fillOpacity   = select(`#gBasemap #${lyr}`).style("fill-opacity")
         const strokeColor   = rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )
         const strokeOpacity = select(`#gBasemap #${layer}`).style("stroke-opacity")
@@ -45,8 +45,8 @@
     // Applique sur chaque couche les changements de style provenant d'inputs
     $: {
         select(`#gBasemap #${layer}`)
-            .style("fill", mapStyle.fillColor)
-            .style("fill-opacity", mapStyle.fillOpacity)
+            .style("fill", layer == 'hydro' ? mapStyle.strokeColor : mapStyle.fillColor)
+            .style("fill-opacity", layer == 'hydro' ? mapStyle.strokeOpacity : mapStyle.fillOpacity)
             .style("stroke", mapStyle.strokeColor)
             .style("stroke-opacity", mapStyle.strokeOpacity)
             .style("stroke-width", `${mapStyle.strokeWidth / $zTransform.k}px`) // compense le facteur de zoom
