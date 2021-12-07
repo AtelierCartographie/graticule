@@ -22,7 +22,7 @@ export const gratType = writable('top')             // top ou all
 export const gratStep = writable(10)
 export const urbanSize = writable(50000)
 // Resolution
-export const resType = writable('dynamic')
+export const resType = writable(['dynamic'])
 export const res = writable('110m')
 
 // MODAL

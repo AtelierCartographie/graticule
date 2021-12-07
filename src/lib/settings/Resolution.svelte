@@ -1,16 +1,13 @@
 <script>
     import Tip from './Tip.svelte'
+    import Toggle from './Toggle.svelte'
+    import { slide } from "svelte/transition"
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
     import { resType, res } from '../../stores.js'
 
     //Tips message
-    let m1 = "Simplifier (ou généraliser) les tracés permet de modifier le niveau de détails des objets. Cette fonction est par exemple utile pour adapter la carte à une certaine échelle."
-
-    const res_type = {
-        "Dynamique": "dynamic",
-        "Constant": "constant"
-    }
+    let m1 = "Par défaut le détail des tracés augmentent avec le niveau de zoom selon trois niveaux de simplification. Ce comportement dynamique peut être remplacé par un niveau de simplification fixé manuellement."
 
     const res_list = {
         "Simplifié": "110m",
@@ -25,26 +22,20 @@
 >
     <h2><span class="material-icons">timeline</span> Simplifier</h2>
     <Tip message={m1} />
-    <h3>Type de simplification</h3>
-    <ul>
-        {#each Object.entries(res_type) as [name, value] }
-        <li>
-            <label for={value}>{name}</label>
-            <input type="radio" bind:group={$resType} id={value} {value} {name}>
-        </li>
-        {/each}
-    </ul>
-    
 
-    <h3>Détail des tracés</h3>
+    <Toggle label="Simplification manuelle" id="resToggle" name="Constant" value="constant" bind:bindGroup={$resType} />
+    
+    {#if $resType.includes('constant')}
+    <h3 transition:slide={{ duration: 300 }}>Détail des tracés</h3>
     <ul>
         {#each Object.entries(res_list) as [name, value] }
-            <li>
+            <li transition:slide={{ duration: 300 }}>
                 <label for={value}>{name}</label>
-                <input type="radio" bind:group={$res} id={value} {value} {name} disabled={$resType == 'dynamic'}>
+                <input type="radio" bind:group={$res} id={value} {value} {name}>
             </li> 
         {/each}
     </ul>
+    {/if}
 </section>
 
 
