@@ -1,5 +1,4 @@
 <script>
-    import { blur, draw } from "svelte/transition";
     import { feature } from 'topojson-client'
     import { range } from 'd3'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
@@ -145,9 +144,15 @@
     // https://svelte.dev/tutorial/key-blocks
 </script>
 
+<mask id="land">
+    <path d="{path(outline)}" fill="white" />
+    <path d="{path(geo.land)}" fill="black" />
+</mask>
+
 <g id='gBasemap' style="clip-path: url(#clip)">
 {#if geo}
-    <path id="ocean" d="{path(outline)}" transition:blur="{{ duration: 1500 }}" style="visibility: hidden"/>
+    
+    <path id="ocean" d="{path(outline)}" mask="url(#land)" style="visibility: hidden"/>
     
     <g id='graticule'>
         {#if $gratType == 'top'}
