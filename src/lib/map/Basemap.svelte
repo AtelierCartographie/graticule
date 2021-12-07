@@ -166,6 +166,8 @@
         {/if}
     </g>
 
+    <path id="coastline" d="{path(geo.coastline)}" style="visibility: hidden"/>
+
     <g id="countries">
         {#each geo.countries.features as country}
         <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }}

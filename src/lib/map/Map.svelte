@@ -253,6 +253,10 @@
             --grat-stroke-o: 1;
             --grat-stroke-w: 0.5;
 
+            --coastline-stroke: #ccc;
+            --coastline-stroke-o: 1;
+            --coastline-stroke-w: 0.5;
+
             --pays-fill: lightgrey;
             --pays-fill-o: 1;
 
@@ -273,13 +277,17 @@
         #mapSvg.outlineMode { 
             --ocean-fill: white;
             --ocean-fill-o: 1;
-            --ocean-stroke: #ccc;
+            --ocean-stroke: black;
             --ocean-stroke-o: 1;
             --ocean-stroke-w: 1;
 
             --grat-stroke: black;
             --grat-stroke-o: 1;
             --grat-stroke-w: 0.5;
+
+            --coastline-stroke: black;
+            --coastline-stroke-o: 1;
+            --coastline-stroke-w: 0.5;
             
             --pays-fill: white;
             --pays-fill-o: 1;
@@ -300,6 +308,7 @@
         }
         #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w); }
         #graticule { fill: none; stroke: var(--grat-stroke); stroke-opacity: var(--grat-stroke-o); stroke-width: var(--grat-stroke-w); }
+        #coastline { fill: none; stroke: var(--coastline-stroke); stroke-opacity: var(--coastline-stroke-o); stroke-width: var(--coastline-stroke-w); }
         #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: none; }
         #borders { fill: none; stroke: var(--borders-stroke); stroke-opacity: var(--borders-stroke-o); stroke-width: var(--borders-stroke-w); }
         #hydro { fill: var(--hydro-stroke); stroke: var(--hydro-stroke); stroke-opacity: var(--hydro-stroke-o); stroke-width: var(--hydro-stroke-w); }
