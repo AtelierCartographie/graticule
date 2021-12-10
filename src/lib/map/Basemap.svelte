@@ -3,8 +3,12 @@
     import { range } from 'd3'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, lyr, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
+
+    import { contours } from 'd3-contour'
+    import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
+
 
     export let path, outline
 
@@ -79,6 +83,27 @@
         return geo_10m
     }
     getGeo10m().then(d => geo_10m = d)
+
+
+    // RELIEF
+    const getReliefValue = async () => {
+        let { z110m } = await import('../../assets/relief.js')
+        return z110m
+    }
+
+    const getReliefGeojson = async (seuils) => {
+        let z
+        await getReliefValue().then(d => z = d)
+
+        const d3Contours = contours().size([z.width, z.height]).thresholds(seuils)
+        const geojsonXY = d3Contours(z[0])
+        const geojsonLatLon = geojsonXY.map(d => invert(d, z.width, z.height))
+        return geojsonLatLon
+    }
+    const seuils = [0,500,1000,2000,4000]
+    let reliefGeojson
+    getReliefGeojson(seuils).then(d => reliefGeojson = d)
+
 
     // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
@@ -172,8 +197,17 @@
         {#each geo.countries.features as country}
         <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }}
                 id='{country.properties.id}' class="countries"
-                d="{path(country)}"></path>
+                d="{path(country)}" />
         {/each}
+    </g>
+
+
+    <g id="relief">
+        {#if reliefGeojson != undefined}
+        {#each reliefGeojson as d}
+        <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
+        {/each}
+        {/if}
     </g>
 
     <g id="hydro">

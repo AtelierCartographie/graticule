@@ -211,6 +211,10 @@
         <clipPath id="clip-cadrage">
             <rect x={rx} y={ry} width={rw} height={rh} />
         </clipPath>
+        <filter id="reliefShadow">
+            <feDropShadow dx="{-.5 / k}" dy="{-.5 / k}" stdDeviation="0" flood-color="white" flood-opacity=".8"/>
+            <feDropShadow dx="{.5 / k}" dy="{.5 / k}" stdDeviation="0" flood-color="black" flood-opacity=".8"/>
+        </filter>
     </defs>
 
     {#if isReady}
@@ -260,6 +264,9 @@
             --pays-fill: lightgrey;
             --pays-fill-o: 1;
 
+            --relief-fill: lightgrey;
+            --relief-fill-o: 1;
+
             --borders-stroke: white;
             --borders-stroke-o: 1;
             --borders-stroke-w: 0.5;
@@ -292,6 +299,9 @@
             --pays-fill: white;
             --pays-fill-o: 1;
 
+            --relief-fill: lightgrey;
+            --relief-fill-o: 1;
+
             --borders-stroke: black;
             --borders-stroke-o: 1;
             --borders-stroke-w: 0.5;
@@ -312,6 +322,8 @@
         #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: none; }
         #borders { fill: none; stroke: var(--borders-stroke); stroke-opacity: var(--borders-stroke-o); stroke-width: var(--borders-stroke-w); }
         #hydro { fill: var(--hydro-stroke); stroke: var(--hydro-stroke); stroke-opacity: var(--hydro-stroke-o); stroke-width: var(--hydro-stroke-w); }
+        #relief { fill: var(--relief-fill); fill-opacity: var(--relief-fill-o); pointer-events: none; }
+        #relief .levelRelief { filter: url(#reliefShadow); }
         #rivers { fill: none; }
         #lakes { stroke: none; }
         #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); }
