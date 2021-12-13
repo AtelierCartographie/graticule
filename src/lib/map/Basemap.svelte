@@ -86,23 +86,40 @@
 
 
     // RELIEF
-    const getReliefValue = async () => {
-        let { z110m } = await import('../../assets/relief.js')
-        return z110m
-    }
-
-    const getReliefGeojson = async (seuils) => {
+    const getReliefGeojson = async (zLevel,seuils) => {
         let z
-        await getReliefValue().then(d => z = d)
-
+        switch (zLevel) {
+            case '0':
+                let { z110m } = await import('../../assets/relief.js')
+                z = z110m
+                break;
+        
+            case '1':
+                let { z50m } = await import('../../assets/relief.js')
+                z = z50m
+                break;
+            case '2':
+                let { z10m } = await import('../../assets/relief.js')
+                z = z10m
+                break;
+        }
+        
         const d3Contours = contours().size([z.width, z.height]).thresholds(seuils)
         const geojsonXY = d3Contours(z[0])
         const geojsonLatLon = geojsonXY.map(d => invert(d, z.width, z.height))
         return geojsonLatLon
     }
-    const seuils = [0,500,1000,2000,4000]
-    let reliefGeojson
-    getReliefGeojson(seuils).then(d => reliefGeojson = d)
+
+    const seuils = [0,200,500,1000,2000,3000]
+
+    let z110m
+    getReliefGeojson('0', seuils).then(d => z110m = d)
+
+    let z50m
+    getReliefGeojson('1', seuils).then(d => z50m = d)
+
+    let z10m
+    getReliefGeojson('2', seuils).then(d => z10m = d)
 
 
     // URBAN
@@ -134,45 +151,52 @@
                 ? 'medium' 
                 : 'high'
 
-    let geo
+    let geo, zRelief
     $: { if ($resType == "dynamic") { 
         switch ($zCat) {
             case 'low':
                 geo = geo_110m
+                zRelief = z110m
                 $res = '110m'
                 break
             case 'medium':
                 geo = geo_50m
+                zRelief = z50m
                 $res = '50m'
                 break
             case 'high': 
                 geo = geo_10m
+                zRelief = z10m
                 $res = '10m'
                 break
         }
       }
       else {
           switch ($res) {
-              case '110m': geo = geo_110m
+              case '110m': 
+                geo = geo_110m
+                zRelief = z110m
                 break
-              case '50m': geo = geo_50m
+              case '50m': 
+                geo = geo_50m
+                zRelief = z50m
                 break
               case '10m': 
                 geo = geo_10m
+                zRelief = z10m
                 break
           }
       }
     }
-
-    // Par défaut les transitions ne se font qu'à l'apparition/création de l'élément dans le DOM
-    // pour les activers quand une valeur de variable change il faut utiliser #key
-    // https://svelte.dev/tutorial/key-blocks
 </script>
 
-<mask id="land">
+<mask id="oceanLand">
     <path d="{path(outline)}" fill="white" />
     <path d="{path(geo.land)}" fill="black" />
 </mask>
+<clipPath id="land">
+    <path d={path(geo.land)} />
+</clipPath>
 
 <g id='gBasemap' style="clip-path: url(#clip)">
 {#if geo}
@@ -202,9 +226,9 @@
     </g>
 
 
-    <g id="relief">
-        {#if reliefGeojson != undefined}
-        {#each reliefGeojson as d}
+    <g id="relief" clip-path="url(#land)">
+        {#if zRelief}
+        {#each zRelief as d}
         <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
         {/each}
         {/if}

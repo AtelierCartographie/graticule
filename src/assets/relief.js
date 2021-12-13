@@ -1,10 +1,19 @@
 import GeoTIFF, { fromUrl } from 'geotiff';
 
-import z0_4326 from '../assets/basemap/z0_4326.tif?url'
+import z0 from '../assets/basemap/z0.tif'
+import z1 from '../assets/basemap/z1.tif'
+import z2 from '../assets/basemap/z2.tif'
 
-// const arrayBuffer = await z0_4326.arrayBuffer()
-// console.log(arrayBuffer)
-const tiff = await fromUrl(z0_4326)
-const image = await tiff.getImage()
 
-export const z110m = await image.readRasters() // [values, width, height]
+async function getZ(url) {
+    const tiff = await fromUrl(url)
+    const image = await tiff.getImage()
+    const z = await image.readRasters() // [values, width, height]
+    return z
+}
+
+export const z110m = await getZ(z0)
+
+export const z50m = await getZ(z1)
+
+export const z10m = await getZ(z2)

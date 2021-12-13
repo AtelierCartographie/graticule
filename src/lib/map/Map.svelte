@@ -176,6 +176,8 @@
             : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
     // ---------------------------------------- //
 
+    $: dropShadowOffset = (1 / k).toFixed(3)
+
     onMount( () => {
         isReady = true
         mapReady.set(isReady)
@@ -212,8 +214,8 @@
             <rect x={rx} y={ry} width={rw} height={rh} />
         </clipPath>
         <filter id="reliefShadow">
-            <feDropShadow dx="{-.5 / k}" dy="{-.5 / k}" stdDeviation="0" flood-color="white" flood-opacity=".8"/>
-            <feDropShadow dx="{.5 / k}" dy="{.5 / k}" stdDeviation="0" flood-color="black" flood-opacity=".8"/>
+            <feDropShadow dx="{-dropShadowOffset}" dy="{-dropShadowOffset}" stdDeviation="0" flood-color="white" flood-opacity=".8"/>
+            <feDropShadow dx="{dropShadowOffset}" dy="{dropShadowOffset}" stdDeviation="0" flood-color="black" flood-opacity=".8"/>
         </filter>
     </defs>
 
