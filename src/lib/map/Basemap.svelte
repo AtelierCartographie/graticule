@@ -1,9 +1,9 @@
 <script>
     import { feature } from 'topojson-client'
-    import { range } from 'd3'
+    import { select, range } from 'd3'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, resType, res } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, resType, res } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     import { contours } from 'd3-contour'
@@ -110,16 +110,16 @@
         return geojsonLatLon
     }
 
-    const seuils = [0,200,500,1000,2000,3000]
-
     let z110m
-    getReliefGeojson('0', seuils).then(d => z110m = d)
+    getReliefGeojson('0', $zLevels).then(d => z110m = d)
 
     let z50m
-    getReliefGeojson('1', seuils).then(d => z50m = d)
+    getReliefGeojson('1', $zLevels).then(d => z50m = d)
 
     let z10m
-    getReliefGeojson('2', seuils).then(d => z10m = d)
+    getReliefGeojson('2', $zLevels).then(d => z10m = d)
+
+
 
 
     // URBAN
@@ -188,6 +188,17 @@
           }
       }
     }
+
+    // Tooltip des pays par dessus toute les couches
+    function tooltipON(e) {
+        select("#gBasemap").append(
+            () => e.target.cloneNode(false))
+            .classed('hover', true)
+            .style("pointer-events", "none")
+    }
+    function tooltipOFF() {
+        select('.countries.hover').remove()
+    }
 </script>
 
 <mask id="oceanLand">
@@ -221,13 +232,15 @@
         {#each geo.countries.features as country}
         <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }}
                 id='{country.properties.id}' class="countries"
-                d="{path(country)}" />
+                d="{path(country)}" 
+                on:mouseenter|stopPropagation={tooltipON} 
+                on:mouseleave={tooltipOFF} />
         {/each}
     </g>
 
 
     <g id="relief" clip-path="url(#land)">
-        {#if zRelief}
+        {#if $lyr.includes('relief')}
         {#each zRelief as d}
         <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
         {/each}
@@ -235,8 +248,10 @@
     </g>
 
     <g id="hydro">
+        {#if $lyr.includes('hydro')}
         <path id='rivers' d="{path(geo.rivers)}"></path>
         <path id='lakes' d="{path(geo.lakes)}"></path>
+        {/if}
     </g>
 
     <path id='borders' d="{path(geo.borders)}" style="visibility: hidden"></path>
@@ -246,7 +261,6 @@
 </g>
 
 <style>
-    .countries:hover { fill: var(--accent-color-light); }
     .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }
     .countries:focus, .gratTop:hover { outline: none; }
 </style>
