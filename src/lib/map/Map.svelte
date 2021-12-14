@@ -266,8 +266,8 @@
             --pays-fill: lightgrey;
             --pays-fill-o: 1;
 
-            --relief-fill: lightgrey;
-            --relief-fill-o: 1;
+            --relief-fill: #FDE9D8;
+            --relief-fill-o: .2;
 
             --borders-stroke: white;
             --borders-stroke-o: 1;
