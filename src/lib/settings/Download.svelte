@@ -132,7 +132,7 @@
             }
             case 'png': {
                 SVGtoPNG(svg, 4).then( //blob => blob)
-                    blob => { console.log(blob)
+                    blob => {
                         url = URL.createObjectURL(blob)
                         const size = (blob.size / 1024).toFixed(0) // octet => Ko
                         blobPNG = {size, url}
@@ -152,7 +152,6 @@
                 break
             }
         }
-        console.log(url)
         reset()
     }
 

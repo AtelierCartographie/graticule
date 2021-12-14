@@ -1,6 +1,7 @@
 <script>
     import { feature } from 'topojson-client'
-    import { select, range } from 'd3'
+    import { select } from 'd3-selection'
+    import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
     import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, resType, res } from '../../stores.js'
