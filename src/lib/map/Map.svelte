@@ -325,7 +325,8 @@
         #borders { fill: none; stroke: var(--borders-stroke); stroke-opacity: var(--borders-stroke-o); stroke-width: var(--borders-stroke-w); }
         #hydro { fill: var(--hydro-stroke); stroke: var(--hydro-stroke); stroke-opacity: var(--hydro-stroke-o); stroke-width: var(--hydro-stroke-w); }
         #relief { fill: var(--relief-fill); fill-opacity: var(--relief-fill-o); pointer-events: none; }
-        #relief .levelRelief { filter: url(#reliefShadow); mix-blend-mode: color-burn; }
+        #relief .levelRelief { filter: url(#reliefShadow); }
+        #relief.ShadeColor .levelRelief { mix-blend-mode: color-burn; }
         #rivers { fill: none; }
         #lakes { stroke: none; }
         #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); }

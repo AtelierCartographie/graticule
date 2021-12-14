@@ -4,7 +4,7 @@
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, resType, res } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     import { contours } from 'd3-contour'
@@ -70,16 +70,16 @@
             : geoGraticule().step([$gratStep, $gratStep])()
     )
 
-    // ASYNCHRONE geo_50m et geo_10m
-    let geo_50m
-    const getGeo50m = async () => {
-        let {geo_50m} = await import('../../assets/geo_50m.js')
+    // CHARGEMENT ASYNCHRONE
+    // geo_50m et geo_10m
+    let geo_50m, geo_10m
+    const getGeo50m = async () => { 
+        let {geo_50m} = await import('../../assets/geo_50m.js') 
         return geo_50m
     }
     getGeo50m().then(d => geo_50m = d)
 
-    let geo_10m
-    const getGeo10m = async () => {
+    const getGeo10m = async () => { 
         let {geo_10m} = await import('../../assets/geo_10m.js')
         return geo_10m
     }
@@ -206,8 +206,7 @@
 </clipPath>
 
 <g id='gBasemap' style="clip-path: url(#clip)">
-{#if geo}
-    
+
     <path id="ocean" d="{path(outline)}" mask="url(#land)" style="visibility: hidden"/>
     
     <g id='graticule'>
@@ -235,7 +234,7 @@
     </g>
 
 
-    <g id="relief" clip-path="url(#land)">
+    <g id="relief" clip-path="url(#land)" class:ShadeColor={$zColor}>
         {#if $lyr.includes('relief') && zRelief}
         {#each zRelief as d}
         <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
@@ -253,7 +252,6 @@
     <path id='borders' d="{path(geo.borders)}" style="visibility: hidden"></path>
 
     <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
-{/if}
 </g>
 
 <style>

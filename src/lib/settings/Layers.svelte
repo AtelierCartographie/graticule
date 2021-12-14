@@ -7,6 +7,7 @@
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
     import UrbanFilter from './UrbanFilter.svelte'
+    import ReliefFilter from './ReliefFilter.svelte'
     import layers_list from '../../assets/layers_list.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -83,6 +84,8 @@
                 <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
                     {#if id == 'urban'}
                     <UrbanFilter />
+                    {:else if id == 'relief'}
+                    <ReliefFilter />
                     {/if}
                 </Styling>
             </li>
