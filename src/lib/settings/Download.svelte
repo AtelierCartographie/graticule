@@ -78,7 +78,9 @@
             context.drawImage(image, 0, 0, rect.width, rect.height)
             canvas.toBlob(resolve)
             }
-        image.src = URL.createObjectURL(serialize(svg))
+        let svgUrl = serialize(svg)
+        image.src = URL.createObjectURL(svgUrl)
+        URL.revokeObjectURL(svgUrl)
 
         return promise
     }
@@ -102,12 +104,13 @@
     // param3: optionnel = si le téléchargement doit être enclenché ou non
     function downloadMap(svg, type, dl) {
         const a = select(`#download_${type}`).node()
-
+        let url // stocke l'url du blob
+        
         // reset blobURL, href et download attr
         async function reset() {
             // https://developer.mozilla.org/fr/docs/Web/API/Window/requestAnimationFrame
             await new Promise(requestAnimationFrame);
-            URL.revokeObjectURL(a.href)
+            URL.revokeObjectURL(url)
             a.removeAttribute("href")
             a.removeAttribute("download")
         }
@@ -116,7 +119,7 @@
         switch (type) {
             case 'svg': {
                 const blob = serialize(svg)
-                const url = URL.createObjectURL(blob)
+                url = URL.createObjectURL(blob)
                 const size = (blob.size / 1024 / 1024).toFixed(1) // octet => Ko => Mo
                 blobSVG = {size, url}
                 if (dl) {
@@ -129,8 +132,8 @@
             }
             case 'png': {
                 SVGtoPNG(svg, 4).then( //blob => blob)
-                    blob => {
-                        const url = URL.createObjectURL(blob)
+                    blob => { console.log(blob)
+                        url = URL.createObjectURL(blob)
                         const size = (blob.size / 1024).toFixed(0) // octet => Ko
                         blobPNG = {size, url}
                         if (dl) {
@@ -149,6 +152,7 @@
                 break
             }
         }
+        console.log(url)
         reset()
     }
 

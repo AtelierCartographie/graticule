@@ -110,17 +110,12 @@
         return geojsonLatLon
     }
 
-    let z110m
-    getReliefGeojson('0', $zLevels).then(d => z110m = d)
-
-    let z50m
-    getReliefGeojson('1', $zLevels).then(d => z50m = d)
-
-    let z10m
-    getReliefGeojson('2', $zLevels).then(d => z10m = d)
-
-
-
+    let z110m, z50m, z10m
+    $: if ($lyr.includes('relief')) {
+        getReliefGeojson('0', $zLevels).then(d => z110m = d)
+        getReliefGeojson('1', $zLevels).then(d => z50m = d)
+        getReliefGeojson('2', $zLevels).then(d => z10m = d)
+    }
 
     // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
@@ -240,7 +235,7 @@
 
 
     <g id="relief" clip-path="url(#land)">
-        {#if $lyr.includes('relief')}
+        {#if $lyr.includes('relief') && zRelief}
         {#each zRelief as d}
         <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
         {/each}
