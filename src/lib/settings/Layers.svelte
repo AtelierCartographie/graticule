@@ -76,20 +76,32 @@
         </button>
     </div>
 
-    <h3>Informations géographiques</h3>
+    <h3>Géographie physique</h3>
     <ul>
-        {#each layers_list as {id, name, style} }
+        {#each layers_list.filter(d => d.type == "geo") as {id, name, type, style} }
+            <li>
+                <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
+                <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
+                    {#if id == 'relief'}
+                    <ReliefFilter />
+                    {/if}
+                </Styling>
+            </li>
+        {/each}
+    </ul>
+
+    <h3>Géographie humaine</h3>
+    <ul>
+        {#each layers_list.filter(d => d.type == "human") as {id, name, type, style} }
             <li>
                 <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
                 <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
                     {#if id == 'urban'}
                     <UrbanFilter />
-                    {:else if id == 'relief'}
-                    <ReliefFilter />
                     {/if}
                 </Styling>
             </li>
-        {/each} 
+        {/each}
     </ul>
 
     <h3>Habillage</h3>

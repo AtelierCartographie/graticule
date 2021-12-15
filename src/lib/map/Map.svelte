@@ -301,7 +301,7 @@
             --pays-fill: white;
             --pays-fill-o: 1;
 
-            --relief-fill: lightgrey;
+            --relief-fill: rgb(225,225,225);
             --relief-fill-o: 1;
 
             --borders-stroke: black;

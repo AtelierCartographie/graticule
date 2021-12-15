@@ -21,7 +21,7 @@ export const scaleDist = writable()
 export const gratType = writable('top')             // top ou all
 export const gratStep = writable(10)
 export const urbanSize = writable(50000)
-export const zLevels = writable([0,500,1000,2000,3000])
+export const zLevels = writable([0,500,1000,2000,3000,4000])
 export const zColor = writable(true)
 // Resolution
 export const resType = writable(['dynamic'])

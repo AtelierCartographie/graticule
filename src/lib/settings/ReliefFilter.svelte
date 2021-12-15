@@ -2,7 +2,6 @@
     import { lyr, zColor } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
     import { slide } from "svelte/transition";
-    $: console.log($zColor)
 </script>
 
 {#if $lyr.includes("relief")}
