@@ -4,7 +4,7 @@
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res, showSnackbar } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     import { contours } from 'd3-contour'
@@ -111,12 +111,18 @@
         return geojsonLatLon
     }
 
-    let z110m, z50m, z10m
-    $: if ($lyr.includes('relief')) {
+    let z110m, z50m, z10m, zOnce = 0
+    $: if ($lyr.includes('relief') && zOnce == 0) {
+        showSnackbar.set({state: 'loading', message: 'Chargement du relief'})
         getReliefGeojson('0', $zLevels).then(d => z110m = d)
         getReliefGeojson('1', $zLevels).then(d => z50m = d)
-        getReliefGeojson('2', $zLevels).then(d => z10m = d)
+        getReliefGeojson('2', $zLevels).then(d => {
+            z10m = d
+            showSnackbar.set({state: 'loaded', message: 'Relief chargé'})
+        })
+        ++zOnce
     }
+    
 
     // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
@@ -131,13 +137,18 @@
         return feature(urban, urban.objects.urban)
     }
 
-    $: if ($lyr.includes('urban')) {
+    let urbanOnce = 0
+    $: if ($lyr.includes('urban') && urbanOnce == 0) {
+        showSnackbar.set({state: 'loading', message: 'Chargement des zones urbaines'})
+
         getUrban().then(urban => {
             urbanFilter = {
                 type: "FeatureCollection",
                 features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
             }
+            showSnackbar.set({state: 'loaded', message: 'Zones urbaines chargées'})
         })
+        ++urbanOnce
     }
 
     // LAYERS with 3 resolutions

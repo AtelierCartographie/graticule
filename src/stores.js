@@ -30,3 +30,6 @@ export const res = writable('110m')
 // MODAL
 export const isModalOpen = writable(false)
 export const modalContent = writable()
+
+// SNACKBAR
+export const showSnackbar = writable({state: null, message: null})

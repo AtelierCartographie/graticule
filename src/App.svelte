@@ -12,6 +12,7 @@
   import Footer from './lib/Footer.svelte'
   import Modal from './lib/Modal.svelte'  
   import Help from './lib/help/Help.svelte'
+  import Snackbar from './lib/Snackbar.svelte'
 
   let canRender = false
   let width, height
@@ -39,6 +40,7 @@
   <Help />
 </Modal>
 
+<Snackbar />
 <style>
   :root {
     font-family: "Open sans", sans-serif;
