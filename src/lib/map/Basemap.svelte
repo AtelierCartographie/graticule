@@ -1,10 +1,11 @@
 <script>
+    import { onMount } from 'svelte'
     import { feature } from 'topojson-client'
     import { select } from 'd3-selection'
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res, showSnackbar } from '../../stores.js'
+    import { basemapReady, zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res, showSnackbar } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     import { contours } from 'd3-contour'
@@ -206,7 +207,12 @@
     function tooltipOFF() {
         select('.countries.hover').remove()
     }
+
+
+    onMount( () => { $basemapReady = true })
 </script>
+
+{#if geo}
 
 <mask id="oceanLand">
     <path d="{path(outline)}" fill="white" />
@@ -264,6 +270,7 @@
 
     <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
 </g>
+{/if}
 
 <style>
     .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }

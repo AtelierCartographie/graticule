@@ -1,6 +1,6 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projName, proj, isModalOpen, modalContent } from '../../stores.js'
+    import { projName, proj, isModalOpen, modalContent, projSettings } from '../../stores.js'
     import Tip from './Tip.svelte'
     import proj_list from '../../assets/proj_list.js'
     import inView from '../../assets/inView.js'
@@ -8,14 +8,31 @@
     import tooltip from '../../assets/tooltip.js'
 
     // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
-    $: lambda = proj_list.find( d => d.name === $projName).lambda
-    $: phi = proj_list.find( d => d.name === $projName).phi
-    $: gamma = proj_list.find( d => d.name === $projName).gamma
-    $: parallel = proj_list.find( d => d.name === $projName).parallel
-    $: distance = proj_list.find( d => d.name === $projName).distance
-    $: tilt = proj_list.find( d => d.name === $projName).tilt
+    // Vérifier si valeurs dans le localStorage (LS) différente des valeurs par défaut
+    const fromLS = (v, proj) => {
+        const storage = $projSettings[v]
+        const projDefault = proj_list.find( d => d.name === proj)[v]
+
+        if (projDefault == undefined) {
+            return undefined
+        } else {
+            return storage != projDefault && storage != undefined
+            ? storage
+            : projDefault
+        }
+    }
+
+    $: $projSettings = {lambda, phi, gamma, parallel, distance, tilt, clipAngle}
+
+    $: lambda = fromLS('lambda', $projName)
+    $: phi = fromLS('phi', $projName)
+    $: gamma = fromLS('gamma', $projName)
+    $: parallel = fromLS('parallel', $projName)
+    $: distance = fromLS('distance', $projName)
+    $: tilt = fromLS('tilt', $projName)
     $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
 
+    
     $: {
         let p = proj_list.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
