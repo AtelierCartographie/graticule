@@ -6,6 +6,7 @@
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
+    import GraticuleFilter from './GraticuleFilter.svelte'
     import UrbanFilter from './UrbanFilter.svelte'
     import ReliefFilter from './ReliefFilter.svelte'
     import layers_list from '../../assets/layers_list.js'
@@ -84,6 +85,8 @@
                 <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
                     {#if id == 'relief'}
                     <ReliefFilter />
+                    {:else if id == 'graticule'}
+                    <GraticuleFilter />
                     {/if}
                 </Styling>
             </li>
