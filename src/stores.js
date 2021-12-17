@@ -11,7 +11,6 @@ const fromLS = (variable, value) => {
 export const mapReady = writable()
 export const zTransform = writable({ k: 1, x: 0, y: 0})
 export const zCat = writable()
-export const basemapReady = writable()
 
 // SETTINGS
 // Frame
@@ -35,8 +34,8 @@ export const urbanSize = writable(50000)
 export const zLevels = writable([0,500,1000,2000,3000,4000])
 export const zColor = writable(true)
 // Resolution
-export const resType = writable( ['dynamic'] )
-export const res = writable( '110m' )
+export const resType = writable( fromLS('resType', ['dynamic']) )
+export const res = writable( fromLS('res', '110m') )
 
 // MODAL
 export const isModalOpen = writable(false)
@@ -59,5 +58,5 @@ mapTitle.subscribe(d => toLS("mapTitle", d))
 projName.subscribe(d => toLS("projName", d))
 projSettings.subscribe(d => toLS("projSettings", d))
 
-// resType.subscribe(d => toLS("resType", d))
-// res.subscribe(d => toLS("res", d))
+resType.subscribe(d => toLS("resType", d))
+res.subscribe(d => toLS("res", d))

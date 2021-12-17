@@ -5,7 +5,7 @@
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { basemapReady, zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res, showSnackbar } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res, showSnackbar } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     import { contours } from 'd3-contour'
@@ -168,12 +168,12 @@
                 $res = '110m'
                 break
             case 'medium':
-                geo = geo_50m
+                geo = geo_50m ? geo_50m : geo_110m
                 zRelief = z50m
                 $res = '50m'
                 break
             case 'high': 
-                geo = geo_10m
+                geo = geo_10m ? geo_10m : geo_110m
                 zRelief = z10m
                 $res = '10m'
                 break
@@ -186,11 +186,11 @@
                 zRelief = z110m
                 break
               case '50m': 
-                geo = geo_50m
+                geo = geo_50m ? geo_50m : geo_110m 
                 zRelief = z50m
                 break
               case '10m': 
-                geo = geo_10m
+                geo = geo_10m ? geo_10m : geo_110m
                 zRelief = z10m
                 break
           }
@@ -207,12 +207,9 @@
     function tooltipOFF() {
         select('.countries.hover').remove()
     }
-
-
-    onMount( () => { $basemapReady = true })
 </script>
 
-{#if geo}
+
 
 <mask id="oceanLand">
     <path d="{path(outline)}" fill="white" />
@@ -241,6 +238,7 @@
     <path id="coastline" d="{path(geo.coastline)}" style="visibility: hidden"/>
 
     <g id="countries">
+        <!-- {#await geo then geo} -->
         {#each geo.countries.features as country}
         <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }}
                 id='{country.properties.id}' class="countries"
@@ -248,6 +246,7 @@
                 on:mouseenter|stopPropagation={tooltipON} 
                 on:mouseleave={tooltipOFF} />
         {/each}
+        <!-- {/await} -->
     </g>
 
 
@@ -270,7 +269,7 @@
 
     <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
 </g>
-{/if}
+
 
 <style>
     .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }
