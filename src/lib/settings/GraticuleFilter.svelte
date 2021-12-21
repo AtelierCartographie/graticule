@@ -18,16 +18,16 @@
                 title="Équateur, Tropiques, Cercles polaires, Greenwitch" 
                 type="button" 
                 class="badge">
-            remarquables
+            Remarquables
         </button>
 
         <button on:click={() => $gratType = 'all'}
                 class:active="{ $gratType === 'all' }"
                 use:tooltip={{ placement: 'top' }} 
-                title="Grille à espacement régulié" 
+                title="Grille à espacement régulier" 
                 type="button" 
                 class="badge">
-            réguliés
+            Réguliés
         </button>
         {#if $gratType == 'all'}
             <input use:tooltip={{ content: 'Espacement en degré', placement: 'top' }} 

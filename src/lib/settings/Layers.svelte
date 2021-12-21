@@ -18,7 +18,7 @@
     export let canRender
 
     //Tips message
-    let m1 = "Ajouter si besoin des informations supplémentaires"
+    let m1 = "Ajouter ou retirer des informations et en modifier la représentation graphique."
 
     function addLayer(layer) {
         const base = select("#gBasemap")
@@ -50,12 +50,12 @@
     on:enter={() => stepEnter("headerLayers")}
 >
     <h2><span class="material-icons">layers</span> Personnaliser</h2>
-    <!-- <Tip message={m1} /> -->
+    <Tip message={m1} />
 
     <!-- Prevent implicit submission of the form = ne recharge pas la page si 'form > input' + Enter -->
     <!-- <input type="submit" disabled style="display: none" aria-hidden="true" /> -->
 
-    <h3>Thèmes</h3>
+    <h3>Thèmes graphiques</h3>
     <div id="themes">
         <button on:click={() => mapTheme.set('colorMode')}
                 class:active="{ $mapTheme === 'colorMode' }"

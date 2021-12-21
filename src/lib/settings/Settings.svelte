@@ -11,31 +11,31 @@
 <div id="settings">
     <Frame />
     <a href="#projection" class="next-section fontTitle">
-        <p>continuer</p>
+        <p>Continuer</p>
         <p><span class="material-icons">expand_more</span></p>
     </a>
 
     <Projection />
     <a href="#layers" class="next-section fontTitle">
-        <p>continuer</p>
+        <p>Continuer</p>
         <p><span class="material-icons">expand_more</span></p>
     </a>
 
     <Layers {canRender} />
     <a href="#resolution" class="next-section fontTitle">
-        <p>continuer</p>
+        <p>Continuer</p>
         <p><span class="material-icons">expand_more</span></p>
     </a>
 
     <Resolution />
     <a href="#download" class="next-section fontTitle">
-        <p>continuer</p>
+        <p>Continuer</p>
         <p><span class="material-icons">expand_more</span></p>
     </a>
 
     <Download />
     <a href="#download" class="next-section fontTitle" style="visibility: hidden;">
-        <p>continuer</p>
+        <p>Continuer</p>
         <p><span class="material-icons">expand_more</span></p>
     </a>
 </div>

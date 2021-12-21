@@ -7,11 +7,11 @@
     import { resType, res } from '../../stores.js'
 
     //Tips message
-    let m1 = "Par défaut le détail des tracés augmentent avec le niveau de zoom selon trois niveaux de simplification. Ce comportement dynamique peut être remplacé par un niveau de simplification fixé manuellement."
+    let m1 = "Le détail des tracés se précise automatiquement selon le niveau de zoom. À petite échelle, les tracés sont simplifiés, à grande échelle les tracés sont détaillés. Pour choisir un niveau de détail, activer la simplification manuelle ci-dessous."
 
     const res_list = {
-        "Simplifié": "110m",
-        "Normal": "50m",
+        "Très simplifié": "110m",
+        "Simplifié": "50m",
         "Détaillé": "10m"
     }
 </script>

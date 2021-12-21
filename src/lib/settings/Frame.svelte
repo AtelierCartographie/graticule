@@ -61,7 +61,7 @@
 
     <p><strong>ou</strong></p>
     
-    <h3 id="freeFrame">Cadrage libre <span class="material-icons">east</span></h3>
+    <h3 id="freeFrame">Cadrage personnalisé <span class="material-icons">east</span></h3>
 </section>
 
 

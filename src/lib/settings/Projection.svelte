@@ -41,8 +41,7 @@
     }
 
     // Tips message
-    let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
-    let m2 = "Choisir parmi la liste de projection et régler si besoin les paramètres."
+    let m1 = "Choisir parmi la liste de projections et régler si besoin les paramètres."
 </script>
 
 <section id="projection" class="settings-section" 
@@ -50,10 +49,10 @@
     on:enter={() => stepEnter("headerProjection")}
 >
     <h2><span class="material-icons">language</span> Projeter</h2>
-    <Tip message={m2} />
+    <Tip message={m1} />
 
     <label for="input_projSelect" class="fontTitle">
-        Sélectionner une projection
+        Projections
         <span 
         use:tooltip title="Cliquer pour en savoir plus"
         on:click={() => modalContent.set('proj')}
@@ -78,7 +77,7 @@
     
 
 
-    <h3>Paramétrage de la projection</h3>
+    <h3>Paramètres</h3>
     <ul>
         <li>
             <label for="lon">Longitude</label>

@@ -8,7 +8,7 @@
     //Tips message
     let m1 = "SVG est un format vectoriel permettant l'édition et le changement de dimensions sans dégrader la résolution"
     let m2 = "PNG est un format matriciel qui ne peut être agrandi sans dégrader la résolution"
-    let m3 = "Imprimer directement la carte ou sauvegarder là au format PDF"
+    let m3 = "Imprimer directement la carte ou la sauvegarder au format PDF"
 
     //
     const today = new Date().toLocaleString("fr", {
