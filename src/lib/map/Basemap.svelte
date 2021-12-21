@@ -168,7 +168,7 @@
                 $res = '110m'
                 break
             case 'medium':
-                geo = geo_50m ? geo_50m : geo_110m
+                geo = geo_50m ? geo_50m : geo_110m // affiche 110m en attendant async 50m
                 zRelief = z50m
                 $res = '50m'
                 break
@@ -238,7 +238,6 @@
     <path id="coastline" d="{path(geo.coastline)}" style="visibility: hidden"/>
 
     <g id="countries">
-        <!-- {#await geo then geo} -->
         {#each geo.countries.features as country}
         <path use:tooltip={{content: country.properties.name, followCursor: true, placement: 'right' }}
                 id='{country.properties.id}' class="countries"
@@ -246,7 +245,6 @@
                 on:mouseenter|stopPropagation={tooltipON} 
                 on:mouseleave={tooltipOFF} />
         {/each}
-        <!-- {/await} -->
     </g>
 
 

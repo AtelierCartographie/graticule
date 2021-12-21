@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { lyr, mapTheme, mapTitle, scaleDist, canAddScale, isModalOpen, modalContent } from '../../stores.js'
+    import { lyr, mapTheme, mapTitle, scaleDist, isModalOpen, modalContent } from '../../stores.js'
     import { slide } from "svelte/transition"
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
@@ -16,12 +16,6 @@
     
 
     export let canRender
-
-    // Ajouter l'échelle graphique
-    $: if ($lyr.includes("scaleBar")) {
-        let checked = document.getElementById('input_scale').checked
-        if (checked) { canAddScale.set(checked) }
-    }
 
     //Tips message
     let m1 = "Ajouter si besoin des informations supplémentaires"

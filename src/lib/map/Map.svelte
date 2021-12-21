@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, canAddScale, mapReady } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -50,20 +50,28 @@
     $: xyCropBottom = "translate(" + (rx + rw / 2) + "," + (ry + rh - 28) + ")"
     $: xyCropLeft = "translate(" + (rx + 5) + "," + (ry + rh / 2) + ")"
     // ---------------------------------------- //
-
+    
     // --------------- SCALE BAR -------------- //
     let scaleInitDist = 2000 // distance de l'échelle en km
-    let k = 1                // stock le facteur de zoom
+    let k = $zTransform.k == 1 ? 1 : $zTransform.k                // stock le facteur de zoom
     let zx = 0, zy = 0       // stock le translate du zoom
-    // centre du cadrage
-    $: cx = rx + rw / 2
-    $: cy = ry + rh / 2
-    // centre du cadrage dans la carte avec le zoom
-    $: zcx = (cx - zx) / k
-    $: zcy = (cy - zy) / k
-    // position de la légende
-    $: left = zcx / width
-    $: top = zcy / mapHeight
+    let cx, cy               // centre du cadrage
+    let zcx, zcy             // centre du cadrage dans la carte avec le zoom
+    let left, top            // position de la légende
+    $: if ($lyr.includes("scaleBar")) {
+        // centre du cadrage
+        cx = rx + rw / 2
+        cy = ry + rh / 2
+        // centre du cadrage dans la carte avec le zoom
+        zcx = (cx - zx) / k
+        zcy = (cy - zy) / k
+        // position de la légende
+        left = zcx / width
+        top = zcy / mapHeight
+
+        $scaleBarLeft == null || $scaleBarLeft == undefined ? $scaleBarLeft = left : $scaleBarLeft
+        $scaleBarTop == null || $scaleBarTop == undefined ? $scaleBarTop = top : $scaleBarTop
+    }
     
     const scaleBar = geoScaleBar()
         .projection($proj)
@@ -77,38 +85,42 @@
 
     // Initialise l'échelle graphique quand le toggle est activé
     // appliquer une seule fois !
-    let i = true
-    $: if ($canAddScale && i) {
-        i = !i
+    $: if ($lyr.includes("scaleBar")) {
         select("#gScaleBar")
             .attr("cursor", "move")
-            .call(scaleBar.left(left).top(top))
+            .call(scaleBar.left($scaleBarLeft).top($scaleBarTop))
             .call(dragScaleBar)
     }
-    // Relancer l'échelle si...
+
+    // Relance l'échelle si...
     $: {
-        // Taille et épaisseur constante en pompensant le zoom
+        // Taille et épaisseur constante en compensant le zoom
         select("#gScaleBar .label").attr("font-size", 12 / k)
         select("#gScaleBar .domain").attr("stroke-width", 1.5 / k)
 
         // ... changement de projection
-        if ($canAddScale) { select("#gScaleBar").call(scaleBar.projection($proj)) }
+        if ($lyr.includes("scaleBar")) { select("#gScaleBar").call(scaleBar.projection($proj)) }
 
+        if ($lyr.includes("scaleBar")) {
         // ... zoom (comportement dynamique par défaut sinon utilisateur fixe une distance)
-        isNaN($scaleDist)
+        $scaleDist == null || $scaleDist == undefined
         ? select("#gScaleBar").call(scaleBar.distance(scaleInitDist / k)
                                             .label(`${Math.round(scaleBar.distance())} km`))
         : select("#gScaleBar").call(scaleBar.distance($scaleDist)
-                                            .label(`${Math.round(scaleBar.distance())} km`))  
+                                            .label(`${Math.round(scaleBar.distance())} km`))
+        }
     }
 
     // Déplacer l'échelle graphique
     function dragged(event) {
         scaleBar.left(event.x / width).top(event.y / height) // passer des pixels du svg au 0-1 de scaleBar.left et .top
         select("#gScaleBar").attr("cursor", "grabbing").call(scaleBar)
+        // stocke le nouveau positionnement de l'échelle graphique
+        $scaleBarLeft = scaleBar.left()
+        $scaleBarTop = scaleBar.top()
     }
     const dragScaleBar = drag()
-        .on("drag", dragged)
+        .on("drag", e => dragged(e))
         .on("end", () => select("#gScaleBar").attr("cursor", "move")) // retour au curseur d'origine
     // ---------------------------------------- //
 
@@ -117,26 +129,33 @@
     // https://stackoverflow.com/a/67925459
     select(document.body).on('wheel.body', e => {})
 
-    let isReady = false
+
     let zmin = 0.5,
         zmax = 100,
         zCall = "#gCadrage",
         zApply = "#gZoom"
 
     // paramètres du pan and zoom
+    // let reload = false
     const d3zoom = zoom()
             .scaleExtent([zmin, zmax]) // min, max du zoom
             .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
             .on("zoom", ({ transform }) => {
                 select(zApply).attr("transform", transform).attr("cursor", "grabbing")
+                
                 // utiliser par scaleBar
-                zTransform.set(transform)
-                k = transform.k
-                zx = transform.x
-                zy = transform.y
+                    $zTransform = transform
+                    k = transform.k
+                    zx = transform.x
+                    zy = transform.y
             })
             .on("end", () => select(zApply).attr("cursor", "grab"))
-    
+
+    const d3zoomReload = zoom()
+            .scaleExtent([zmin, zmax]) // min, max du zoom
+            .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
+            .on("zoom", ({ transform }) => select(zApply).attr("transform", transform))
+
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
     function zoomRegion(b) {
         if (b != null) {
@@ -144,7 +163,7 @@
             const [[x0, y0], [x1, y1]] = path.bounds(b)
 
             // Voir exemple : https://observablehq.com/@d3/zoom-to-bounding-box
-            select(zCall).transition().duration(750).call(
+            select(zCall).transition().duration(1750).call(
                 d3zoom.transform,
                 zoomIdentity
                     .translate(width / 2, mapHeight / 2)
@@ -156,20 +175,21 @@
 
     // Applique le zoom sur une zone à la sélection
     // et au changement de projection
-    $: if (isReady) { 
+    $: if ($mapReady) { 
         $proj
         zoomRegion($regbbox)
         zoomRegion($countrybbox)
 
-        if ($regbbox == null) zoomReset() // = zoom monde si region null ou pays null
+        // if ($regbbox == null) zoomReset() // = zoom monde si region null ou pays null
     }
+
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
     const zoomIn = () => select(zCall).transition().call(d3zoom.scaleBy, 1.5)
     const zoomOut = () => select(zCall).transition().call(d3zoom.scaleBy, 1/1.5)
     const zoomReset = () => $regbbox == null && $countrybbox == null
-            ?  select(zCall).transition().duration(750).call(
+            ?  select(zCall).transition().duration(1750).call(
                 d3zoom.transform,
                 zoomIdentity,
                 zoomTransform(select(zCall).node()).invert([width / 2, mapHeight / 2]))
@@ -179,8 +199,14 @@
     $: dropShadowOffset = (1 / k).toFixed(3)
 
     onMount( () => {
-        isReady = true
-        mapReady.set(isReady)
+        // Zoom sur le dernier cadrage au rechargement de la page
+        select(zCall).transition().duration(1750).call(
+            d3zoomReload.transform,
+            zoomIdentity.translate($zTransform.x, $zTransform.y)
+                        .scale($zTransform.k))
+        
+        
+
         // BRUSH ----- initialise le cadrage avec d3-brush
         let gBrush = select('#gBrush')
         gBrush
@@ -202,6 +228,8 @@
         select(zCall)
             .attr("cursor", "grab")
             .call(d3zoom)
+
+        $mapReady = true
     })
 </script>
 
@@ -219,7 +247,7 @@
         </filter>
     </defs>
 
-    {#if isReady}
+    {#if $mapReady}
     <text id="mapTitle" x={rx} y={ry} dy=-5>{$mapTitle}</text>
     <text id="mapCredit" x={rx + rw} y={ry + rh} dy=10>{mapCredit}</text>
     {/if}
@@ -231,7 +259,7 @@
     </g>
     
     <g id="gBrush">
-        {#if isReady}
+        {#if $mapReady}
         <path id="cropTop" class="crop" transform={xyCropTop} d="M19,15l-1.41-1.41L13,18.17V2H11v16.17l-4.59-4.59L5,15l7,7L19,15z"/>
         <path id="cropRight" class="crop" transform={xyCropRight} d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z"/>
         <path id="cropBottom" class="crop" transform={xyCropBottom} d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z"/>
