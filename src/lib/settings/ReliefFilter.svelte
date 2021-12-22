@@ -1,25 +1,36 @@
 <script>
-    import { lyr, reliefLevels, reliefColor } from '../../stores.js'
+    import { lyr, reliefColor, reliefShowLevels, reliefLevels  } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
     import { slide } from "svelte/transition";
-
-    $: console.log($reliefLevels.split(","))
 </script>
 
 {#if $lyr.includes("relief")}
     <div class="habillage-style" transition:slide={{ duration: 300 }}>
-            <button on:click={() => reliefColor.set(!$reliefColor)}
-                    class:active="{ $reliefColor === true }"
-                    use:tooltip={{ placement: 'top' }} 
-                    title="Ajouté une intensité de couleurs à l'ombrage" 
-                    type="button" 
-                    class="badge">
-                Couleurs
-            </button>
-            <input use:tooltip={{ content: 'Seuils (en m)', placement: 'top' }} 
-                type="text"
-                bind:value={$reliefLevels} 
-                id="reliefLevels">
+        <button on:click={() => reliefColor.set(!$reliefColor)}
+                class:active="{ $reliefColor }"
+                use:tooltip={{ placement: 'top' }} 
+                title="Ajouter une intensité de couleurs à l'ombrage" 
+                type="button" 
+                class="badge">
+            Couleurs
+        </button>
+
+        <button on:click={() => $reliefShowLevels = !$reliefShowLevels}
+                class:active="{ $reliefShowLevels }"
+                use:tooltip={{ placement: 'top' }} 
+                title="Changer les seuils d'altitude (en m)" 
+                type="button" 
+                class="badge">
+            Seuils personnalisés
+        </button>
+
+        {#if $reliefShowLevels}
+        <input use:tooltip={{ content: 'Valeurs entières séparées par des virgules', placement: 'top' }} 
+            transition:slide={{ duration: 300 }}
+            type="text"
+            bind:value={$reliefLevels} 
+            id="reliefLevels">
+        {/if}
     </div>
 {/if}
 
@@ -41,5 +52,6 @@
         color: var(--accent-color);
         border: 1px solid var(--accent-color);
     }
-    p { margin-bottom: 0; }
+    input { margin-top: .5rem; width: 100%; }
+
 </style>

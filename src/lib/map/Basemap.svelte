@@ -5,7 +5,7 @@
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, zLevels, zColor, resType, res, showSnackbar } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
 
     import { contours } from 'd3-contour'
@@ -88,40 +88,50 @@
 
 
     // RELIEF
-    const getReliefGeojson = async (zLevel,seuils) => {
-        let z
-        switch (zLevel) {
+    const getRelief = async (rLevel) => {
+        let r
+        switch (rLevel) {
             case '0':
-                let { z110m } = await import('../../assets/relief.js')
-                z = z110m
+                let { r110m } = await import('../../assets/relief.js')
+                r = r110m
                 break;
         
             case '1':
-                let { z50m } = await import('../../assets/relief.js')
-                z = z50m
+                let { r50m } = await import('../../assets/relief.js')
+                r = r50m
                 break;
             case '2':
-                let { z10m } = await import('../../assets/relief.js')
-                z = z10m
+                let { r10m } = await import('../../assets/relief.js')
+                r = r10m
                 break;
         }
         
-        const d3Contours = contours().size([z.width, z.height]).thresholds(seuils)
-        const geojsonXY = d3Contours(z[0])
-        const geojsonLatLon = geojsonXY.map(d => invert(d, z.width, z.height))
+        return r
+    }
+    const relief2geojson = async (r, seuils) => {
+        const d3Contours = await contours().size([r.width, r.height]).thresholds(seuils.split(","))
+        const geojsonXY = await d3Contours(r[0])
+        const geojsonLatLon = geojsonXY.map(d => invert(d, r.width, r.height))
+        
         return geojsonLatLon
     }
 
-    let z110m, z50m, z10m, zOnce = 0
-    $: if ($lyr.includes('relief') && zOnce == 0) {
+    let r0, r1, r2
+    let r110m, r50m, r10m, rOnce = 0
+    $: if ($lyr.includes('relief') && rOnce == 0) {
         showSnackbar.set({state: 'loading', message: 'Chargement du relief'})
-        getReliefGeojson('0', $zLevels).then(d => z110m = d)
-        getReliefGeojson('1', $zLevels).then(d => z50m = d)
-        getReliefGeojson('2', $zLevels).then(d => {
-            z10m = d
+        getRelief('0').then(async d => r0 = d)
+        getRelief('1').then(async d => r1 = d)
+        getRelief('2').then(async d => {
+            r2 = d
             showSnackbar.set({state: 'loaded', message: 'Relief chargé'})
         })
-        ++zOnce
+        ++rOnce
+    }
+    $: if (r0) {
+        relief2geojson(r0, $reliefLevels).then(d => r110m = d)
+        relief2geojson(r1, $reliefLevels).then(d => r50m = d)
+        relief2geojson(r2, $reliefLevels).then(d => r10m = d)
     }
     
 
@@ -164,17 +174,17 @@
         switch ($zCat) {
             case 'low':
                 geo = geo_110m
-                zRelief = z110m
+                zRelief = r110m
                 $res = '110m'
                 break
             case 'medium':
                 geo = geo_50m ? geo_50m : geo_110m // affiche 110m en attendant async 50m
-                zRelief = z50m
+                zRelief = r50m
                 $res = '50m'
                 break
             case 'high': 
                 geo = geo_10m ? geo_10m : geo_110m
-                zRelief = z10m
+                zRelief = r10m
                 $res = '10m'
                 break
         }
@@ -183,15 +193,15 @@
           switch ($res) {
               case '110m': 
                 geo = geo_110m
-                zRelief = z110m
+                zRelief = r110m
                 break
               case '50m': 
                 geo = geo_50m ? geo_50m : geo_110m 
-                zRelief = z50m
+                zRelief = r50m
                 break
               case '10m': 
                 geo = geo_10m ? geo_10m : geo_110m
-                zRelief = z10m
+                zRelief = r10m
                 break
           }
       }
@@ -248,7 +258,7 @@
     </g>
 
 
-    <g id="relief" clip-path="url(#land)" class:ShadeColor={$zColor}>
+    <g id="relief" clip-path="url(#land)" class:ShadeColor={$reliefColor}>
         {#if $lyr.includes('relief') && zRelief}
         {#each zRelief as d}
         <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />

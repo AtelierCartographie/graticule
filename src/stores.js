@@ -30,8 +30,10 @@ export const lyr = writable( fromSS('lyr', ['ocean', 'graticule', 'countries', '
 export const gratType = writable( fromSS('gratType', 'top') )  // top ou all
 export const gratStep = writable( fromSS('gratStep', 10) )
 export const urbanSize = writable( fromSS('urbanSize', 50000) )
-export const zLevels = writable([0,500,1000,2000,3000,4000])
-export const zColor = writable( fromSS('countrySelect', true) )
+export const reliefColor = writable( fromSS('reliefColor', true) )
+export const reliefShowLevels = writable( fromSS('reliefShowLevels', false) )
+export const reliefLevels = writable( fromSS('reliefLevels', "0,500,1000,2000,3000,4000") )
+
 
 export const scaleDist = writable( fromSS('scaleDist', null) )
 export const scaleBarLeft = writable( fromSS('scaleBarLeft', null) )
@@ -69,7 +71,9 @@ mapTitle.subscribe(d => toSS("mapTitle", d))
 gratType.subscribe(d => toSS("gratType", d))
 gratStep.subscribe(d => toSS("gratStep", d))
 urbanSize.subscribe(d => toSS("urbanSize", d))
-zColor.subscribe(d => toSS("zColor", d))
+reliefColor.subscribe(d => toSS("reliefColor", d))
+reliefShowLevels.subscribe(d => toSS("reliefShowLevels", d))
+reliefLevels.subscribe(d => toSS("reliefLevels", d))
 scaleDist.subscribe(d => toSS("scaleDist", d))
 scaleBarLeft.subscribe(d => toSS("scaleBarLeft", d))
 scaleBarTop.subscribe(d => toSS("scaleBarTop", d))

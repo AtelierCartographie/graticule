@@ -5,15 +5,15 @@ import z1 from '../assets/basemap/z1.tif'
 import z2 from '../assets/basemap/z2.tif'
 
 
-async function getZ(url) {
+async function getRaster(url) {
     const tiff = await fromUrl(url)
     const image = await tiff.getImage()
-    const z = await image.readRasters() // [values, width, height]
-    return z
+    const r = await image.readRasters() // [values, width, height]
+    return r
 }
 
-export const z110m = await getZ(z0)
+export const r110m = await getRaster(z0)
 
-export const z50m = await getZ(z1)
+export const r50m = await getRaster(z1)
 
-export const z10m = await getZ(z2)
+export const r10m = await getRaster(z2)
