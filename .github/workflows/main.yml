@@ -27,10 +27,11 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install and build
-        env: NODE_OPTIONS: '--max_old_space_size=4096'
         run: |
           yarn install
           yarn build
+        env: 
+          NODE_OPTIONS: '--max_old_space_size=4096'
 
       - name: Deploy to github pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
