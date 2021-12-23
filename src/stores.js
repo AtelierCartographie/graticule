@@ -19,6 +19,7 @@ export const regSelect = writable( fromSS('regSelect', null) )
 export const countrySelect = writable( fromSS('countrySelect', null) )
 export const regbbox = writable()
 export const countrybbox = writable()
+export const zResetMessage = writable()
 // Projection
 export const projName = writable( fromSS('projName', 'Equal Earth') )
 export const proj = writable()

@@ -1,10 +1,11 @@
 <script>
-    import { regSelect, countrySelect, regbbox, countrybbox } from '../../stores.js'
+    import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage } from '../../stores.js'
     import Tip from './Tip.svelte'
     import regionsBbox from '../../assets/regionsBbox.js'         //cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
+import { listen } from 'svelte/internal';
 
     //Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
@@ -23,6 +24,14 @@
         }
     }
     
+    // Tooltip message du bouton zoomReset de la carte
+    const frameName = (list,value) => list.find(d => d.id == value).name
+    $: $zResetMessage = 
+        $regSelect != null
+            ? `Revenir au cadrage ${frameName(regionsBbox, $regSelect)}`
+        : $countrySelect != null
+            ? `Revenir au cadrage ${frameName(countriesBbox, $countrySelect)}`
+            : `Revenir au cadrage "monde"`
 </script>
 
 <section id="frame" class="settings-section"

@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -8,6 +8,7 @@
     import { drag } from 'd3-drag'
     import { geoScaleBar } from 'd3-geo-scale-bar'
     import Basemap from './Basemap.svelte'
+    import tooltip from '../../assets/tooltip.js'
 
     export let width, height // dimensions du svg
 
@@ -179,10 +180,8 @@
         $proj
         zoomRegion($regbbox)
         zoomRegion($countrybbox)
-
         // if ($regbbox == null) zoomReset() // = zoom monde si region null ou pays null
     }
-
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
@@ -196,7 +195,9 @@
             : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
     // ---------------------------------------- //
 
+    // RELIEF -> taille de l'ombrage de l'effet Tanaka contours
     $: dropShadowOffset = (1 / k).toFixed(3)
+
 
     onMount( () => {
         // Zoom sur le dernier cadrage au rechargement de la page
@@ -364,9 +365,9 @@
 </svg>
 
 <div id="zoom-button">
-    <button on:click={zoomIn} title="Zoom avant"><span class="material-icons">add</span></button>
-    <button on:click={zoomOut} title="Zoom arrière"><span class="material-icons">remove</span></button>
-    <button on:click={zoomReset} title="Réinitialiser le zoom"><span class="material-icons">restart_alt</span></button>
+    <button on:click={zoomIn} use:tooltip title="Zoom avant"><span class="material-icons">add</span></button>
+    <button on:click={zoomOut} use:tooltip title="Zoom arrière"><span class="material-icons">remove</span></button>
+    <button on:click={zoomReset} use:tooltip={{content: $zResetMessage}}><span class="material-icons">restart_alt</span></button>
 </div>
 
 
