@@ -1,5 +1,5 @@
 <script>
-    import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage } from '../../stores.js'
+    import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage, callZoomReset } from '../../stores.js'
     import Tip from './Tip.svelte'
     import regionsBbox from '../../assets/regionsBbox.js'         //cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
@@ -24,13 +24,19 @@ import { listen } from 'svelte/internal';
         }
     }
     
+    function clearSelect(el) {
+        document.getElementById(el).value = null
+        el == "input_regSelect" ? $regSelect = null : $countrySelect = null
+        $callZoomReset = true
+    }
+
     // Tooltip message du bouton zoomReset de la carte
     const frameName = (list,value) => list.find(d => d.id == value).name
     $: $zResetMessage = 
         $regSelect != null
-            ? `Revenir au cadrage ${frameName(regionsBbox, $regSelect)}`
+            ? `Revenir au cadrage "${frameName(regionsBbox, $regSelect)}"`
         : $countrySelect != null
-            ? `Revenir au cadrage ${frameName(countriesBbox, $countrySelect)}`
+            ? `Revenir au cadrage "${frameName(countriesBbox, $countrySelect)}"`
             : `Revenir au cadrage "monde"`
 </script>
 
@@ -43,11 +49,18 @@ import { listen } from 'svelte/internal';
 
     <!-- <label for="input_regSelect" class="fontTitle">Régions du monde</label> -->
     <h3>Régions du monde</h3>
-    <select bind:value={$regSelect} on:change="{() => resetSelect("input_regSelect")}" name="regions" id="input_regSelect">
-        {#each regionsBbox as d}
-            <option value={d.id}>{d.name}</option>
-        {/each}
-    </select>
+    <div>
+        <select bind:value={$regSelect} on:change="{() => resetSelect("input_regSelect")}" name="regions" id="input_regSelect">
+            {#each regionsBbox as d}
+                <option value={d.id}>{d.name}</option>
+            {/each}
+        </select>
+        <button on:click={() => clearSelect("input_regSelect")}
+                disabled={$regSelect == null}>
+            <span class="material-icons">clear</span>
+        </button>    
+    </div>
+    
 
     <p><strong>ou</strong></p>
 
@@ -62,12 +75,18 @@ import { listen } from 'svelte/internal';
             <option value={d.id}>{d.name}</option>
         {/each}
     </datalist> -->
-    <select bind:value={$countrySelect} on:change="{() => resetSelect("input_countrySelect")}" name="countries" id="input_countrySelect">
-        {#each countriesBbox as d}
-            <option value={d.id}>{d.name}</option>
-        {/each}
-    </select>
-
+    <div>
+        <select bind:value={$countrySelect} on:change="{() => resetSelect("input_countrySelect")}" name="countries" id="input_countrySelect">
+            {#each countriesBbox as d}
+                <option value={d.id}>{d.name}</option>
+            {/each}
+        </select>
+        <button on:click={() => clearSelect("input_countrySelect")}
+                disabled={$countrySelect == null}>
+            <span class="material-icons">clear</span>
+        </button>    
+    </div>
+    
     <p><strong>ou</strong></p>
     
     <h3 id="freeFrame">Cadrage personnalisé <span class="material-icons">east</span></h3>
@@ -76,10 +95,25 @@ import { listen } from 'svelte/internal';
 
 
 <style>
+    div {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+    select { width: 100%;}
+
     p { 
         font-size: var(--text-medium);
         margin-bottom: 0;
     }
+    
+    button {
+        background-color: transparent;
+        border: 0;
+        color: var(--dark-grey);
+    }
+    button:hover { color: var(--accent-color); }
+    button:disabled { color: var(--grey); }
+
     #freeFrame > .material-icons { color: var(--dark-grey); }
     #freeFrame:hover > .material-icons { 
         animation-duration: .5s;

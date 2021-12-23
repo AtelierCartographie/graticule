@@ -59,5 +59,4 @@
         color: var(--accent-color);
         border: 1px solid var(--accent-color);
     }
-    p { margin-bottom: 0; }
 </style>

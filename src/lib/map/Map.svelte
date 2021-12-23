@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -193,6 +193,8 @@
                 zoomIdentity,
                 zoomTransform(select(zCall).node()).invert([width / 2, mapHeight / 2]))
             : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
+    // Cas où l'utilisateur vide l'input de l'étape Cadrer
+    $: if ($callZoomReset == true) {zoomReset(); $callZoomReset = false}
     // ---------------------------------------- //
 
     // RELIEF -> taille de l'ombrage de l'effet Tanaka contours
