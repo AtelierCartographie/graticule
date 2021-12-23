@@ -65,17 +65,24 @@ import { listen } from 'svelte/internal';
     <p><strong>ou</strong></p>
 
     <h3>Pays du monde</h3>
-    <!-- <input list="countryList"
+    <div>
+        <input list="countryList"
             id="input_countrySelect"
             name="country"
             bind:value={$countrySelect}
             on:change="{() => resetSelect("input_countrySelect")}" />
-    <datalist id="countryList" name="countries" >
-        {#each countriesBbox as d}
-            <option value={d.id}>{d.name}</option>
-        {/each}
-    </datalist> -->
-    <div>
+        <datalist id="countryList" name="countries" >
+            {#each countriesBbox as d}
+                <option value={d.id}>{d.name}</option>
+            {/each}
+        </datalist>
+        <button on:click={() => clearSelect("input_countrySelect")}
+                disabled={$countrySelect == null}>
+            <span class="material-icons">clear</span>
+        </button>   
+    </div>
+    
+    <!-- <div>
         <select bind:value={$countrySelect} on:change="{() => resetSelect("input_countrySelect")}" name="countries" id="input_countrySelect">
             {#each countriesBbox as d}
                 <option value={d.id}>{d.name}</option>
@@ -85,7 +92,7 @@ import { listen } from 'svelte/internal';
                 disabled={$countrySelect == null}>
             <span class="material-icons">clear</span>
         </button>    
-    </div>
+    </div> -->
     
     <p><strong>ou</strong></p>
     
@@ -99,13 +106,13 @@ import { listen } from 'svelte/internal';
         display: flex;
         flex-flow: row nowrap;
     }
-    select { width: 100%;}
+    select, input { width: 100%;}
 
     p { 
         font-size: var(--text-medium);
         margin-bottom: 0;
     }
-    
+
     button {
         background-color: transparent;
         border: 0;
