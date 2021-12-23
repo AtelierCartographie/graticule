@@ -6,10 +6,24 @@
     //https://vitejs.dev/guide/assets.html#importing-asset-as-string
     import helpProj from './helpProjection.md?raw'
     import helpScale from './helpScalBar.md?raw'
+    import helpScreenSize from './helpScreenSize.md?raw'
 
     
     // Changer pour un switch si plus de page d'aide
-    $: markdown = $modalContent == 'proj' ? helpProj : helpScale
+    let markdown
+    $: { switch ($modalContent) {
+            case 'proj':
+                markdown = helpProj
+                break
+            case 'scale':
+                markdown = helpScale
+                break
+            case 'size':
+                markdown = helpScreenSize
+                break
+        }
+    }
+    // $: markdown = $modalContent == 'proj' ? helpProj : helpScale
 
     $: html = marked.parse(markdown)
 </script>

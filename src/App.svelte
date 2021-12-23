@@ -13,9 +13,17 @@
   import Modal from './lib/Modal.svelte'  
   import Help from './lib/help/Help.svelte'
   import Snackbar from './lib/Snackbar.svelte'
+  import { isModalOpen, modalContent } from "./stores";
 
   let canRender = false
-  let width, height
+  let width, height, clientWidth
+
+  // Modal si petit écran (outil non adapté) => cf help/helpScreenSize.md
+  $: small = clientWidth < 700 ? true : false
+  $: small 
+      ? ($modalContent = 'size', $isModalOpen = true)
+      : $isModalOpen = false
+
   onMount( () => {
     canRender = true
     width = document.getElementById('svg-container').clientWidth
@@ -24,7 +32,7 @@
 </script>
 
 <Header />
-<main id="app">
+<main id="app" bind:clientWidth={clientWidth}>
   <Settings {canRender} />
 
   <figure id="svg-container">

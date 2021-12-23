@@ -52,7 +52,7 @@
         max-height: 80vh;
         overflow-y: auto;
         width: calc(var(--settings-width) * 2.5);
-        max-width: 90vw;
+        max-width: 80vw;
         padding: 16px;
         background: white;
         /* display: flex; */
