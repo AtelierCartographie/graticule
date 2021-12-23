@@ -5,14 +5,21 @@
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
-import { listen } from 'svelte/internal';
 
     //Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
 
+    let country = null // stocke la valeur de l'input pays
+    // conserve de l'input pays que les corespondance avec un id de pays
+    $: $countrySelect = 
+        countriesBbox.find( d => d.id == country) == undefined
+        ? null
+        : country
 
+    // Récupère les bbox de la région ou du pays sélectionné
     $: regbbox.set(regionsBbox.find( d => d.id === $regSelect).bbox)
-    $: countrybbox.set(countriesBbox.find( d => d.id === $countrySelect).bbox)
+    $: $countrybbox = countriesBbox.find( d => d.id === $countrySelect).bbox
+    
 
     // Rendre exclusif les deux select
     function resetSelect(el) {
@@ -24,13 +31,14 @@ import { listen } from 'svelte/internal';
         }
     }
     
+    // Vide l'input sélectionné + cadrage carte = monde
     function clearSelect(el) {
         document.getElementById(el).value = null
         el == "input_regSelect" ? $regSelect = null : $countrySelect = null
         $callZoomReset = true
     }
 
-    // Tooltip message du bouton zoomReset de la carte
+    // Message du tooltip du bouton zoomReset de la carte
     const frameName = (list,value) => list.find(d => d.id == value).name
     $: $zResetMessage = 
         $regSelect != null
@@ -69,7 +77,7 @@ import { listen } from 'svelte/internal';
         <input list="countryList"
             id="input_countrySelect"
             name="country"
-            bind:value={$countrySelect}
+            bind:value={country}
             on:change="{() => resetSelect("input_countrySelect")}" />
         <datalist id="countryList" name="countries" >
             {#each countriesBbox as d}
