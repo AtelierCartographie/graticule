@@ -9,15 +9,19 @@
     import { geoScaleBar } from 'd3-geo-scale-bar'
     import Basemap from './Basemap.svelte'
     import tooltip from '../../assets/tooltip.js'
+    import isLyr from '../../assets/isLyr.js'
 
     export let width, height // dimensions du svg
+
+    $: isUrban = isLyr('urban', $lyr)
+    $: isScaleBar = isLyr('scaleBar', $lyr)
 
     // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
     const mapMargin = (height * 0.05) / 2
     const mapHeight = height - mapMargin
 
     let mapCredit
-    $: { mapCredit = $lyr.includes('urban') 
+    $: { mapCredit = isUrban 
             ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
             : "Source : Natural Earth. Réalisé avec #Cartofond." }
 
@@ -74,7 +78,7 @@
     let cx, cy               // centre du cadrage
     let zcx, zcy             // centre du cadrage dans la carte avec le zoom
     let left, top            // position de la légende
-    $: if ($lyr.includes("scaleBar")) {
+    $: if (isScaleBar) {
         // centre du cadrage
         cx = rx + rw / 2
         cy = ry + rh / 2
@@ -101,7 +105,7 @@
 
     // Initialise l'échelle graphique quand le toggle est activé
     // appliquer une seule fois !
-    $: if ($lyr.includes("scaleBar")) {
+    $: if (isScaleBar) {
         select("#gScaleBar")
             .attr("cursor", "move")
             .call(scaleBar.left($scaleBarLeft).top($scaleBarTop))
@@ -115,9 +119,9 @@
         select("#gScaleBar .domain").attr("stroke-width", 1.5 / k)
 
         // ... changement de projection
-        if ($lyr.includes("scaleBar")) { select("#gScaleBar").call(scaleBar.projection($proj)) }
+        if (isScaleBar) { select("#gScaleBar").call(scaleBar.projection($proj)) }
 
-        if ($lyr.includes("scaleBar")) {
+        if (isScaleBar) {
         // ... zoom (comportement dynamique par défaut sinon utilisateur fixe une distance)
         $scaleDist == null || $scaleDist == undefined
         ? select("#gScaleBar").call(scaleBar.distance(scaleInitDist / k)

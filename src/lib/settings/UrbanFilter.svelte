@@ -1,10 +1,13 @@
 <script>
+    import { slide } from "svelte/transition";
     import { lyr, urbanSize } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import { slide } from "svelte/transition";
+    import isLyr from '../../assets/isLyr.js'
+
+    $: isUrban = isLyr('urban', $lyr)
 </script>
 
-{#if $lyr.includes("urban")}
+{#if isUrban}
     <div class="habillage-style" transition:slide={{ duration: 300 }}>
             <button on:click={() => urbanSize.set(50000)}
                     class:active="{ $urbanSize === 50000 }"

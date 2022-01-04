@@ -13,9 +13,12 @@
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
+    import isLyr from '../../assets/isLyr.js'
     
-
     export let canRender
+
+    $: isScaleBar = isLyr('scaleBar', $lyr)
+    $: isMapTitle = isLyr('mapTitle', $lyr)
 
     //Tips message
     let m1 = "Ajouter ou retirer des informations et en modifier la représentation graphique."
@@ -110,7 +113,7 @@
                 on:click={() => modalContent.set('scale')}
                 on:click={isModalOpen.set(!$isModalOpen)}
                 class="material-icons tooltip">help_outline</span>
-            {#if $lyr.includes("scaleBar")}
+            {#if isScaleBar}
             <div class="habillage-style" transition:slide={{ duration: 300 }}>
                 <input type="text" bind:value={$scaleDist} placeholder="distance en km">
                 <p>Cliquer sur l'échelle pour la déplacer</p>
@@ -119,7 +122,7 @@
         </li>
         <li>
             <Toggle label="Titre" id="title" name="Titre" value="mapTitle" bind:bindGroup={$lyr} />
-            {#if $lyr.includes("mapTitle")}
+            {#if isMapTitle}
             <div class="habillage-style" transition:slide={{ duration: 300 }}>
                 <input type="text" bind:value={$mapTitle} style="width: 90%;">
             </div>

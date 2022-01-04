@@ -3,6 +3,7 @@
     import { slide } from 'svelte/transition'
     import rgb2hex from '../../assets/rgb2hex.js'
     import { zTransform, mapTheme, lyr } from '../../stores.js'
+    import isLyr from '../../assets/isLyr.js'
 
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
@@ -10,6 +11,8 @@
     // https://svelte.dev/repl/74ff0da7cb074d4788b996e2d91258d3?version=3.23.0
 
     export let layer, style, disabled
+
+    $: isLayer = isLyr(layer, $lyr)
 
     let isOpen = false
     const toggle = () => isOpen = !isOpen
@@ -58,7 +61,7 @@
 
 <slot></slot>
 
-{#if isOpen && $lyr.includes(layer)}
+{#if isOpen && isLayer}
 <section class="panel" transition:slide={{ duration: 300 }}>
     {#if style.includes("fill")}
         <h3 class='fill'>Fond</h3>

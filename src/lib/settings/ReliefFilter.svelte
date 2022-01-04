@@ -1,10 +1,13 @@
 <script>
+    import { slide } from "svelte/transition"
     import { lyr, reliefColor, reliefShowLevels, reliefLevels  } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import { slide } from "svelte/transition";
+    import isLyr from '../../assets/isLyr.js'
+
+    $: isRelief = isLyr('relief', $lyr)
 </script>
 
-{#if $lyr.includes("relief")}
+{#if isRelief}
     <div class="habillage-style" transition:slide={{ duration: 300 }}>
         <button on:click={() => reliefColor.set(!$reliefColor)}
                 class:active="{ $reliefColor }"

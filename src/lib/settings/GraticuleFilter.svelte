@@ -1,16 +1,13 @@
 <script>
+    import { slide } from "svelte/transition"
     import { lyr, gratType, gratStep } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import { slide } from "svelte/transition";
+    import isLyr from '../../assets/isLyr.js'
 
-    // let step = 10
-    // $: gratStep.set(step)
-
-    // let type
-    // $: gratType.set(type)
+    $: isGrat = isLyr('graticule', $lyr)
 </script>
 
-{#if $lyr.includes("graticule")}
+{#if isGrat}
     <div class="habillage-style" transition:slide={{ duration: 300 }}>
         <button on:click={() => $gratType = 'top'}
                 class:active="{ $gratType === 'top' }"

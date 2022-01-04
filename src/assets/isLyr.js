@@ -1,0 +1,1 @@
+export default (layer, lyr) => lyr.includes(layer)

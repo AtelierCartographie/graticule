@@ -5,13 +5,18 @@
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
+    import isLyr from '../../assets/isLyr.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
 
     import { contours } from 'd3-contour'
     import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
 
     export let path, outline
+
+    $: isRelief = isLyr('relief', $lyr)
+    $: isUrban = isLyr('urban', $lyr)
+    $: isHydro = isLyr('hydro', $lyr)
 
     // GRATICULES
     const geoLine = (value, direction, name, precision = "2.5") => {
@@ -117,7 +122,7 @@
 
     let r0, r1, r2
     let r110m, r50m, r10m, rOnce = 0
-    $: if ($lyr.includes('relief') && rOnce == 0) {
+    $: if (isRelief && rOnce == 0) {
         showSnackbar.set({state: 'loading', message: 'Chargement du relief'})
         getRelief('0').then(async d => r0 = d)
         getRelief('1').then(async d => r1 = d)
@@ -148,7 +153,7 @@
     }
 
     let urbanOnce = 0
-    $: if ($lyr.includes('urban') && urbanOnce == 0) {
+    $: if (isUrban && urbanOnce == 0) {
         showSnackbar.set({state: 'loading', message: 'Chargement des zones urbaines'})
 
         getUrban().then(urban => {
@@ -258,7 +263,7 @@
 
 
     <g id="relief" clip-path="url(#land)" class:ShadeColor={$reliefColor}>
-        {#if $lyr.includes('relief') && zRelief}
+        {#if isRelief && zRelief}
         {#each zRelief as d}
         <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
         {/each}
@@ -266,7 +271,7 @@
     </g>
 
     <g id="hydro">
-        {#if $lyr.includes('hydro')}
+        {#if isHydro}
         <path id='rivers' d="{path(geo.rivers)}"></path>
         <path id='lakes' d="{path(geo.lakes)}"></path>
         {/if}
