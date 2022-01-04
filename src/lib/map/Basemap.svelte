@@ -144,7 +144,8 @@
     // défini par des boutons dans Layers.svelte
     // Le résultat est remis dans une 'FeatureCollection' = 1 seul path
     // Sinon le navigateur ne pourrait pas afficher les >130000 path de chaque ville
-    let urbanFilter
+    let urban,      // tous les polygones
+        urbanFilter // seulement les polygones filtrés
 
     // données récupérées lorsque la couche est activée
     const getUrban = async () => {
@@ -156,14 +157,20 @@
     $: if (isUrban && urbanOnce == 0) {
         showSnackbar.set({state: 'loading', message: 'Chargement des zones urbaines'})
 
-        getUrban().then(urban => {
+        getUrban().then(d => {
+            urban = d
             urbanFilter = {
                 type: "FeatureCollection",
-                features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+                features: d.features.filter(d => d.properties.POP_2015 >= $urbanSize)
             }
             showSnackbar.set({state: 'loaded', message: 'Zones urbaines chargées'})
         })
         ++urbanOnce
+    } else if (isUrban && urbanOnce >= 1) {
+        urbanFilter = {
+                type: "FeatureCollection",
+                features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+            }
     }
 
     // LAYERS with 3 resolutions
