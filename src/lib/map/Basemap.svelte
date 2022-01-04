@@ -11,7 +11,6 @@
     import { contours } from 'd3-contour'
     import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
 
-
     export let path, outline
 
     // GRATICULES

@@ -21,9 +21,24 @@
             ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
             : "Source : Natural Earth. Réalisé avec #Cartofond." }
 
+
     // --------------- PROJECTION -------------- //
+    // Clip à la volée au rectangle de cadrage initial
+    // /!\ ne prend pas en compte le brush manuel de l'utilisateur
+    const xInvert = (d) => (d - $zTransform.x) / $zTransform.k
+    const yInvert = (d) => (d - $zTransform.y) / $zTransform.k
+    let extent = null
+    $: {
+        $zTransform // recalcule l'extent à chaque changement de zoom (translate + scale)
+        $proj // idem pour la projection et ses paramètres
+        // [[x0,y0], [x1,y1]], coordonnées projetées planes de la carte (en pixels)
+        extent = [[xInvert(0),yInvert(mapMargin)], [xInvert(width),yInvert(mapHeight)]]
+    }
+
+    // PATH : centrage carte + clip au cadrage
     let outline = ({type: "Sphere"})
-    $: path = geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline))
+    $: path = geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline)
+        .clipExtent(extent))
     // ---------------------------------------- //
 
     // ----------------- BRUSH ---------------- //
@@ -54,7 +69,7 @@
     
     // --------------- SCALE BAR -------------- //
     let scaleInitDist = 2000 // distance de l'échelle en km
-    let k = $zTransform.k == 1 ? 1 : $zTransform.k                // stock le facteur de zoom
+    let k = $zTransform.k == 1 ? 1 : $zTransform.k     // stock le facteur de zoom
     let zx = 0, zy = 0       // stock le translate du zoom
     let cx, cy               // centre du cadrage
     let zcx, zcy             // centre du cadrage dans la carte avec le zoom

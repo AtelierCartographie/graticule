@@ -10,7 +10,7 @@
         </a>
     </div>
     <div id="version">
-        <p>version 1.0</p>
+        <p>Beta version</p>
     </div>
     
 </footer>
