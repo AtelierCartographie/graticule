@@ -10,6 +10,7 @@ const fromSS = (variable, value) => {
 
 // MAP
 export const mapReady = writable(false)
+export const rectBrush = writable( fromSS('rectBrush', {rx: null, ry: null, rw: null, rh: null}) )
 export const zTransform = writable( fromSS('zTransform', {k: 1, x: 0, y: 0}) )
 export const zCat = writable()
 
@@ -57,6 +58,7 @@ export const showSnackbar = writable({state: null, message: null})
 const toSS = (variable, value) => sessionStorage.setItem(variable, JSON.stringify(value))
 
 // MAP
+rectBrush.subscribe(d => toSS("rectBrush", d))
 zTransform.subscribe(d => toSS("zTransform", d))
 
 // SETTINGS

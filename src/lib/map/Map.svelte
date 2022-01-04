@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -46,14 +46,16 @@
     // ---------------------------------------- //
 
     // ----------------- BRUSH ---------------- //
-    let rx, ry, rw, rh
-    function brushed( { selection: [[x0, y0], [x1, y1]] } ) {
+    let rx, ry, rw, rh // stocke dimensions du rectangle de cadrage
+    function brushed( { selection: [[x0, y0], [x1, y1]] } ) {        
         // passer les coordonnées du brush courant
         // au clip de cadrage => clipPath #clip-cadrage
         rx = x0 - 5
         ry = y0 - 5
         rw = x1 - x0 + 10
         rh = y1 - y0 + 10
+
+        $rectBrush = { rx, ry, rw, rh }
     }
 
     let Brush = brush()
@@ -230,10 +232,18 @@
         
 
         // BRUSH ----- initialise le cadrage avec d3-brush
+        const { rx, ry, rw, rh } = $rectBrush
         let gBrush = select('#gBrush')
-        gBrush
-            .call(Brush)
-            .call(Brush.move, [[5, mapMargin + 5], [width-10, mapHeight-10]])
+
+        gBrush.call(Brush)
+
+        // Positionnement du rect de cadrage au lancement
+        rx == null
+        // si aucun rect cadrage préexistant
+        ? gBrush.call(Brush.move, [[5, mapMargin + 5], [width-10, mapHeight-10]])
+        // si rect cadrage déjà personnalisé = reload
+        : gBrush.call(Brush.move, [[rx + 5, ry + 5], [rx + rw - 5, ry + rh - 5]])
+            
             
         gBrush.select(".overlay").remove()  // empêche la création d'un nouveau brush
         gBrush.select(".selection")
