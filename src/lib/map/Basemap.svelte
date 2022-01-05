@@ -1,21 +1,22 @@
 <script>
     import { onMount } from 'svelte'
-    import { feature } from 'topojson-client'
+    // import { feature } from 'topojson-client'
     import { select } from 'd3-selection'
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10 } from 'd3-geo'
     import { geo_110m } from '../../assets/geo_110m.js'
     import tooltip from '../../assets/tooltip.js'
     import isLyr from '../../assets/isLyr.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, citiesCap, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
 
     import { contours } from 'd3-contour'
     import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
 
     export let path, outline
 
+    // $: isUrban = isLyr('urban', $lyr)
     $: isRelief = isLyr('relief', $lyr)
-    $: isUrban = isLyr('urban', $lyr)
+    $: isCities = isLyr('cities', $lyr)
     $: isHydro = isLyr('hydro', $lyr)
 
     // GRATICULES
@@ -138,40 +139,64 @@
         relief2geojson(r2, $reliefLevels).then(d => r10m = d)
     }
     
+    // CITIES
+    let cities = [],      // tous les villes
+        citiesFilter = [] // seulement les villes filtrées
+
+    // données récupérées lorsque la couche est activée
+    const getCities = async () => {
+        let {cities} = await import('../../assets/cities.js')
+        return cities
+    }
+
+    let citiesOnce = 0
+    $: if (isCities && citiesOnce == 0) {
+        showSnackbar.set({state: 'loading', message: 'Chargement des villes'})
+        getCities().then(d => {
+            cities = d
+            showSnackbar.set({state: 'loaded', message: 'Villes chargées'})
+        })
+        ++citiesOnce
+    }
+    $: if (isCities && citiesOnce >= 1) {
+        console.log(cities[0])
+        // ToDo filtrer les villes selon capitales ou seuils de population
+        citiesFilter = $citiesCap ? cities.filter(d => d.capital == 1) : cities
+    }
 
     // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
     // défini par des boutons dans Layers.svelte
     // Le résultat est remis dans une 'FeatureCollection' = 1 seul path
     // Sinon le navigateur ne pourrait pas afficher les >130000 path de chaque ville
-    let urban,      // tous les polygones
-        urbanFilter // seulement les polygones filtrés
+    // let urban,      // tous les polygones
+    //     urbanFilter // seulement les polygones filtrés
 
-    // données récupérées lorsque la couche est activée
-    const getUrban = async () => {
-        let {default: urban} = await import('../../assets/basemap/urban.json')
-        return feature(urban, urban.objects.urban)
-    }
+    // // données récupérées lorsque la couche est activée
+    // const getUrban = async () => {
+    //     let {default: urban} = await import('../../assets/basemap/urban.json')
+    //     return feature(urban, urban.objects.urban)
+    // }
 
-    let urbanOnce = 0
-    $: if (isUrban && urbanOnce == 0) {
-        showSnackbar.set({state: 'loading', message: 'Chargement des zones urbaines'})
+    // let urbanOnce = 0
+    // $: if (isUrban && urbanOnce == 0) {
+    //     showSnackbar.set({state: 'loading', message: 'Chargement des zones urbaines'})
 
-        getUrban().then(d => {
-            urban = d
-            urbanFilter = {
-                type: "FeatureCollection",
-                features: d.features.filter(d => d.properties.POP_2015 >= $urbanSize)
-            }
-            showSnackbar.set({state: 'loaded', message: 'Zones urbaines chargées'})
-        })
-        ++urbanOnce
-    } else if (isUrban && urbanOnce >= 1) {
-        urbanFilter = {
-                type: "FeatureCollection",
-                features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
-            }
-    }
+    //     getUrban().then(d => {
+    //         urban = d
+    //         urbanFilter = {
+    //             type: "FeatureCollection",
+    //             features: d.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+    //         }
+    //         showSnackbar.set({state: 'loaded', message: 'Zones urbaines chargées'})
+    //     })
+    //     ++urbanOnce
+    // } else if (isUrban && urbanOnce >= 1) {
+    //     urbanFilter = {
+    //             type: "FeatureCollection",
+    //             features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
+    //         }
+    // }
 
     // LAYERS with 3 resolutions
     // 3 catégories de facteur de zoom
@@ -286,7 +311,19 @@
 
     <path id='borders' d="{path(geo.borders)}" style="visibility: hidden"></path>
 
-    <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path>
+    <g id="cities">
+        {#if isCities && citiesFilter}
+        {#each citiesFilter as d}
+            <circle class="city"
+            use:tooltip={{content: d.name, followCursor: true, placement: 'right' }}
+            cx={$proj([+d.lon,+d.lat])[0]}
+            cy={$proj([+d.lon,+d.lat])[1]}
+            r={1/$zTransform.k} />
+        {/each}
+        {/if}
+    </g>
+
+    <!-- <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path> -->
 </g>
 
 

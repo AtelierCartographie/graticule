@@ -13,7 +13,8 @@
 
     export let width, height // dimensions du svg
 
-    $: isUrban = isLyr('urban', $lyr)
+    // $: isUrban = isLyr('urban', $lyr)
+    $: isCities = isLyr('cities', $lyr)
     $: isScaleBar = isLyr('scaleBar', $lyr)
 
     // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
@@ -21,7 +22,7 @@
     const mapHeight = height - mapMargin
 
     let mapCredit
-    $: { mapCredit = isUrban 
+    $: { mapCredit = isCities
             ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
             : "Source : Natural Earth. Réalisé avec #Cartofond." }
 
@@ -337,11 +338,17 @@
             --hydro-stroke-o: 1;
             --hydro-stroke-w: 0.5;
 
-            --urban-fill: black;
+            --cities-fill: black;
+            --cities-fill-o: 1;
+            --cities-stroke: none;
+            --cities-stroke-o: 1;
+            --cities-stroke-w: none;
+
+            /* --urban-fill: black;
             --urban-fill-o: 1;
             --urban-stroke: none;
             --urban-stroke-o: 1;
-            --urban-stroke-w: none;
+            --urban-stroke-w: none; */
         }
         #mapSvg.outlineMode { 
             --ocean-fill: white;
@@ -372,11 +379,17 @@
             --hydro-stroke-o: 1;
             --hydro-stroke-w: 0.5;
 
-            --urban-fill: black;
+            --cities-fill: black;
+            --cities-fill-o: 1;
+            --cities-stroke: none;
+            --cities-stroke-o: 1;
+            --cities-stroke-w: none;
+
+            /* --urban-fill: black;
             --urban-fill-o: 1;
             --urban-stroke: none;
             --urban-stroke-o: 1;
-            --urban-stroke-w: none;
+            --urban-stroke-w: none; */
         }
         #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w); }
         #graticule { fill: none; stroke: var(--grat-stroke); stroke-opacity: var(--grat-stroke-o); stroke-width: var(--grat-stroke-w); }
@@ -389,7 +402,8 @@
         #relief.ShadeColor .levelRelief { mix-blend-mode: color-burn; }
         #rivers { fill: none; }
         #lakes { stroke: none; }
-        #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); }
+        #urban { fill: var(--cities-fill); fill-opacity: var(--cities-fill-o); stroke: var(--cities-stroke); stroke-opacity: var(--cities-stroke-o); stroke-width: var(--cities-stroke-w); }
+        /* #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); } */
 
         .countries.hover { fill: var(--accent-color-light); mix-blend-mode: color; }
     </style>

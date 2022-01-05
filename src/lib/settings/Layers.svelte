@@ -7,7 +7,8 @@
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
     import GraticuleFilter from './GraticuleFilter.svelte'
-    import UrbanFilter from './UrbanFilter.svelte'
+    // import UrbanFilter from './UrbanFilter.svelte'
+    import CitiesFilter from './CitiesFilter.svelte'
     import ReliefFilter from './ReliefFilter.svelte'
     import layers_list from '../../assets/layers_list.js'
     import inView from '../../assets/inView.js'
@@ -96,9 +97,12 @@
             <li>
                 <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
                 <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
-                    {#if id == 'urban'}
-                    <UrbanFilter />
+                    {#if id == 'cities'}
+                    <CitiesFilter />
                     {/if}
+                    <!-- {#if id == 'urban'}
+                    <UrbanFilter />
+                    {/if} -->
                 </Styling>
             </li>
         {/each}
