@@ -7,7 +7,7 @@
     import { geo_110m } from '../../assets/geo_110m.js'
     import tooltip from '../../assets/tooltip.js'
     import isLyr from '../../assets/isLyr.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, citiesCap, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
+    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, citiesType, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
 
     import { contours } from 'd3-contour'
     import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
@@ -159,9 +159,24 @@
         ++citiesOnce
     }
     $: if (isCities && citiesOnce >= 1) {
-        console.log(cities[0])
-        // ToDo filtrer les villes selon capitales ou seuils de population
-        citiesFilter = $citiesCap ? cities.filter(d => d.capital == 1) : cities
+        // citiesFilter = $citiesCap ? cities.filter(d => d.capital == 1) : cities
+        switch ($citiesType) {
+            case 'cap':
+                citiesFilter = cities.filter(d => d.capital == 1)
+                break
+            case '>50k':
+                citiesFilter = cities.filter(d => d.urbanCenter == 1)
+                break
+            case '>100k':
+                citiesFilter = cities.filter(d => d.pop2015Cat != '>50k')
+                break
+            case '>250k':
+                citiesFilter = cities.filter(d => d.pop2015Cat == '>250k' || d.pop2015Cat == '>500k')
+                break
+            case '>500k':
+                citiesFilter = cities.filter(d => d.pop2015Cat == '>500k')
+                break
+        }
     }
 
     // URBAN
@@ -318,7 +333,7 @@
             use:tooltip={{content: d.name, followCursor: true, placement: 'right' }}
             cx={$proj([+d.lon,+d.lat])[0]}
             cy={$proj([+d.lon,+d.lat])[1]}
-            r={1/$zTransform.k} />
+            r={1.5/$zTransform.k} />
         {/each}
         {/if}
     </g>

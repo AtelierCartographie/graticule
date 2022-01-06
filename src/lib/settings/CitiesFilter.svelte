@@ -1,6 +1,6 @@
 <script>
     import { slide } from "svelte/transition";
-    import { lyr, citiesCap } from '../../stores.js'
+    import { lyr, citiesType } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
     import isLyr from '../../assets/isLyr.js'
 
@@ -9,44 +9,44 @@
 
 {#if isCities}
     <div class="habillage-style" transition:slide={{ duration: 300 }}>
-        <button on:click={() => $citiesCap = !$citiesCap}
-                class:active="{ $citiesCap === true }"
+        <button on:click={() => $citiesType = 'cap'}
+                class:active="{ $citiesType === 'cap' }"
                 type="button" 
                 class="badge">
             Capitales
         </button>
-        <!-- <button on:click={() => urbanSize.set(50000)}
-                class:active="{ $urbanSize === 50000 }"
+        <button on:click={() => $citiesType = '>50k'}
+                class:active="{ $citiesType === '>50k' }"
                 use:tooltip={{ placement: 'top' }} 
                 title="> 50 000 hab." 
                 type="button" 
                 class="badge">
             50k
         </button>
-        <button on:click={() => urbanSize.set(100000)}
-                class:active="{ $urbanSize === 100000 }"
+        <button on:click={() => $citiesType = '>100k'}
+                class:active="{ $citiesType === '>100k' }"
                 use:tooltip={{ placement: 'top' }} 
                 title="> 100 000 hab."
                 type="button"
                 class="badge">
             100k
         </button>
-        <button on:click={() => urbanSize.set(250000)}
-                class:active="{ $urbanSize === 250000 }"
+        <button on:click={() => $citiesType = '>250k'}
+                class:active="{ $citiesType === '>250k' }"
                 use:tooltip={{ placement: 'top' }}
                 title="> 250 000 hab." 
                 type="button"
                 class="badge">
             250k
         </button>
-        <button on:click={() => urbanSize.set(500000)}
-                class:active="{ $urbanSize === 500000 }"
+        <button on:click={() => $citiesType = '>500k'}
+                class:active="{ $citiesType === '>500k' }"
                 use:tooltip={{ placement: 'top' }}
                 title="> 500 000 hab." 
                 type="button"
                 class="badge">
             500k
-        </button> -->
+        </button>
     </div>
 {/if}
 
