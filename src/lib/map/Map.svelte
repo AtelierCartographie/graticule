@@ -340,9 +340,9 @@
 
             --cities-fill: black;
             --cities-fill-o: 1;
-            --cities-stroke: none;
-            --cities-stroke-o: 1;
-            --cities-stroke-w: none;
+            --cities-stroke: black;
+            --cities-stroke-o: 0;
+            --cities-stroke-w: 15;
 
             /* --urban-fill: black;
             --urban-fill-o: 1;
@@ -381,9 +381,9 @@
 
             --cities-fill: black;
             --cities-fill-o: 1;
-            --cities-stroke: none;
-            --cities-stroke-o: 1;
-            --cities-stroke-w: none;
+            --cities-stroke: black;
+            --cities-stroke-o: 0;
+            --cities-stroke-w: 15;
 
             /* --urban-fill: black;
             --urban-fill-o: 1;
@@ -402,7 +402,7 @@
         #relief.ShadeColor .levelRelief { mix-blend-mode: color-burn; }
         #rivers { fill: none; }
         #lakes { stroke: none; }
-        #urban { fill: var(--cities-fill); fill-opacity: var(--cities-fill-o); stroke: var(--cities-stroke); stroke-opacity: var(--cities-stroke-o); stroke-width: var(--cities-stroke-w); }
+        #cities { fill: var(--cities-fill); fill-opacity: var(--cities-fill-o); stroke: var(--cities-stroke); stroke-opacity: var(--cities-stroke-o); stroke-width: var(--cities-stroke-w); }
         /* #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); } */
 
         .countries.hover { fill: var(--accent-color-light); mix-blend-mode: color; }

@@ -344,5 +344,5 @@
 
 <style>
     .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }
-    .countries:focus, .gratTop:hover { outline: none; }
+    .countries:focus, .gratTop:hover, .city:hover { outline: none; }
 </style>

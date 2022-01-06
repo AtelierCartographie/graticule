@@ -6,7 +6,7 @@ const layers_list = [
     {id: "relief", name: "Relief", type: "geo", style: ["fill"] },
     {id: "borders", name: "Frontières", type: "human", style: ["stroke"] },
     {id: "hydro", name: "Lacs et rivières", type: "geo", style: ["stroke"] },
-    {id: "cities", name: "Villes", type: "human", style: ["fill", "stroke"] }
+    {id: "cities", name: "Villes", type: "human", style: ["fill"] }
     // {id: "urban", name: "Zones urbaines", type: "human", style: ["fill", "stroke"] }
 ]
 export default layers_list
