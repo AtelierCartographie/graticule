@@ -1,7 +1,7 @@
 import { merge } from 'd3-array'
 import { geoStitch } from 'd3-geo-projection'
 import { path } from 'd3-path'
-import { geoPath} from 'd3-geo'
+import { geoPath } from 'd3-geo'
 import { curveBasisClosed } from 'd3-shape'
 
 
@@ -61,6 +61,8 @@ export function invert(d, n, m) {
     };
   }
 
+  // Pose problème car le clipExtent lié à la projection génère des bords arrondi visible (le clip devient alors visible)
+  // Et la zone clipé du relief n'est pas mise à jour avec le zoom
   export function geoCurvePath(projection) {
     return object => {
       const pathContext = path()

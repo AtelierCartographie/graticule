@@ -292,7 +292,7 @@
 
 <g id='gBasemap' style="clip-path: url(#clip)">
 
-    <path id="ocean" d="{path(outline)}" mask="url(#land)" style="visibility: hidden"/>
+    <path id="ocean" d="{path(outline)}" mask="url(#oceanLand)" style="visibility: hidden"/>
     
     <g id='graticule'>
         {#if $gratType == 'top'}
@@ -322,7 +322,7 @@
     <g id="relief" clip-path="url(#land)" class:ShadeColor={$reliefColor}>
         {#if isRelief && zRelief}
         {#each zRelief as d}
-        <path class="levelRelief" d="{geoCurvePath($proj)(d)}" />
+        <path class="levelRelief" d="{path(d)}" />
         {/each}
         {/if}
     </g>
