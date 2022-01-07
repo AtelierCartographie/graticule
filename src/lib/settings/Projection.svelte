@@ -1,6 +1,6 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projName, proj, isModalOpen, modalContent, projSettings } from '../../stores.js'
+    import { projName, proj, projSettings, isModalOpen, modalContent } from '../../stores.js'
     import Tip from './Tip.svelte'
     import proj_list from '../../assets/proj_list.js'
     import inView from '../../assets/inView.js'
@@ -13,7 +13,7 @@
         const storage = $projSettings[v]
         const projDefault = proj_list.find( d => d.name === proj)[v]
 
-        if (projDefault == undefined) {
+        if (projDefault == undefined || proj == 'Bertin 1953') {
             return undefined
         } else {
             return storage != projDefault && storage != undefined
@@ -21,7 +21,7 @@
             : projDefault
         }
     }
-
+    
     $: $projSettings = {lambda, phi, gamma, parallel, distance, tilt, clipAngle}
 
     $: lambda = fromLS('lambda', $projName)
@@ -32,8 +32,12 @@
     $: tilt = fromLS('tilt', $projName)
     $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
     
+    // Cas spécial de Bertin 1953 qui ne doit pas être modifiable
+    // codage en dur de rotate() et exclusion des inputs bind
+    const bertinRotate = [-16,-42,0]
     $: {
         let p = proj_list.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
+        if ($projName == 'Bertin 1953') p.rotate(bertinRotate)
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
         $proj = p
