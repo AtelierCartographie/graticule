@@ -177,11 +177,8 @@
             case 'cap':
                 citiesFilter = cities.filter(d => d.capital == 1)
                 break
-            case '>50k':
-                citiesFilter = cities.filter(d => d.urbanCenter == 1)
-                break
             case '>100k':
-                citiesFilter = cities.filter(d => d.pop2015Cat != '>50k')
+                citiesFilter = cities.filter(d => d.urbanCenter == 1)
                 break
             case '>250k':
                 citiesFilter = cities.filter(d => d.pop2015Cat == '>250k' || d.pop2015Cat == '>500k')

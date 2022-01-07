@@ -15,14 +15,6 @@
                 class="badge">
             Capitales
         </button>
-        <button on:click={() => $citiesType = '>50k'}
-                class:active="{ $citiesType === '>50k' }"
-                use:tooltip={{ placement: 'top' }} 
-                title="> 50 000 hab." 
-                type="button" 
-                class="badge">
-            50k
-        </button>
         <button on:click={() => $citiesType = '>100k'}
                 class:active="{ $citiesType === '>100k' }"
                 use:tooltip={{ placement: 'top' }} 
@@ -55,7 +47,7 @@
     .badge {
         display: inline-block;
         /* min-zwidth: 1em; */
-        padding: .3rem .7rem;
+        padding: .3rem .5rem;
         border-radius: 2em;
         font-size: var(--text-small);
         text-align: center;

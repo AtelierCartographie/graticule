@@ -29,7 +29,7 @@ function csvToArray(str, delimiter = ",") {
   }
 
 // Transformer les coordonnées en geojson de type point
-// pour utiliser  d3.geoPath et avoir un clipAngle sur certaines projections
+// PAS UTILE FINALEMENT
 function coordToGeoJSON(data) {
   return data.map(d => 
     ({...d,
