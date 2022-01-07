@@ -3,7 +3,8 @@
     // import { feature } from 'topojson-client'
     import { select } from 'd3-selection'
     import { range } from 'd3-array'
-    import { geoGraticule, geoGraticule10 } from 'd3-geo'
+    import { geoGraticule, geoGraticule10, geoDistance } from 'd3-geo'
+    import { symbol, symbolCircle, symbolSquare } from 'd3-shape'
     import { geo_110m } from '../../assets/geo_110m.js'
     import tooltip from '../../assets/tooltip.js'
     import isLyr from '../../assets/isLyr.js'
@@ -158,8 +159,20 @@
         })
         ++citiesOnce
     }
+    // D'après Andrew Reid, https://stackoverflow.com/a/48162235
+    const cityVisible = (lon, lat, proj) => {
+        const clipAngle = proj.clipAngle()
+        if (clipAngle == 0) return 'visible'
+
+        const circle = [lon, lat]
+		const rotate = proj.rotate() // antipode of actual rotational center.
+		const center = [-rotate[0], -rotate[1]]
+		const distance = geoDistance(circle,center)
+        const angle = clipAngle * (Math.PI/180) // degrees to radians
+		return (distance > angle ) ? 'hidden' : 'visible'
+    }
+
     $: if (isCities && citiesOnce >= 1) {
-        // citiesFilter = $citiesCap ? cities.filter(d => d.capital == 1) : cities
         switch ($citiesType) {
             case 'cap':
                 citiesFilter = cities.filter(d => d.capital == 1)
@@ -177,8 +190,8 @@
                 citiesFilter = cities.filter(d => d.pop2015Cat == '>500k')
                 break
         }
+        citiesFilter = citiesFilter.map(d => ({...d, visibility: cityVisible(d.lon, d.lat, $proj)}))
     }
-
     // URBAN
     // Filtre la couche urban selon un seuil d'habitants 
     // défini par des boutons dans Layers.svelte
@@ -329,11 +342,15 @@
     <g id="cities">
         {#if isCities && citiesFilter}
         {#each citiesFilter as d}
-            <circle class="city"
-            use:tooltip={{content: d.name, followCursor: true, placement: 'right' }}
-            cx={$proj([+d.lon,+d.lat])[0]}
-            cy={$proj([+d.lon,+d.lat])[1]}
-            r={1.5/$zTransform.k} />
+            <path class="city"
+            use:tooltip={{content: `<i>${d.name}</i>`, allowHTML: true, followCursor: true, placement: 'right' }}
+            d={d.capital == 1 
+                // carrés => capitales
+                ? symbol(symbolSquare, 6 / $zTransform.k)()
+                // cercles => autres
+                : symbol(symbolCircle, 3 / $zTransform.k)()}  
+            transform={`translate(${$proj([d.lon,d.lat])[0]},${$proj([d.lon,d.lat])[1]})`}
+            style="visibility: {d.visibility}" />
         {/each}
         {/if}
     </g>

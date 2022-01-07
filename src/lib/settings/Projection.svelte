@@ -31,13 +31,12 @@
     $: distance = fromLS('distance', $projName)
     $: tilt = fromLS('tilt', $projName)
     $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
-
     
     $: {
         let p = proj_list.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
-        proj.set(p)
+        $proj = p
     }
 
     // Tips message
