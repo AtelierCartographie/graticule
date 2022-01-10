@@ -7,6 +7,7 @@ import { geoArmadillo,
         geoInterruptedMollweide,
         geoInterruptedMollweideHemispheres,
         geoSatellite } from 'd3-geo-projection'
+import { geoAirocean } from 'd3-geo-polygon'
 
 const proj_list = [
     {name: "Equal Earth", top: true, fn: geoEqualEarth(), lambda: 0, phi: 0, gamma: 0},
@@ -22,6 +23,7 @@ const proj_list = [
     {name: "Plate Carrée", top: true, fn: geoEquirectangular(), lambda: 0, phi: 0, gamma: 0},
     {name: "Mollweide Hemispheres", top: false, fn: geoInterruptedMollweideHemispheres(), lambda: 20, phi: 0, gamma: 0},
     {name: "Lambert azimutale équivalente (LAEA)", top: false, fn: geoAzimuthalEqualArea(), lambda: 0, phi: -89, gamma: 0},
+    {name: "Fuller (Airocean)", top: false, fn: geoAirocean(), lambda: -83.65929, phi: 25.44458, gamma: -87.45184},
 ]
 
 export default proj_list.sort( (a,b) => a.name.localeCompare(b.name))

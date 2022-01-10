@@ -59,6 +59,9 @@
         $proj = p
     }
 
+    // Projection non paramétrable
+    const projInputDisabled = ['Bertin 1953', 'Fuller (Airocean']
+
     // Tips message
     let m1 = "Choisir parmi la liste de projections et régler si besoin les paramètres."
 </script>
@@ -100,18 +103,18 @@
     <ul>
         <li>
             <label for="lon">Longitude</label>
-            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $projName == "Bertin 1953"}>
-            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || $projName == "Bertin 1953"}>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projName)}>
+            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projName)}>
         </li>
         <li>
             <label for="lat">Latitude</label>
-            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $projName == "Bertin 1953"}>
-            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || $projName == "Bertin 1953"}>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projName)}>
+            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projName)}>
         </li>
         <li>
             <label for="rot">Rotation</label>
-            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $projName == "Bertin 1953"}>
-            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || $projName == "Bertin 1953"}>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projName)}>
+            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projName)}>
         </li>
 
         {#if parallel || parallel == 0}
