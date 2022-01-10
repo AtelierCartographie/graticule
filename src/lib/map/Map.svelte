@@ -23,8 +23,8 @@
 
     let mapCredit
     $: { mapCredit = isCities
-            ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec #Cartofond."
-            : "Source : Natural Earth. Réalisé avec #Cartofond." }
+            ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec Graticule."
+            : "Source : Natural Earth. Réalisé avec Graticule." }
 
 
     // --------------- PROJECTION -------------- //

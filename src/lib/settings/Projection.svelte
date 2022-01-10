@@ -9,37 +9,53 @@
 
     // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
     // Vérifier si valeurs dans le localStorage (LS) différente des valeurs par défaut
-    const fromLS = (v, proj) => {
+    const fromLS = (v) => {
         const storage = $projSettings[v]
-        const projDefault = proj_list.find( d => d.name === proj)[v]
+        const projDefault = proj_list.find( d => d.name === $projName)[v]
 
-        if (projDefault == undefined || proj == 'Bertin 1953') {
-            return undefined
-        } else {
-            return storage != projDefault && storage != undefined
-            ? storage
-            : projDefault
-        }
+        if (projDefault == undefined) return undefined
+        if (storage == undefined) return projDefault
+        return (storage != projDefault && onLoad) ? storage : projDefault
     }
-    
-    $: $projSettings = {lambda, phi, gamma, parallel, distance, tilt, clipAngle}
 
-    $: lambda = fromLS('lambda', $projName)
-    $: phi = fromLS('phi', $projName)
-    $: gamma = fromLS('gamma', $projName)
-    $: parallel = fromLS('parallel', $projName)
-    $: distance = fromLS('distance', $projName)
-    $: tilt = fromLS('tilt', $projName)
-    $: clipAngle = Math.acos( 1 / distance ) * 180 / Math.PI
+    const setProjSettings = () => {
+        lambda = fromLS('lambda')
+        phi = fromLS('phi')
+        gamma = fromLS('gamma')
+        parallel = fromLS('parallel')
+        distance = fromLS('distance')
+        tilt = fromLS('tilt')
+    }
+
+    let onLoad = true, projOnLoad
+    let lambda, phi, gamma, parallel, distance, tilt, clipAngle
+    // Au chargement = préférence sessionStorage sur paramètres par défaut
+    $: if (onLoad) {
+        setProjSettings()
+        onLoad = false
+        projOnLoad = $projName
+    }
+
+    // Au changement de projection = préférence paramètres par défaut
+    $: if (!onLoad && projOnLoad != $projName) {
+        setProjSettings()
+        projOnLoad = '' // reset
+    }
+
+    // Cas de la projection satellite
+    // Conversion de la distance en km vers distance depuis centre de la terre https://github.com/d3/d3-geo-projection#satellite_distance
+    $: distanceD3 = (distance + 6371) / 6371
+    // clipAngle dynamique selon la distance
+    $: clipAngle = Math.acos( 1 / distanceD3 ) * 180 / Math.PI
+
+    // Stockage en sessionStorage des paramètres de projection
+    $: $projSettings = {lambda, phi, gamma, parallel, distance, tilt, clipAngle}
     
-    // Cas spécial de Bertin 1953 qui ne doit pas être modifiable
-    // codage en dur de rotate() et exclusion des inputs bind
-    const bertinRotate = [-16,-42,0]
+    // Ajouts des paramètres à la projection d3
     $: {
         let p = proj_list.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
-        if ($projName == 'Bertin 1953') p.rotate(bertinRotate)
         if (parallel || parallel == 0) p.parallel([parallel])
-        if (distance) p.distance([distance]).tilt([tilt]).clipAngle([clipAngle])
+        if (distance) p.distance([distanceD3]).tilt([tilt]).clipAngle([clipAngle])
         $proj = p
     }
 
@@ -109,8 +125,8 @@
         {#if distance}
         <li>
             <label for="alt">Altitude en km</label>
-            <input type="range" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
-            <input type="number" bind:value={distance} id="alt" min="1" max="16" step="0.1" >
+            <input type="range" bind:value={distance} id="alt" min="10" max="40000" step="100" >
+            <input type="number" bind:value={distance} id="alt" min="10" max="40000" step="100" >
         </li>
         <li>
             <label for="tilt">Inclinaison en degré</label>

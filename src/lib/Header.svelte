@@ -5,7 +5,7 @@
 
 <header role="banner">
     <nav role="navigation" id="topbar">
-        <h1><a href="./" on:click={() => sessionStorage.clear()}>#Cartofond</a></h1>
+        <h1><a href="./" on:click={() => sessionStorage.clear()}>Graticule</a></h1>
         <ol class="fontTitle">
             <li id="headerFrame" class="navSteps inView"> <a href="#frame" class="header-steps"><span class="material-icons">crop</span> Cadrer</a> </li>
             <li id="headerProjection" class="navSteps inView"> <a href="#projection"class="header-steps" ><span class="material-icons">language</span> Projeter</a> </li>
