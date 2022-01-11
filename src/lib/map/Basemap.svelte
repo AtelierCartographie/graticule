@@ -1,24 +1,24 @@
 <script>
-    import { onMount } from 'svelte'
     // import { feature } from 'topojson-client'
     import { select } from 'd3-selection'
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10, geoDistance } from 'd3-geo'
     import { symbol, symbolCircle, symbolSquare } from 'd3-shape'
-    import { geo_110m } from '../../assets/geo_110m.js'
+    import { geo110m } from '../../assets/geo110m.js'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
-    import { zTransform, zCat, proj, lyr, gratType, gratStep, urbanSize, citiesType, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
+    import { isLyr } from '../../assets/isLyr.js'
+    import { zTransform, zCat, proj, gratType, gratStep, urbanSize,
+             citiesType, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
 
     import { contours } from 'd3-contour'
     import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
 
     export let path, outline
 
-    // $: isUrban = isLyr('urban', $lyr)
-    $: isRelief = isLyr('relief', $lyr)
-    $: isCities = isLyr('cities', $lyr)
-    $: isHydro = isLyr('hydro', $lyr)
+    // $: isUrban = isLyr('urban')
+    $: isRelief = isLyr('relief')
+    $: isCities = isLyr('cities')
+    $: isHydro = isLyr('hydro')
 
     // GRATICULES
     const geoLine = (value, direction, name, precision = "2.5") => {
@@ -77,23 +77,26 @@
             : geoGraticule().step([$gratStep, $gratStep])()
     )
 
-    // CHARGEMENT ASYNCHRONE
-    // geo_50m et geo_10m
-    let geo_50m, geo_10m
+    /* --------------------------------- */
+    /* CHARGEMENT ASYNCHRONE DE COUCHE
+    /* --------------------------------- */
+    // geo50m et geo10m
+    let geo50m, geo10m
     const getGeo50m = async () => { 
-        let {geo_50m} = await import('../../assets/geo_50m.js') 
-        return geo_50m
+        let {geo50m} = await import('../../assets/geo50m.js') 
+        return geo50m
     }
-    getGeo50m().then(d => geo_50m = d)
+    getGeo50m().then(d => geo50m = d)
 
     const getGeo10m = async () => { 
-        let {geo_10m} = await import('../../assets/geo_10m.js')
-        return geo_10m
+        let {geo10m} = await import('../../assets/geo10m.js')
+        return geo10m
     }
-    getGeo10m().then(d => geo_10m = d)
+    getGeo10m().then(d => geo10m = d)
 
-
-    // RELIEF
+    /* --------------------------------- */
+    /* RELIEF -> async à l'activation
+    /* --------------------------------- */
     const getRelief = async (rLevel) => {
         let r
         switch (rLevel) {
@@ -140,25 +143,31 @@
         relief2geojson(r2, $reliefLevels).then(d => r10m = d)
     }
     
-    // CITIES
-    let cities = [],      // tous les villes
-        citiesFilter = [] // seulement les villes filtrées
+    /* --------------------------------- */
+    /* CITIES -> async 
+    /* --------------------------------- */
+    let cities = [],      // stock tous les villes
+        citiesFilter = [] // stock seulement les villes filtrées
 
-    // données récupérées lorsque la couche est activée
+    // Récupère la liste des villes + capitales
     const getCities = async () => {
         let {cities} = await import('../../assets/cities.js')
         return cities
     }
 
-    let citiesOnce = 0
-    $: if (isCities && citiesOnce == 0) {
+    // Charge les données, seulement à la première activation de la couche
+    let citiesOnce = true
+    $: if (isCities && citiesOnce) {
         showSnackbar.set({state: 'loading', message: 'Chargement des villes'})
         getCities().then(d => {
             cities = d
             showSnackbar.set({state: 'loaded', message: 'Villes chargées'})
         })
-        ++citiesOnce
+        citiesOnce = !citiesOnce
     }
+
+    // Détermine les villes à l'intérieur ou en dehors du clip de la projection
+    // retourne une valeur css de "visibility" (hidden ou visible)
     // D'après Andrew Reid, https://stackoverflow.com/a/48162235
     const cityVisible = (lon, lat, proj) => {
         const clipAngle = proj.clipAngle()
@@ -168,11 +177,11 @@
 		const rotate = proj.rotate() // antipode of actual rotational center.
 		const center = [-rotate[0], -rotate[1]]
 		const distance = geoDistance(circle,center)
-        const angle = clipAngle * (Math.PI/180) // degrees to radians
-		return (distance > angle ) ? 'hidden' : 'visible'
+        const angleRad = clipAngle * (Math.PI/180) // degrees to radians
+		return (distance > angleRad ) ? 'hidden' : 'visible'
     }
 
-    $: if (isCities && citiesOnce >= 1) {
+    $: if (isCities && !citiesOnce) {
         switch ($citiesType) {
             case 'cap':
                 citiesFilter = cities.filter(d => d.capital == 1)
@@ -234,17 +243,17 @@
     $: { if ($resType == "dynamic") { 
         switch ($zCat) {
             case 'low':
-                geo = geo_110m
+                geo = geo110m
                 zRelief = r110m
                 $res = '110m'
                 break
             case 'medium':
-                geo = geo_50m ? geo_50m : geo_110m // affiche 110m en attendant async 50m
+                geo = geo50m ? geo50m : geo110m // affiche 110m en attendant async 50m
                 zRelief = r50m
                 $res = '50m'
                 break
             case 'high': 
-                geo = geo_10m ? geo_10m : geo_110m
+                geo = geo10m ? geo10m : geo110m
                 zRelief = r10m
                 $res = '10m'
                 break
@@ -253,15 +262,15 @@
       else {
           switch ($res) {
               case '110m': 
-                geo = geo_110m
+                geo = geo110m
                 zRelief = r110m
                 break
               case '50m': 
-                geo = geo_50m ? geo_50m : geo_110m 
+                geo = geo50m ? geo50m : geo110m 
                 zRelief = r50m
                 break
               case '10m': 
-                geo = geo_10m ? geo_10m : geo_110m
+                geo = geo10m ? geo10m : geo110m
                 zRelief = r10m
                 break
           }

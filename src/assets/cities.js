@@ -28,8 +28,8 @@ function csvToArray(str, delimiter = ",") {
     return arr;
   }
 
+// NON UTILISÉ
 // Transformer les coordonnées en geojson de type point
-// PAS UTILE FINALEMENT
 function coordToGeoJSON(data) {
   return data.map(d => 
     ({...d,
@@ -40,4 +40,6 @@ function coordToGeoJSON(data) {
     })
   )
 }
+
+
 export const cities = csvToArray(csv)

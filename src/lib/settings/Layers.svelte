@@ -10,16 +10,16 @@
     // import UrbanFilter from './UrbanFilter.svelte'
     import CitiesFilter from './CitiesFilter.svelte'
     import ReliefFilter from './ReliefFilter.svelte'
-    import layers_list from '../../assets/layers_list.js'
+    import layersList from '../../assets/layersList.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
     
     export let canRender
 
-    $: isScaleBar = isLyr('scaleBar', $lyr)
-    $: isMapTitle = isLyr('mapTitle', $lyr)
+    $: isScaleBar = isLyr('scaleBar')
+    $: isMapTitle = isLyr('mapTitle')
 
     //Tips message
     let m1 = "Ajouter ou retirer des informations et en modifier la représentation graphique."
@@ -77,7 +77,7 @@
 
     <h3>Géographie physique</h3>
     <ul>
-        {#each layers_list.filter(d => d.type == "geo") as {id, name, type, style} }
+        {#each layersList.filter(d => d.type == "geo") as {id, name, type, style} }
             <li>
                 <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
                 <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
@@ -93,7 +93,7 @@
 
     <h3>Géographie humaine</h3>
     <ul>
-        {#each layers_list.filter(d => d.type == "human") as {id, name, type, style} }
+        {#each layersList.filter(d => d.type == "human") as {id, name, type, style} }
             <li>
                 <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
                 <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>

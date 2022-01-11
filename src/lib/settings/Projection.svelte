@@ -2,16 +2,16 @@
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
     import { projName, proj, projSettings, isModalOpen, modalContent } from '../../stores.js'
     import Tip from './Tip.svelte'
-    import proj_list from '../../assets/proj_list.js'
+    import projList from '../../assets/projList.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
 
-    // Paramètres des projections : par défaut selon 'proj_list' puis dynamique via les input
+    // Paramètres des projections : par défaut selon 'projList' puis dynamique via les input
     // Vérifier si valeurs dans le localStorage (LS) différente des valeurs par défaut
     const fromLS = (v) => {
         const storage = $projSettings[v]
-        const projDefault = proj_list.find( d => d.name === $projName)[v]
+        const projDefault = projList.find( d => d.name === $projName)[v]
 
         if (projDefault == undefined) return undefined
         if (storage == undefined) return projDefault
@@ -53,7 +53,7 @@
     
     // Ajouts des paramètres à la projection d3
     $: {
-        let p = proj_list.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
+        let p = projList.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distanceD3]).tilt([tilt]).clipAngle([clipAngle])
         $proj = p
@@ -86,12 +86,12 @@
 
     <select bind:value={$projName} name="projection" id="input_projSelect">
         <optgroup label="Incontournables">
-            {#each proj_list.filter(d => d.top == true) as d}
+            {#each projList.filter(d => d.top == true) as d}
                 <option value={d.name}>{d.name}</option>
             {/each}
         </optgroup>
         <optgroup label="Autres">
-            {#each proj_list.filter(d => d.top == false) as d}
+            {#each projList.filter(d => d.top == false) as d}
                 <option value={d.name}>{d.name}</option>
             {/each}
         </optgroup>

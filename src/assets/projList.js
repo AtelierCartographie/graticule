@@ -1,5 +1,9 @@
-import { geoAzimuthalEqualArea, geoMercator, geoEqualEarth, geoEquirectangular, geoOrthographic } from 'd3-geo'
-import { geoArmadillo,
+import {geoAzimuthalEqualArea,
+        geoMercator,
+        geoEqualEarth,
+        geoEquirectangular,
+        geoOrthographic } from 'd3-geo'
+import {geoArmadillo,
         geoBertin1953,
         geoBonne,
         geoMollweide,
@@ -7,9 +11,9 @@ import { geoArmadillo,
         geoInterruptedMollweide,
         geoInterruptedMollweideHemispheres,
         geoSatellite } from 'd3-geo-projection'
-import { geoAirocean } from 'd3-geo-polygon'
+import {geoAirocean } from 'd3-geo-polygon'
 
-const proj_list = [
+const projList = [
     {name: "Equal Earth", top: true, fn: geoEqualEarth(), lambda: 0, phi: 0, gamma: 0},
     {name: "Natural Earth 2", top: false, fn: geoNaturalEarth2(), lambda: 0, phi: 0, gamma: 0},
     {name: "Armadillo", top: false, fn: geoArmadillo(), lambda: -10, phi: NaN, gamma: NaN, parallel: 20},
@@ -26,4 +30,7 @@ const proj_list = [
     {name: "Fuller (Airocean)", top: false, fn: geoAirocean(), lambda: -83.65929, phi: 25.44458, gamma: -87.45184},
 ]
 
-export default proj_list.sort( (a,b) => a.name.localeCompare(b.name))
+// trie les projections par nom
+const projListSort = projList.sort( (a,b) => a.name.localeCompare(b.name))
+
+export default projListSort

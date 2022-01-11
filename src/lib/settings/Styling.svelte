@@ -1,9 +1,9 @@
 <script>
     import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
-    import rgb2hex from '../../assets/rgb2hex.js'
+    import { rgb2hex } from '../../assets/rgb2hex.js'
     import { zTransform, mapTheme, lyr } from '../../stores.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
 
     // Stratégie d'accordéon en svelte
     // https://www.youtube.com/watch?v=vs10Omo9H7c
@@ -12,7 +12,7 @@
 
     export let layer, style, disabled
 
-    $: isLayer = isLyr(layer, $lyr)
+    $: isLayer = isLyr(layer)
 
     let isOpen = false
     const toggle = () => isOpen = !isOpen

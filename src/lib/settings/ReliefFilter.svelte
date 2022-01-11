@@ -2,9 +2,9 @@
     import { slide } from "svelte/transition"
     import { lyr, reliefColor, reliefShowLevels, reliefLevels  } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
 
-    $: isRelief = isLyr('relief', $lyr)
+    $: isRelief = isLyr('relief')
 </script>
 
 {#if isRelief}

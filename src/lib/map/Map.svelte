@@ -9,14 +9,14 @@
     import { geoScaleBar } from 'd3-geo-scale-bar'
     import Basemap from './Basemap.svelte'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
 
     export let width, height // dimensions du svg
 
-    // $: isUrban = isLyr('urban', $lyr)
-    $: isCities = isLyr('cities', $lyr)
-    $: isScaleBar = isLyr('scaleBar', $lyr)
-    $: isRelief = isLyr('relief', $lyr)
+    // $: isUrban = isLyr('urban')
+    $: isCities = isLyr('cities')
+    $: isScaleBar = isLyr('scaleBar')
+    $: isRelief = isLyr('relief')
 
     // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
     const mapMargin = (height * 0.05) / 2

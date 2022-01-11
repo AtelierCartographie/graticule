@@ -4,7 +4,7 @@ import countries_10m from './basemap/countries_10m.json'
 import rivers_10m from './basemap/rivers_10m.json'
 import lakes_10m from './basemap/lakes_10m.json'
 
-export const geo_10m = {
+export const geo10m = {
     coastline: mesh(countries_10m, countries_10m.objects.countries_10m, (a,b) => a == b),
     land: merge(countries_10m, countries_10m.objects.countries_10m.geometries),
     countries: feature(countries_10m, countries_10m.objects.countries_10m),

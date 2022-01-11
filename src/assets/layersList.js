@@ -1,4 +1,4 @@
-const layers_list = [
+const layersList = [
     {id: "ocean", name: "Mers et océans", type: "geo", style: ["fill", "stroke"] },
     {id: "graticule", name: "Méridiens/parallèles", type: "geo", style: ["stroke"] },
     {id: "coastline", name: "Côtes", type: "geo", style: ["stroke"] },
@@ -9,4 +9,4 @@ const layers_list = [
     {id: "cities", name: "Villes", type: "human", style: ["fill"] }
     // {id: "urban", name: "Zones urbaines", type: "human", style: ["fill", "stroke"] }
 ]
-export default layers_list
+export default layersList

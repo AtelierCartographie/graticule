@@ -2,9 +2,9 @@
     import { slide } from "svelte/transition";
     import { lyr, urbanSize } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
 
-    $: isUrban = isLyr('urban', $lyr)
+    $: isUrban = isLyr('urban')
 </script>
 
 {#if isUrban}

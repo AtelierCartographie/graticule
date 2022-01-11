@@ -2,6 +2,7 @@
 import tippy, {followCursor} from 'tippy.js';
 import 'tippy.js/dist/tippy.css'; // optional for styling 
 
+// D'après Dana Woodman, https://dev.to/danawoodman/svelte-quick-tip-using-actions-to-integrate-with-javascript-libraries-tippy-tooltips-2m94
 export default function tooltip(node, params = {}) {
     // Determine the title to show. We want to prefer
     //    the custom content passed in first, then the

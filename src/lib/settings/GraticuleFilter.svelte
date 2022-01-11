@@ -2,9 +2,9 @@
     import { slide } from "svelte/transition"
     import { lyr, gratType, gratStep } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
 
-    $: isGrat = isLyr('graticule', $lyr)
+    $: isGrat = isLyr('graticule')
 </script>
 
 {#if isGrat}

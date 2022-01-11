@@ -2,9 +2,9 @@
     import { slide } from "svelte/transition";
     import { lyr, citiesType } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
-    import isLyr from '../../assets/isLyr.js'
+    import { isLyr } from '../../assets/isLyr.js'
 
-    $: isCities = isLyr('cities', $lyr)
+    $: isCities = isLyr('cities')
 </script>
 
 {#if isCities}

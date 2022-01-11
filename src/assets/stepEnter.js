@@ -1,5 +1,7 @@
 import { select, selectAll } from 'd3-selection'
 
+// Synchronise les boutons d'étapes du header avec l'affichage des étapes
+// La classe css .inView met en avant l'étape courante
 export default function stepEnter(id) {
     selectAll(".navSteps").classed("inView", false)
     select(`#${id}`).classed("inView", true)

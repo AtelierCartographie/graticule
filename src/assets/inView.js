@@ -11,7 +11,7 @@
  * optional params { root, top, bottom }
  * top and bottom are numbers
  * use:inView={ bottom: 100 } // 100 pixels from bottom of viewport
- */
+ **/
 
 export default function inView(node, params = {}) {
 	let observer;
