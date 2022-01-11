@@ -21,7 +21,7 @@
     $: $countrybbox = countriesBbox.find( d => d.id === $countrySelect).bbox
     
 
-    // Rendre exclusif les deux select
+    // Rends exclusif les deux select
     function resetSelect(el) {
         const a = document.getElementById(el)
         const b = el == "input_regSelect" ? "input_countrySelect" : "input_regSelect"

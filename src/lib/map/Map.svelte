@@ -16,16 +16,20 @@
     // $: isUrban = isLyr('urban', $lyr)
     $: isCities = isLyr('cities', $lyr)
     $: isScaleBar = isLyr('scaleBar', $lyr)
+    $: isRelief = isLyr('relief', $lyr)
 
     // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
     const mapMargin = (height * 0.05) / 2
     const mapHeight = height - mapMargin
 
-    let mapCredit
-    $: { mapCredit = isCities
-            ? "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec Graticule."
-            : "Source : Natural Earth. Réalisé avec Graticule." }
-
+    // Affiche les sources selon les couches actives
+    const getCredit = (city, relief) => {
+        if (city && !relief) return "Sources : Natural Earth ; European Commission, JRC, GHS, 2019. Réalisé avec Graticule."
+        if (!city && relief) return "Sources : Natural Earth ; Terrain Tiles, Nextzen. Réalisé avec Graticule."
+        if (city && relief) return  "Sources : Natural Earth ; European Commission, JRC, GHS, 2019 ; Terrain Tiles, Nextzen. Réalisé avec Graticule."
+        return "Source : Natural Earth. Réalisé avec Graticule."
+    }
+    $: mapCredit = getCredit(isCities, isRelief)
 
     // --------------- PROJECTION -------------- //
     // Clip à la volée au rectangle de cadrage initial
@@ -282,7 +286,7 @@
 
     {#if $mapReady}
     <text id="mapTitle" x={rx} y={ry} dy=-5>{$mapTitle}</text>
-    <text id="mapCredit" x={rx + rw} y={ry + rh} dy=10>{mapCredit}</text>
+    <text id="mapCredit" x={rx + rw} y={ry + rh} dy=15>{mapCredit}</text>
     {/if}
     <g id="gCadrage" style="clip-path: url(#clip-cadrage)">
         <g id="gZoom" >        
