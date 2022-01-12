@@ -4,7 +4,8 @@
     import tooltip from '../../assets/tooltip.js'
     import { isLyr } from '../../assets/isLyr.js'
 
-    $: isCities = isLyr('cities')
+    let isCities
+    $: { isCities = isLyr('cities') ; $lyr }
 </script>
 
 {#if isCities}

@@ -12,7 +12,8 @@
 
     export let layer, style, disabled
 
-    $: isLayer = isLyr(layer)
+    let isLayer
+    $: { isLayer = isLyr(layer) ; $lyr }
 
     let isOpen = false
     const toggle = () => isOpen = !isOpen

@@ -4,7 +4,12 @@
     import tooltip from '../../assets/tooltip.js'
     import { isLyr } from '../../assets/isLyr.js'
 
-    $: isUrban = isLyr('urban')
+    let isUrban
+    $: {
+        $lyr
+        isUrban = isLyr('urban')
+    }
+
 </script>
 
 {#if isUrban}

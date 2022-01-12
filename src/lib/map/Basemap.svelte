@@ -7,7 +7,7 @@
     import { geo110m } from '../../assets/geo110m.js'
     import tooltip from '../../assets/tooltip.js'
     import { isLyr } from '../../assets/isLyr.js'
-    import { zTransform, zCat, proj, gratType, gratStep, urbanSize,
+    import { zTransform, zCat, proj, gratType, gratStep, lyr, urbanSize,
              citiesType, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
 
     import { contours } from 'd3-contour'
@@ -15,12 +15,25 @@
 
     export let path, outline
 
-    // $: isUrban = isLyr('urban')
-    $: isRelief = isLyr('relief')
-    $: isCities = isLyr('cities')
-    $: isHydro = isLyr('hydro')
+    let isRelief, isCities, isHydro
+    $: {
+        $lyr
+        isRelief = isLyr('relief')
+        isCities = isLyr('cities')
+        isHydro = isLyr('hydro')
+    }
 
-    // GRATICULES
+    /* --------------------------------- */
+    /* GRATICULES
+    /* A. Générateur de lignes spécifiques
+    /* B. Générer les lignes remarquables (équateur, tropiques...)
+    /* C. Graticules réguliés avec écart en degré sélectionné par l'utilisateur
+    /* --------------------------------- */
+    // Générateur de méridiens ou parallèles
+    // Produit un geojson de type ligne à partir :
+    // - une valeur en degré ()
+    // - une direction (latitude ou longitude)
+    // - un nom passé en propriété du geojson
     const geoLine = (value, direction, name, precision = "2.5") => {
         const v = parseFloat(value)
         const step = parseFloat(precision)
@@ -38,16 +51,14 @@
             case 'latitude':
             case 'lat':
                 v == 0
-                ? geojson.geometry.coordinates = [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]] // Équateur
+                ? geojson.geometry.coordinates = [[-180, v], [-90, v], [0, v], [90, v], [180, v]] // Équateur
                 : geojson.geometry.coordinates = range(-180, 180, step).concat(180).map(x => [x,v])
                 break
             case 'longitude':
             case 'long':
             case 'lon':
-                v == 0
-                ? geojson.geometry.coordinates = [[0, 90], [0, 0], [0, -90]] // Greenwitch
-                : v == 180
-                ? geojson.geometry.coordinates = [[180, 90], [180,0], [180,-90]] // Antiméridien
+                v == 0 || v == 180
+                ? geojson.geometry.coordinates = [[v, 90], [v, 0], [v, -90]] // Greenwitch || Antiméridien
                 : geojson.geometry.coordinates = range(-90, 90, step).concat(90).map(y => [v,y])
                 break
             default:
@@ -56,6 +67,7 @@
         return geojson
     }
 
+    // B.
     const geographicLines = {
         type: "FeatureCollection",
         features: [
@@ -69,6 +81,7 @@
         ]
     }
 
+    // C.
     $: graticule = (
         $gratType == 'top'
         ? geographicLines
@@ -96,6 +109,9 @@
 
     /* --------------------------------- */
     /* RELIEF -> async à l'activation
+    /* A. Récupère les 3 résolutions de données d'élévations
+    /* B. Convertit en polygone de contours (geojson) selon des seuils d'élévations
+    /* C. Met à jour B. si changement de seuils
     /* --------------------------------- */
     const getRelief = async (rLevel) => {
         let r
@@ -144,7 +160,10 @@
     }
     
     /* --------------------------------- */
-    /* CITIES -> async 
+    /* CITIES -> async à l'activation
+    /* A. Récupérer les données
+    /* B. Filtrer selon choix utilisateurs (capitale ou seuil population)
+    /* C. Prendre en compte du clipAngle de certaines projections
     /* --------------------------------- */
     let cities = [],      // stock tous les villes
         citiesFilter = [] // stock seulement les villes filtrées
@@ -198,7 +217,77 @@
         }
         citiesFilter = citiesFilter.map(d => ({...d, visibility: cityVisible(d.lon, d.lat, $proj)}))
     }
-    // URBAN
+
+    /* --------------------------------- */
+    /* GESTION DES COUCHES À 3 RÉSOLUTIONS
+    /* A. Déterminer les seuils de zoom déclenchant le changement de résolution
+    /* B. Différencier le comportement dynamique par défaut d'un choix constant par l'utilisateurs 
+    /* C. Afficher, en fonction de A. et B., les bonnes résolutions de couches
+    /* --------------------------------- */
+    // 3 catégories de facteur de zoom
+    $: $zCat = $zTransform.k <= 4 
+                ? 'low' : $zTransform.k <= 17 
+                ? 'medium' 
+                : 'high'
+
+    let geo, zRelief
+    // Dynamique -> cas par défaut 
+    $: { if ($resType == "dynamic") { 
+        switch ($zCat) {
+            case 'low':
+                geo = geo110m
+                zRelief = r110m
+                $res = '110m'
+                break
+            case 'medium':
+                geo = geo50m ? geo50m : geo110m // affiche 110m en attendant async 50m
+                zRelief = r50m
+                $res = '50m'
+                break
+            case 'high': 
+                geo = geo10m ? geo10m : geo110m
+                zRelief = r10m
+                $res = '10m'
+                break
+        }
+      }
+      // Constant -> choix utilisateur
+      else {
+          switch ($res) {
+              case '110m': 
+                geo = geo110m
+                zRelief = r110m
+                break
+              case '50m': 
+                geo = geo50m ? geo50m : geo110m 
+                zRelief = r50m
+                break
+              case '10m': 
+                geo = geo10m ? geo10m : geo110m
+                zRelief = r10m
+                break
+          }
+      }
+    }
+
+    /* --------------------------------- */
+    /* TOOLTIP DES PAYS
+    /* Pour que l'highlight du polygone ne soit pas masquer par le relief
+    /* le pays survoler est copier et ajouter par dessus toutes les couches
+    /* à la sortie du survol, le path copié est supprimé
+    /* --------------------------------- */
+    function tooltipON(e) {
+        select("#gBasemap").append(
+            () => e.target.cloneNode(false))
+            .classed('hover', true)
+            .style("pointer-events", "none")
+    }
+    function tooltipOFF() {
+        select('.countries.hover').remove()
+    }
+
+    // NON UTILISÉ
+    // URBAN (zones urbaines denses, polygones), d'après le Global Human Settlement
     // Filtre la couche urban selon un seuil d'habitants 
     // défini par des boutons dans Layers.svelte
     // Le résultat est remis dans une 'FeatureCollection' = 1 seul path
@@ -231,62 +320,6 @@
     //             features: urban.features.filter(d => d.properties.POP_2015 >= $urbanSize)
     //         }
     // }
-
-    // LAYERS with 3 resolutions
-    // 3 catégories de facteur de zoom
-    $: $zCat = $zTransform.k <= 4 
-                ? 'low' : $zTransform.k <= 17 
-                ? 'medium' 
-                : 'high'
-
-    let geo, zRelief
-    $: { if ($resType == "dynamic") { 
-        switch ($zCat) {
-            case 'low':
-                geo = geo110m
-                zRelief = r110m
-                $res = '110m'
-                break
-            case 'medium':
-                geo = geo50m ? geo50m : geo110m // affiche 110m en attendant async 50m
-                zRelief = r50m
-                $res = '50m'
-                break
-            case 'high': 
-                geo = geo10m ? geo10m : geo110m
-                zRelief = r10m
-                $res = '10m'
-                break
-        }
-      }
-      else {
-          switch ($res) {
-              case '110m': 
-                geo = geo110m
-                zRelief = r110m
-                break
-              case '50m': 
-                geo = geo50m ? geo50m : geo110m 
-                zRelief = r50m
-                break
-              case '10m': 
-                geo = geo10m ? geo10m : geo110m
-                zRelief = r10m
-                break
-          }
-      }
-    }
-
-    // Tooltip des pays par dessus toute les couches
-    function tooltipON(e) {
-        select("#gBasemap").append(
-            () => e.target.cloneNode(false))
-            .classed('hover', true)
-            .style("pointer-events", "none")
-    }
-    function tooltipOFF() {
-        select('.countries.hover').remove()
-    }
 </script>
 
 

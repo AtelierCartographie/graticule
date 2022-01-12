@@ -18,8 +18,12 @@
     
     export let canRender
 
-    $: isScaleBar = isLyr('scaleBar')
-    $: isMapTitle = isLyr('mapTitle')
+    let isScaleBar, isMapTitle
+    $: {
+        $lyr
+        isScaleBar = isLyr('scaleBar')
+        isMapTitle = isLyr('mapTitle')
+    }
 
     //Tips message
     let m1 = "Ajouter ou retirer des informations et en modifier la représentation graphique."

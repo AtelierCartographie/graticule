@@ -13,10 +13,13 @@
 
     export let width, height // dimensions du svg
 
-    // $: isUrban = isLyr('urban')
-    $: isCities = isLyr('cities')
-    $: isScaleBar = isLyr('scaleBar')
-    $: isRelief = isLyr('relief')
+    let isCities, isScaleBar, isRelief
+    $: {
+        $lyr
+        isCities = isLyr('cities')
+        isScaleBar = isLyr('scaleBar')
+        isRelief = isLyr('relief')
+    }
 
     // hauteur du cadrage de la carte = laisse de la place pour le titre et le crédit
     const mapMargin = (height * 0.05) / 2
