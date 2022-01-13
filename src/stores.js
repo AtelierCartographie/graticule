@@ -29,7 +29,7 @@ export const projSettings = writable( fromSS('projSettings', {}) ) // {lambda: 0
 // Layers
 export const mapTheme = writable( fromSS('mapTheme', 'colorMode') )  // colorMode ou outlineMode
 export const mapTitle = writable( fromSS('mapTitle', "Titre de la carte") )
-export const lyr = writable( fromSS('lyr', ['ocean', 'graticule', 'countries', 'borders']) )
+export const lyr = writable( fromSS('lyr', ['ocean', 'graticule', 'coastline', 'countries', 'borders']) )
 export const gratType = writable( fromSS('gratType', 'top') )  // top ou all
 export const gratStep = writable( fromSS('gratStep', 10) )
 export const reliefColor = writable( fromSS('reliefColor', true) )

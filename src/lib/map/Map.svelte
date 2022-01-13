@@ -343,37 +343,37 @@
         #mapCredit { font-size: 12px; font-family: "Open sans", sans-serif; text-anchor: end; fill: var(--dark-grey); }
 
         #mapSvg.colorMode { 
-            --ocean-fill: AliceBlue;
+            --ocean-fill: #F4FAFF;
             --ocean-fill-o: 1;
-            --ocean-stroke: #ccc;
-            --ocean-stroke-o: 1;
-            --ocean-stroke-w: 1;
+            --ocean-stroke: black;
+            --ocean-stroke-o: 0.3;
+            --ocean-stroke-w: 2;
             
-            --grat-stroke: #ccc;
-            --grat-stroke-o: 1;
-            --grat-stroke-w: 0.5;
+            --grat-stroke: black;
+            --grat-stroke-o: 0.3;
+            --grat-stroke-w: 0.3;
 
-            --coastline-stroke: #ccc;
+            --coastline-stroke: #7D9CB3;
             --coastline-stroke-o: 1;
-            --coastline-stroke-w: 0.5;
+            --coastline-stroke-w: 1.5;
 
-            --pays-fill: lightgrey;
+            --pays-fill: white;
             --pays-fill-o: 1;
 
-            --relief-fill: #FDE9D8;
+            --relief-fill: #FFE4DB;
             --relief-fill-o: .2;
 
-            --borders-stroke: white;
-            --borders-stroke-o: 1;
+            --borders-stroke: black;
+            --borders-stroke-o: 0.3;
             --borders-stroke-w: 0.5;
 
-            --hydro-stroke: CornflowerBlue;
+            --hydro-stroke: #A9C1D1;
             --hydro-stroke-o: 1;
             --hydro-stroke-w: 0.5;
 
             --cities-fill: black;
-            --cities-fill-o: 1;
-            --cities-stroke: black;
+            --cities-fill-o: 0.6;
+            --cities-stroke: white;
             --cities-stroke-o: 0;
             --cities-stroke-w: 15;
 
@@ -387,34 +387,34 @@
             --ocean-fill: white;
             --ocean-fill-o: 1;
             --ocean-stroke: black;
-            --ocean-stroke-o: 1;
-            --ocean-stroke-w: 1;
+            --ocean-stroke-o: 0.3;
+            --ocean-stroke-w: 2;
 
             --grat-stroke: black;
-            --grat-stroke-o: 1;
-            --grat-stroke-w: 0.5;
+            --grat-stroke-o: 0.3;
+            --grat-stroke-w: 0.3;
 
-            --coastline-stroke: black;
+            --coastline-stroke: #7D9CB3;
             --coastline-stroke-o: 1;
-            --coastline-stroke-w: 0.5;
+            --coastline-stroke-w: 1.5;
             
             --pays-fill: white;
             --pays-fill-o: 1;
 
-            --relief-fill: rgb(225,225,225);
-            --relief-fill-o: 1;
+            --relief-fill: #F2F2F2;
+            --relief-fill-o: 0.5;
 
             --borders-stroke: black;
             --borders-stroke-o: 1;
             --borders-stroke-w: 0.5;
 
-            --hydro-stroke: CornflowerBlue;
+            --hydro-stroke: #D9D9D9;
             --hydro-stroke-o: 1;
             --hydro-stroke-w: 0.5;
 
             --cities-fill: black;
-            --cities-fill-o: 1;
-            --cities-stroke: black;
+            --cities-fill-o: 0.6;
+            --cities-stroke: white;
             --cities-stroke-o: 0;
             --cities-stroke-w: 15;
 
