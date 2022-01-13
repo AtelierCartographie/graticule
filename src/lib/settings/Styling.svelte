@@ -19,7 +19,7 @@
     const toggle = () => isOpen = !isOpen
 
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
-    // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb2hex voir mon notebook utils observable)
+    // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb2hex voir mon notebook utils sur Observable)
     // Stock les styles courants de chaque couche
     let mapStyle = {}
     const getMapStyle = (lyr) => {

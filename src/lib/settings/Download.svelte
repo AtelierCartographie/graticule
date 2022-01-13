@@ -10,7 +10,6 @@
     let m2 = "PNG est un format matriciel qui ne peut être agrandi sans dégrader la résolution"
     let m3 = "Imprimer directement la carte ou la sauvegarder au format PDF"
 
-    //
     const today = new Date().toLocaleString("fr", {
         "day": "numeric",
         "month": "numeric",
@@ -101,12 +100,12 @@
 
     // param1: svg de la carte = appel de cleaningSVG()
     // param2: format de fichier (svg, png ou pdf)
-    // param3: optionnel = si le téléchargement doit être enclenché ou non
+    // param3: (optionnel) si le téléchargement doit être enclenché ou non
     function downloadMap(svg, type, dl) {
         const a = select(`#download_${type}`).node()
         let url // stocke l'url du blob
         
-        // reset blobURL, href et download attr
+        // reset blobURL, href et download attributes
         async function reset() {
             // https://developer.mozilla.org/fr/docs/Web/API/Window/requestAnimationFrame
             await new Promise(requestAnimationFrame);
@@ -199,9 +198,6 @@
         border-radius: 2em;
         padding: .3rem .7rem;
         background-color: var(--light-grey);
-        /* box-shadow: 0 4px 4px rgb(0 0 0 / 20%); */
-        /* color: var(--dark-grey); */
-        /* padding: .2rem; */
     }
     button:hover {
         border: 1px solid var(--accent-color);

@@ -1,7 +1,3 @@
-<script>
-
-</script>
-
 <footer>
     <div id="logo">
         <p>Graticule est un projet open source développé par</p>

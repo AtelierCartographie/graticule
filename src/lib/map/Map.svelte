@@ -34,7 +34,11 @@
     }
     $: mapCredit = getCredit(isCities, isRelief)
 
-    // --------------- PROJECTION -------------- //
+    /* --------------------------------- */
+    /* PROJECTION
+    /* Calcul du geoPath en fonction de la projection
+    /* Application d'un clip
+    /* --------------------------------- */
     // Clip à la volée au rectangle de cadrage initial
     // /!\ ne prend pas en compte le brush manuel de l'utilisateur
     const xInvert = (d) => (d - $zTransform.x) / $zTransform.k
@@ -51,9 +55,15 @@
     let outline = ({type: "Sphere"})
     $: path = geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline)
         .clipExtent(extent))
-    // ---------------------------------------- //
 
-    // ----------------- BRUSH ---------------- //
+
+    
+    /* --------------------------------- */
+    /* BRUSH
+    /* Utilise d3-brush pour générer et modifier un rectangle de cadrage
+    /* Désactive certains events => empêcher de refaire un nouveau brush, seulement modifier l'existant
+    /* UI => positionement des flèches svg pour l'utilisateur
+    /* --------------------------------- */
     let rx, ry, rw, rh // stocke dimensions du rectangle de cadrage
     function brushed( { selection: [[x0, y0], [x1, y1]] } ) {        
         // passer les coordonnées du brush courant
@@ -79,15 +89,24 @@
     $: xyCropRight = "translate(" + (rx + rw - 28) + "," + (ry + rh / 2) + ")"
     $: xyCropBottom = "translate(" + (rx + rw / 2) + "," + (ry + rh - 28) + ")"
     $: xyCropLeft = "translate(" + (rx + 5) + "," + (ry + rh / 2) + ")"
-    // ---------------------------------------- //
     
-    // --------------- SCALE BAR -------------- //
+
+
+    /* --------------------------------- */
+    /* SCALE BAR
+    /* Utilise d3-geo-scale-bar pour générer une échelle graphique
+    /* l'échelle est généré à l'activation de la couche
+    /* elle peut être déplacé en prenant en compte le positionnement dans la projection
+    /* la distance peut être changé par l'utilisateur
+    /* le facteur de zoom est compensé pour la longueur du trait et la taille du texte
+    /* --------------------------------- */
     let scaleInitDist = 2000 // distance de l'échelle en km
     let k = $zTransform.k == 1 ? 1 : $zTransform.k     // stock le facteur de zoom
     let zx = 0, zy = 0       // stock le translate du zoom
     let cx, cy               // centre du cadrage
     let zcx, zcy             // centre du cadrage dans la carte avec le zoom
     let left, top            // position de la légende
+    // Détermine la position dans la projection du centre du cadrage
     $: if (isScaleBar) {
         // centre du cadrage
         cx = rx + rw / 2
@@ -95,7 +114,7 @@
         // centre du cadrage dans la carte avec le zoom
         zcx = (cx - zx) / k
         zcy = (cy - zy) / k
-        // position de la légende
+        // position de l'échelle
         left = zcx / width
         top = zcy / mapHeight
 
@@ -114,7 +133,6 @@
         .zoomFactor(k)
 
     // Initialise l'échelle graphique quand le toggle est activé
-    // appliquer une seule fois !
     $: if (isScaleBar) {
         select("#gScaleBar")
             .attr("cursor", "move")
@@ -152,13 +170,22 @@
     const dragScaleBar = drag()
         .on("drag", e => dragged(e))
         .on("end", () => select("#gScaleBar").attr("cursor", "move")) // retour au curseur d'origine
-    // ---------------------------------------- //
 
-    // ----------------- ZOOM ----------------- //
+
+
+
+    /* --------------------------------- */
+    /* ZOOM (d3-zoom)
+    /* 3 types de zoom
+    /* A. zoom utilisateur, du node d'appel et du node où il s'applique
+    /* B. Zoom programmatique sur une région ou un pays
+    /* C. Zoom programmatique par des boutons (zoomIn, zoomOut, zoomReset)
+    /* Stockage du transform courant {x,y,k} pour être réutilisé dans des blocs réactifs
+    /* --------------------------------- */
+
     // Fix bug webkit: Wheel event is not fired on a SVG group element in Safari
     // https://stackoverflow.com/a/67925459
     select(document.body).on('wheel.body', e => {})
-
 
     let zmin = 0.5,
         zmax = 100,
@@ -166,25 +193,24 @@
         zApply = "#gZoom"
 
     // paramètres du pan and zoom
-    // let reload = false
     const d3zoom = zoom()
-            .scaleExtent([zmin, zmax]) // min, max du zoom
-            .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
-            .on("zoom", ({ transform }) => {
-                select(zApply).attr("transform", transform).attr("cursor", "grabbing")
-                
-                // utiliser par scaleBar
-                    $zTransform = transform
-                    k = transform.k
-                    zx = transform.x
-                    zy = transform.y
-            })
-            .on("end", () => select(zApply).attr("cursor", "grab"))
+        .scaleExtent([zmin, zmax]) // min, max du zoom
+        .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
+        .on("zoom", ({ transform }) => {
+            select(zApply).attr("transform", transform).attr("cursor", "grabbing")
+            
+            // utiliser par scaleBar
+            $zTransform = transform
+            k = transform.k
+            zx = transform.x
+            zy = transform.y
+        })
+        .on("end", () => select(zApply).attr("cursor", "grab"))
 
     const d3zoomReload = zoom()
-            .scaleExtent([zmin, zmax]) // min, max du zoom
-            .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
-            .on("zoom", ({ transform }) => select(zApply).attr("transform", transform))
+        .scaleExtent([zmin, zmax])
+        .translateExtent([[0, mapMargin], [width, mapHeight]])
+        .on("zoom", ({ transform }) => select(zApply).attr("transform", transform))
 
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
     function zoomRegion(b) {
@@ -209,7 +235,6 @@
         $proj
         zoomRegion($regbbox)
         zoomRegion($countrybbox)
-        // if ($regbbox == null) zoomReset() // = zoom monde si region null ou pays null
     }
 
     // Boutons de contrôle du zoom
@@ -224,7 +249,8 @@
             : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
     // Cas où l'utilisateur vide l'input de l'étape Cadrer
     $: if ($callZoomReset == true) {zoomReset(); $callZoomReset = false}
-    // ---------------------------------------- //
+
+
 
     // RELIEF -> taille de l'ombrage de l'effet Tanaka contours
     $: dropShadowOffset = (1 / k).toFixed(3)
@@ -264,7 +290,7 @@
 
         // ZOOM ----- applique le zoom sur "g#gCadrage" plutôt que l'ensemble du svg
         // => limite le zoom à l'intérieur du cadrage (via d3-brush)
-        // => évite les conflits d'event avec 
+        // => évite les conflits d'event avec le brush
         select(zCall)
             .attr("cursor", "grab")
             .call(d3zoom)

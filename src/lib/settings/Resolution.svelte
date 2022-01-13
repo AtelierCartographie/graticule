@@ -9,7 +9,9 @@
     //Tips message
     let m1 = "Le détail des tracés se précise automatiquement selon le niveau de zoom. À petite échelle, les tracés sont simplifiés, à grande échelle les tracés sont détaillés. Pour choisir un niveau de détail, activer la simplification manuelle ci-dessous."
 
-    const res_list = {
+    // Changement de résolution dynamique par défaut ($resType == 'dynamic')
+    // si $resType == 'constant', l'utilisateur choisi parmi les trois options
+    const resList = {
         "Très simplifié": "110m",
         "Simplifié": "50m",
         "Détaillé": "10m"
@@ -28,7 +30,7 @@
     {#if $resType.includes('constant')}
     <h3 transition:slide={{ duration: 300 }}>Détail des tracés</h3>
     <ul>
-        {#each Object.entries(res_list) as [name, value] }
+        {#each Object.entries(resList) as [name, value] }
             <li transition:slide={{ duration: 300 }}>
                 <label for={value}>{name}</label>
                 <input type="radio" bind:group={$res} id={value} {value} {name}>

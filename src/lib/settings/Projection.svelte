@@ -7,6 +7,10 @@
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
 
+    // Tips message
+    let m1 = "Choisir parmi la liste de projections et régler si besoin les paramètres."
+
+
     // Paramètres des projections : par défaut selon 'projList' puis dynamique via les input
     // Vérifier si valeurs dans le localStorage (LS) différente des valeurs par défaut
     const fromLS = (v) => {
@@ -29,21 +33,21 @@
 
     let onLoad = true, projOnLoad
     let lambda, phi, gamma, parallel, distance, tilt, clipAngle
-    // Au chargement = préférence sessionStorage sur paramètres par défaut
+    // Au chargement : préférence sessionStorage sur paramètres par défaut
     $: if (onLoad) {
         setProjSettings()
         onLoad = false
         projOnLoad = $projName
     }
 
-    // Au changement de projection = préférence paramètres par défaut
+    // Au changement de projection : préférence paramètres par défaut
     $: if (!onLoad && projOnLoad != $projName) {
         setProjSettings()
         projOnLoad = '' // reset
     }
 
     // Cas de la projection satellite
-    // Conversion de la distance en km vers distance depuis centre de la terre https://github.com/d3/d3-geo-projection#satellite_distance
+    // Conversion de la distance en km vers distance depuis centre de la terre, https://github.com/d3/d3-geo-projection#satellite_distance
     $: distanceD3 = (distance + 6371) / 6371
     // clipAngle dynamique selon la distance
     $: clipAngle = Math.acos( 1 / distanceD3 ) * 180 / Math.PI
@@ -59,11 +63,8 @@
         $proj = p
     }
 
-    // Projection non paramétrable
+    // Projection non paramétrable : input disabled
     const projInputDisabled = ['Bertin 1953', 'Fuller (Airocean']
-
-    // Tips message
-    let m1 = "Choisir parmi la liste de projections et régler si besoin les paramètres."
 </script>
 
 <section id="projection" class="settings-section" 

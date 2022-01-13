@@ -1,11 +1,11 @@
 <script>
-    import { onMount } from 'svelte'
     import { lyr, mapTheme, mapTitle, scaleDist, isModalOpen, modalContent } from '../../stores.js'
     import { slide } from "svelte/transition"
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
     import Styling from './Styling.svelte'
     import Toggle from './Toggle.svelte'
+    import Badge from './Badge.svelte'
     import GraticuleFilter from './GraticuleFilter.svelte'
     // import UrbanFilter from './UrbanFilter.svelte'
     import CitiesFilter from './CitiesFilter.svelte'
@@ -36,20 +36,15 @@
         // Pour chaque bouton radio sélectionné => rendre visible le layer
         layer.forEach(e => select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false))
         // Cas particuliers (titre et échelle)
-        layer.includes("scaleBar") 
+        isScaleBar
             ? select("#gScaleBar").style("visibility", "visible").classed("hidden", false)
             : select("#gScaleBar").style("visibility", "hidden").classed("hidden", true)
-        layer.includes("mapTitle")
+        isMapTitle
             ? select("#mapTitle").style("visibility", "visible").classed("hidden", false)
             : select("#mapTitle").style("visibility", "hidden").classed("hidden", true)
     }
 
     $: addLayer($lyr)
-    
-    onMount( () => {
-        // applique la couche par défaut au démarrage
-        addLayer($lyr)
-    })
 </script>
 
 {#if canRender}
@@ -65,18 +60,15 @@
 
     <h3>Thèmes graphiques</h3>
     <div id="themes">
-        <button on:click={() => mapTheme.set('colorMode')}
-                class:active="{ $mapTheme === 'colorMode' }"
-                type="button" 
-                class="badge">
-            Couleurs
-        </button>
-        <button on:click={() => mapTheme.set('outlineMode')}
-                class:active="{ $mapTheme === 'outlineMode' }"
-                type="button" 
-                class="badge">
-            Noir et blanc
-        </button>
+        <Badge onClick={() => $mapTheme = 'colorMode'}
+            classActive={$mapTheme === 'colorMode'}
+            text="Couleurs"
+            isTooltip={false} />
+
+        <Badge onClick={() => $mapTheme = 'outlineMode'}
+            classActive={$mapTheme === 'outlineMode'}
+            text="Noir et blanc"
+            isTooltip={false} />
     </div>
 
     <h3>Géographie physique</h3>
@@ -175,22 +167,6 @@
     #themes {
         display: flex;
         gap: .5rem;
-    }
-    .badge {
-        display: inline-block;
-        /* min-zwidth: 1em; */
-        padding: .3rem .7rem;
-        border-radius: 2em;
-        font-size: var(--text-small);
-        text-align: center;
-        background: var(--light-grey);
-        color: var(--dark-grey);
-        border: 1px solid var(--dark-grey);
-    }
-    .badge.active, .badge:hover {
-        background: var(--accent-color-light);
-        color: var(--accent-color);
-        border: 1px solid var(--accent-color);
     }
 
     p { margin-bottom: 0; }

@@ -8,8 +8,6 @@
     import helpScale from './helpScalBar.md?raw'
     import helpScreenSize from './helpScreenSize.md?raw'
 
-    
-    // Changer pour un switch si plus de page d'aide
     let markdown
     $: { switch ($modalContent) {
             case 'proj':
@@ -23,7 +21,6 @@
                 break
         }
     }
-    // $: markdown = $modalContent == 'proj' ? helpProj : helpScale
 
     $: html = marked.parse(markdown)
 </script>

@@ -1,7 +1,7 @@
 <script>
     import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage, callZoomReset } from '../../stores.js'
     import Tip from './Tip.svelte'
-    import regionsBbox from '../../assets/regionsBbox.js'         //cadrage régionaux  
+    import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -10,18 +10,18 @@
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
 
     let country = null // stocke la valeur de l'input pays
-    // conserve de l'input pays que les corespondance avec un id de pays
+    // Conserve de l'input pays que les correspondances avec un ID de pays
     $: $countrySelect = 
         countriesBbox.find( d => d.id == country) == undefined
         ? null
         : country
 
     // Récupère les bbox de la région ou du pays sélectionné
-    $: regbbox.set(regionsBbox.find( d => d.id === $regSelect).bbox)
+    $: $regbbox = regionsBbox.find( d => d.id === $regSelect).bbox
     $: $countrybbox = countriesBbox.find( d => d.id === $countrySelect).bbox
     
 
-    // Rends exclusif les deux select
+    // Rends exclusif les deux select (région OU pays)
     function resetSelect(el) {
         const a = document.getElementById(el)
         const b = el == "input_regSelect" ? "input_countrySelect" : "input_regSelect"
@@ -31,6 +31,7 @@
         }
     }
     
+    // Bouton à côté de l'input
     // Vide l'input sélectionné + cadrage carte = monde
     function clearSelect(el) {
         document.getElementById(el).value = null
@@ -55,7 +56,7 @@
     <h2><span class="material-icons">crop</span> Cadrer</h2>
     <Tip message={m1} />
 
-    <!-- <label for="input_regSelect" class="fontTitle">Régions du monde</label> -->
+
     <h3>Régions du monde</h3>
     <div>
         <select bind:value={$regSelect} on:change="{() => resetSelect("input_regSelect")}" name="regions" id="input_regSelect">
@@ -71,6 +72,7 @@
     
 
     <p><strong>ou</strong></p>
+
 
     <h3>Pays du monde</h3>
     <div>
@@ -102,8 +104,10 @@
         </button>    
     </div> -->
     
+
     <p><strong>ou</strong></p>
     
+
     <h3 id="freeFrame">Cadrage personnalisé <span class="material-icons">east</span></h3>
 </section>
 
