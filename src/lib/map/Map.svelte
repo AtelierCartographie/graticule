@@ -308,8 +308,8 @@
             <rect x={rx} y={ry} width={rw} height={rh} />
         </clipPath>
         <filter id="reliefShadow">
-            <feDropShadow dx="{-dropShadowOffset}" dy="{-dropShadowOffset}" stdDeviation="0" flood-color="white" flood-opacity=".8"/>
-            <feDropShadow dx="{dropShadowOffset}" dy="{dropShadowOffset}" stdDeviation="0" flood-color="black" flood-opacity=".8"/>
+            <feDropShadow dx="{-dropShadowOffset}" dy="{-dropShadowOffset}" stdDeviation="0.05" flood-color="white" flood-opacity=".8"/>
+            <feDropShadow dx="{dropShadowOffset}" dy="{dropShadowOffset}" stdDeviation="0.05" flood-color="black" flood-opacity=".8"/>
         </filter>
     </defs>
 
@@ -360,8 +360,8 @@
             --pays-fill: white;
             --pays-fill-o: 1;
 
-            --relief-fill: #FFE4DB;
-            --relief-fill-o: .2;
+            --relief-fill: #ffeee8;
+            --relief-fill-o: 0.7;
 
             --borders-stroke: black;
             --borders-stroke-o: 0.3;
@@ -394,7 +394,7 @@
             --grat-stroke-o: 0.3;
             --grat-stroke-w: 0.3;
 
-            --coastline-stroke: #7D9CB3;
+            --coastline-stroke: black;
             --coastline-stroke-o: 1;
             --coastline-stroke-w: 1.5;
             
@@ -402,10 +402,10 @@
             --pays-fill-o: 1;
 
             --relief-fill: #F2F2F2;
-            --relief-fill-o: 0.5;
+            --relief-fill-o: 0.7;
 
             --borders-stroke: black;
-            --borders-stroke-o: 1;
+            --borders-stroke-o: 0.7;
             --borders-stroke-w: 0.5;
 
             --hydro-stroke: #D9D9D9;
@@ -429,16 +429,16 @@
         #coastline { fill: none; stroke: var(--coastline-stroke); stroke-opacity: var(--coastline-stroke-o); stroke-width: var(--coastline-stroke-w); }
         #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: none; }
         #borders { fill: none; stroke: var(--borders-stroke); stroke-opacity: var(--borders-stroke-o); stroke-width: var(--borders-stroke-w); }
-        #hydro { fill: var(--hydro-stroke); stroke: var(--hydro-stroke); stroke-opacity: var(--hydro-stroke-o); stroke-width: var(--hydro-stroke-w); }
+        #hydro { fill: var(--hydro-stroke); stroke: var(--hydro-stroke); stroke-opacity: var(--hydro-stroke-o); stroke-width: var(--hydro-stroke-w); mix-blend-mode: multiply; }
         #relief { fill: var(--relief-fill); fill-opacity: var(--relief-fill-o); pointer-events: none; }
         #relief .levelRelief { filter: url(#reliefShadow); }
-        #relief.ShadeColor .levelRelief { mix-blend-mode: color-burn; }
+        #relief.ShadeColor .levelRelief { mix-blend-mode: multiply; }
         #rivers { fill: none; }
         #lakes { stroke: none; }
         #cities { fill: var(--cities-fill); fill-opacity: var(--cities-fill-o); stroke: var(--cities-stroke); stroke-opacity: var(--cities-stroke-o); stroke-width: var(--cities-stroke-w); }
         /* #urban { fill: var(--urban-fill); fill-opacity: var(--urban-fill-o); stroke: var(--urban-stroke); stroke-opacity: var(--urban-stroke-o); stroke-width: var(--urban-stroke-w); } */
 
-        .countries.hover { fill: var(--accent-color-light); mix-blend-mode: color; }
+        .countries.hover { fill: var(--accent-color-light); fill-opacity: 0.7; mix-blend-mode: multiply; }
     </style>
 </svg>
 

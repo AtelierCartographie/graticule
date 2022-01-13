@@ -341,7 +341,8 @@
             {#each graticule.features as d}
                 <path use:tooltip={{content: d.properties.name, followCursor: true, placement: 'right' }}
                         class="gratTop"
-                        d="{path(d)}"></path>
+                        d="{path(d)}"
+                        stroke-dasharray={d.properties.name == 'Équateur' ? 0 : 6 / $zTransform.k}></path>
             {/each}
         {:else}
         <path class="gratAll" d="{path(graticule)}"></path>
