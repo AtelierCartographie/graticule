@@ -117,16 +117,16 @@
         let r
         switch (rLevel) {
             case '0':
-                let { r110m } = await import('../../assets/relief.js')
+                const { r110m } = await import('../../assets/relief.js')
                 r = r110m
                 break;
         
             case '1':
-                let { r50m } = await import('../../assets/relief.js')
+                const { r50m } = await import('../../assets/relief.js')
                 r = r50m
                 break;
             case '2':
-                let { r10m } = await import('../../assets/relief.js')
+                const { r10m } = await import('../../assets/relief.js')
                 r = r10m
                 break;
         }

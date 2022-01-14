@@ -1,7 +1,20 @@
 {
-  "name": "cartofond",
+  "name": "graticule",
   "version": "0.0.0",
+  "description": "Basemaps generator",
   "type": "module",
+  "keywords": [
+    "basemap",
+    "map",
+    "cartography",
+    "geography"
+  ],
+  "author": "SciencesPo - Atelier de cartographie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AtelierCartographie/graticule/issues"
+  },
+  "homepage": "https://github.com/AtelierCartographie/graticule#readme",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
