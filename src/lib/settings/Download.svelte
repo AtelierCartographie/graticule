@@ -89,7 +89,8 @@
     function printSVG(url) {
         let win = window.open(url, '__blank')
         win.addEventListener('afterprint', event => event.target.close() )
-        win.print()
+        // add delay to fix bug in firefox
+        setTimeout( () => win.print(), 50)
     }
 
     // --------------- DOWNLOAD --------------- //
