@@ -324,17 +324,15 @@
 
 
 
-<mask id="oceanLand">
-    <path d="{path(outline)}" fill="white" />
-    <path d="{path(geo.land)}" fill="black" />
-</mask>
 <clipPath id="land">
     <path d={path(geo.land)} />
 </clipPath>
 
+<path id="outline" d="{path(outline)}" />
+
 <g id='gBasemap' style="clip-path: url(#clip)">
 
-    <path id="ocean" d="{path(outline)}" mask="url(#oceanLand)" style="visibility: hidden"/>
+    <path id="ocean" d="{path(geo.ocean)}" style="visibility: hidden"/>
     
     <g id='graticule'>
         {#if $gratType == 'top'}

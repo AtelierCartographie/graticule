@@ -1,5 +1,5 @@
 const layersList = [
-    {id: "ocean", name: "Mers et océans", type: "geo", style: ["fill", "stroke"] },
+    {id: "ocean", name: "Mers et océans", type: "geo", style: ["fill"] },
     {id: "graticule", name: "Méridiens/parallèles", type: "geo", style: ["stroke"] },
     {id: "coastline", name: "Côtes", type: "geo", style: ["stroke"] },
     {id: "countries", name: "Pays", type: "human", style: ["fill"] },

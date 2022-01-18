@@ -28,6 +28,7 @@
   "dependencies": {
     "@fontsource/fira-code": "^4.5.2",
     "@fontsource/open-sans": "^4.5.2",
+    "@turf/rewind": "^6.5.0",
     "d3-array": "^3.1.1",
     "d3-brush": "^3.0.0",
     "d3-contour": "^3.0.1",
@@ -41,6 +42,7 @@
     "d3-zoom": "^3.0.0",
     "geotiff": "^1.0.9",
     "marked": "^4.0.3",
+    "polygon-clipping": "^0.15.3",
     "tippy.js": "^6.3.7",
     "topojson-client": "^3.1.0"
   }

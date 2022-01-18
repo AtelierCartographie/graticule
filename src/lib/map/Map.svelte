@@ -424,7 +424,8 @@
             --urban-stroke-o: 1;
             --urban-stroke-w: none; */
         }
-        #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w); }
+        #outline { fill: none; stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w);}
+        #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: none; }
         #graticule { fill: none; stroke: var(--grat-stroke); stroke-opacity: var(--grat-stroke-o); stroke-width: var(--grat-stroke-w); }
         #coastline { fill: none; stroke: var(--coastline-stroke); stroke-opacity: var(--coastline-stroke-o); stroke-width: var(--coastline-stroke-w); }
         #countries { fill: var(--pays-fill); fill-opacity: var(--pays-fill-o); stroke: none; }
