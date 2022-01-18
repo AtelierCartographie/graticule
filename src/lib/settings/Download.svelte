@@ -67,16 +67,22 @@
         const image = new Image
         image.onerror = reject
         image.onload = () => {
+            // get current size of the canvas
             const rect = svg.viewBox.baseVal
             const canvas = document.createElement("canvas")
+            // increase the actual size of our canvas
             canvas.width = rect.width * dpi
             canvas.height = rect.height * dpi
+            // scale everything down using CSS
             canvas.style.width = rect.width + "px"
+            canvas.style.height = rect.height + "px"
             const context = canvas.getContext("2d")
+            // ensure all drawing operations are scaled
             context.scale(dpi, dpi)
             context.drawImage(image, 0, 0, rect.width, rect.height)
             canvas.toBlob(resolve)
             }
+        
         let svgUrl = serialize(svg)
         image.src = URL.createObjectURL(svgUrl)
         URL.revokeObjectURL(svgUrl)
