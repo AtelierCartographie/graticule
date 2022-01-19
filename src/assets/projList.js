@@ -27,7 +27,7 @@ const projList = [
     {name: "Plate Carrée", top: true, fn: geoEquirectangular(), lambda: 0, phi: 0, gamma: 0},
     {name: "Mollweide Hemispheres", top: false, fn: geoInterruptedMollweideHemispheres(), lambda: 20, phi: 0, gamma: 0},
     {name: "Lambert azimutale équivalente (LAEA)", top: false, fn: geoAzimuthalEqualArea(), lambda: 0, phi: -89, gamma: 0},
-    {name: "Fuller (Airocean)", top: false, fn: geoAirocean(), lambda: -83.65929, phi: 25.44458, gamma: -87.45184},
+//     {name: "Fuller (Airocean)", top: false, fn: geoAirocean(), lambda: -83.65929, phi: 25.44458, gamma: -87.45184},
 ]
 
 // trie les projections par nom
