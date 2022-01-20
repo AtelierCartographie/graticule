@@ -48,7 +48,7 @@
         $zTransform // recalcule l'extent à chaque changement de zoom (translate + scale)
         $proj // idem pour la projection et ses paramètres
         // [[x0,y0], [x1,y1]], coordonnées projetées planes de la carte (en pixels)
-        extent = [[xInvert(0),yInvert(mapMargin)], [xInvert(width),yInvert(mapHeight)]]
+        extent = [[xInvert(0-10),yInvert(mapMargin-10)], [xInvert(width+10),yInvert(mapHeight+10)]]
     }
 
     // PATH : centrage carte + clip au cadrage
@@ -303,7 +303,7 @@
     width="100%" height="100%" viewBox="0 0 {width} {height}" 
     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
-        <clipPath id="clip"><path d="{path(outline)}" /></clipPath>
+        <clipPath id="clip-outline"><path d="{path(outline)}" /></clipPath>
         <clipPath id="clip-cadrage">
             <rect x={rx} y={ry} width={rw} height={rh} />
         </clipPath>

@@ -31,7 +31,7 @@
     function addLayer(layer) {
         const base = select("#gBasemap")
         // Couches hidden par défault
-        base.selectChildren().style("visibility", "hidden").classed("hidden", true)
+        base.selectChildren().filter(':not(#outline)').style("visibility", "hidden").classed("hidden", true)
 
         // Pour chaque bouton radio sélectionné => rendre visible le layer
         layer.forEach(e => select(`#gBasemap #${e}`).style("visibility", "visible").classed("hidden", false))

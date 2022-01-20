@@ -324,15 +324,17 @@
 
 
 
-<clipPath id="land">
+<clipPath id="clip-land">
     <path d={path(geo.land)} />
 </clipPath>
 
-<path id="outline" d="{path(outline)}" />
 
-<g id='gBasemap' style="clip-path: url(#clip)">
+
+<g id='gBasemap' style="clip-path: url(#clip-outline)">
 
     <path id="ocean" d="{path(geo.ocean)}" style="visibility: hidden"/>
+
+    <path id="outline" d="{path(outline)}" style="visibility: visible !important"/>
     
     <g id='graticule'>
         {#if $gratType == 'top'}
@@ -360,7 +362,7 @@
     </g>
 
 
-    <g id="relief" clip-path="url(#land)" class:ShadeColor={$reliefColor}>
+    <g id="relief" clip-path="url(#clip-land)" class:ShadeColor={$reliefColor}>
         {#if isRelief && zRelief}
         {#each zRelief as d}
         <path class="levelRelief" d="{path(d)}" />
