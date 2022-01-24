@@ -2,7 +2,7 @@
     import { select } from 'd3-selection'
     import { slide } from 'svelte/transition'
     import { rgb2hex } from '../../assets/rgb2hex.js'
-    import { zTransform, mapTheme, lyr } from '../../stores.js'
+    import { zTransform, mapTheme, lyr, lyrCSS } from '../../stores.js'
     import { isLyr } from '../../assets/isLyr.js'
 
     // Stratégie d'accordéon en svelte
@@ -10,7 +10,7 @@
     // https://svelte.dev/repl/0aff293b94e44574a83a8271ba457136?version=3.29.4
     // https://svelte.dev/repl/74ff0da7cb074d4788b996e2d91258d3?version=3.23.0
 
-    export let layer, style, disabled
+    export let layer, styleType, disabled
 
     let isLayer
     $: { isLayer = isLyr(layer) ; $lyr }
@@ -20,19 +20,29 @@
 
     // !! test simplifié => https://svelte.dev/repl/7314dfbb07634362b2e7910ad409de9c?version=3.44.0
     // ATTENTION aux unités => width en 'px' (= parseFloat) et color en hexadecimal (= rgb2hex voir mon notebook utils sur Observable)
+
     // Stock les styles courants de chaque couche
-    let mapStyle = {}
+    let mapStyle = $lyrCSS[layer] || {}
+
+    // Stocke les styles de la couche de l'instance du component dans l'objet $lyrCSS
+    // { ocean: mapStyle, countries: mapStyle, ...}
+    $: $lyrCSS[layer] = mapStyle
+
+    // 1. Load avec style storage
+
     const getMapStyle = (lyr) => {
-        let fillColor     = rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )
-        const fillOpacity   = select(`#gBasemap #${lyr}`).style("fill-opacity")
-        const strokeColor   = rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )
-        const strokeOpacity = select(`#gBasemap #${layer}`).style("stroke-opacity")
-        const strokeWidth   = parseFloat( select(`#gBasemap #${layer}`).style("stroke-width") )
+        let fillColor       = !mapStyle.fillColor      ? rgb2hex( select(`#gBasemap #${lyr}`).style("fill") )              : mapStyle.fillColor
+        const fillOpacity   = !mapStyle.fillOpacity    ? select(`#gBasemap #${lyr}`).style("fill-opacity")                 : mapStyle.fillOpacity
+        const strokeColor   = !mapStyle.strokeColor    ? rgb2hex( select(`#gBasemap #${layer}`).style("stroke") )          : mapStyle.strokeColor
+        const strokeOpacity = !mapStyle.strokeOpacity  ? select(`#gBasemap #${layer}`).style("stroke-opacity")             : mapStyle.strokeOpacity
+        const strokeWidth   = !mapStyle.strokeWidth    ? parseFloat( select(`#gBasemap #${layer}`).style("stroke-width") ) : mapStyle.strokeWidth
         return mapStyle = {fillColor, fillOpacity, strokeColor, strokeOpacity, strokeWidth}
     }
 
+    let currentTheme = $mapTheme
+
     // À chaque changement de thème
-    $: { $mapTheme
+    $: if(currentTheme != $mapTheme) {
         // Reset des styles inlines
         select(`#gBasemap #${layer}`)
             .style("fill", null)
@@ -40,10 +50,17 @@
             .style("stroke", null)
             .style("stroke-opacity", null)
             .style("stroke-width", null)
+
+        // reset variable
+        mapStyle = {} 
+
         // Styles par variables CSS deviennent prioritaires
         // Stock styles du nouveau thème  ('computed styles' = variables CSS)
         getMapStyle(layer)
+        currentTheme = $mapTheme // update current theme
     }
+
+    $: getMapStyle(layer)
 
     // Applique sur chaque couche les changements de style provenant d'inputs
     $: {
@@ -54,6 +71,7 @@
             .style("stroke-opacity", mapStyle.strokeOpacity)
             .style("stroke-width", `${mapStyle.strokeWidth / $zTransform.k}px`) // compense le facteur de zoom
     }
+
 </script>
 
 <button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
@@ -64,7 +82,7 @@
 
 {#if isOpen && isLayer}
 <section class="panel" transition:slide={{ duration: 300 }}>
-    {#if style.includes("fill")}
+    {#if styleType.includes("fill")}
         <h3 class='fill'>Fond</h3>
         <ul>
             <li>
@@ -79,7 +97,7 @@
         </ul>
     {/if}
 
-    {#if style.includes("stroke")}
+    {#if styleType.includes("stroke")}
         <h3 class='stroke'>Contour</h3>
         <ul>
             <li>

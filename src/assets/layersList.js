@@ -1,12 +1,12 @@
 const layersList = [
-    {id: "ocean", name: "Mers et océans", type: "geo", style: ["fill"] },
-    {id: "graticule", name: "Méridiens/parallèles", type: "geo", style: ["stroke"] },
-    {id: "coastline", name: "Côtes", type: "geo", style: ["stroke"] },
-    {id: "countries", name: "Pays", type: "human", style: ["fill"] },
-    {id: "relief", name: "Relief", type: "geo", style: ["fill"] },
-    {id: "borders", name: "Frontières", type: "human", style: ["stroke"] },
-    {id: "hydro", name: "Lacs et rivières", type: "geo", style: ["stroke"] },
-    {id: "cities", name: "Villes", type: "human", style: ["fill"] }
-    // {id: "urban", name: "Zones urbaines", type: "human", style: ["fill", "stroke"] }
+    {id: "ocean", name: "Mers et océans", type: "geo", styleType: ["fill"] },
+    {id: "graticule", name: "Méridiens/parallèles", type: "geo", styleType: ["stroke"] },
+    {id: "coastline", name: "Côtes", type: "geo", styleType: ["stroke"] },
+    {id: "countries", name: "Pays", type: "human", styleType: ["fill"] },
+    {id: "relief", name: "Relief", type: "geo", styleType: ["fill"] },
+    {id: "borders", name: "Frontières", type: "human", styleType: ["stroke"] },
+    {id: "hydro", name: "Lacs et rivières", type: "geo", styleType: ["stroke"] },
+    {id: "cities", name: "Villes", type: "human", styleType: ["fill"] }
+    // {id: "urban", name: "Zones urbaines", type: "human", styleType: ["fill", "stroke"] }
 ]
 export default layersList

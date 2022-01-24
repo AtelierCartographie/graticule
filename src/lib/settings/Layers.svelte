@@ -1,5 +1,5 @@
 <script>
-    import { lyr, mapTheme, mapTitle, scaleDist, isModalOpen, modalContent } from '../../stores.js'
+    import { lyr, lyrCSS, mapTheme, mapTitle, scaleDist, isModalOpen, modalContent } from '../../stores.js'
     import { slide } from "svelte/transition"
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
@@ -73,10 +73,10 @@
 
     <h3>Géographie physique</h3>
     <ul>
-        {#each layersList.filter(d => d.type == "geo") as {id, name, type, style} }
+        {#each layersList.filter(d => d.type == "geo") as {id, name, type, styleType} }
             <li>
                 <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
-                <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
+                <Styling layer={id} {styleType} disabled={$lyr.includes(id) ? false : true}>
                     {#if id == 'relief'}
                     <ReliefFilter />
                     {:else if id == 'graticule'}
@@ -89,10 +89,10 @@
 
     <h3>Géographie humaine</h3>
     <ul>
-        {#each layersList.filter(d => d.type == "human") as {id, name, type, style} }
+        {#each layersList.filter(d => d.type == "human") as {id, name, type, styleType} }
             <li>
                 <Toggle label={name} {id} {name} value={id} bind:bindGroup={$lyr} />
-                <Styling layer={id} {style} disabled={$lyr.includes(id) ? false : true}>
+                <Styling layer={id} {styleType} disabled={$lyr.includes(id) ? false : true}>
                     {#if id == 'cities'}
                     <CitiesFilter />
                     {/if}

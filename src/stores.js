@@ -37,6 +37,7 @@ export const reliefShowLevels = writable( fromSS('reliefShowLevels', false) )
 export const reliefLevels = writable( fromSS('reliefLevels', "0,500,1000,2000,3000,4000") )
 export const urbanSize = writable( fromSS('urbanSize', 50000) )
 export const citiesType = writable( fromSS('citiesType', 'cap') )
+export const lyrCSS = writable( fromSS('lyrCSS', {}) )
 
 
 export const scaleDist = writable( fromSS('scaleDist', null) )
@@ -83,6 +84,7 @@ scaleBarLeft.subscribe(d => toSS("scaleBarLeft", d))
 scaleBarTop.subscribe(d => toSS("scaleBarTop", d))
 urbanSize.subscribe(d => toSS("urbanSize", d))
 citiesType.subscribe(d => toSS("citiesType", d))
+lyrCSS.subscribe(d => toSS("lyrCSS", d))
 // Resolution
 resType.subscribe(d => toSS("resType", d))
 res.subscribe(d => toSS("res", d))
