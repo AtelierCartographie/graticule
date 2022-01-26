@@ -13,7 +13,11 @@
   import Modal from './lib/Modal.svelte'  
   import Help from './lib/help/Help.svelte'
   import Snackbar from './lib/Snackbar.svelte'
-  import { isModalOpen, modalContent } from "./stores";
+  import { isModalOpen, modalContent } from "./stores"
+  import { mapTheme, projName, countrySelect, reliefColor, mapTitle, citiesType, rectBrush, 
+          res, gratStep, lyr, reliefLevels, regSelect, resType, urbanSize, projSettings,
+          scaleBarLeft, scaleDist, scaleBarTop, gratType, zTransform, lyrCSS, reliefShowLevels } from './stores'
+  import { cleanURL, addToURL } from './assets/cleanURL.js'
 
   let canRender = false
   let width, height, clientWidth
@@ -23,6 +27,57 @@
   $: small 
       ? ($modalContent = 'size', $isModalOpen = true)
       : $isModalOpen = false
+
+  /* --------------------------------- */
+  /* PARTAGE D'URL
+  /* sessionStorage -> URL.searchParams
+  /* --------------------------------- */
+  // À chaque changement de stores.js,
+  // génère un objet "s" rassemblant tous les données stockées
+  let s = {}
+  let clean = {}
+  $: {
+    // $rectBrush
+
+    // MAP
+    s.zTransform = $zTransform
+    // FRAME
+    s.countrySelect = $countrySelect
+    s.regSelect = $regSelect
+    // PROJ
+    s.projName = $projName
+    s.projSettings = $projSettings
+    // LAYERS
+    s.mapTheme = $mapTheme
+    s.mapTitle = $mapTitle
+    s.lyr = $lyr
+    s.gratType = $gratType
+    s.gratStep = $gratStep
+    s.reliefColor = $reliefColor
+    s.reliefShowLevels = $reliefShowLevels
+    s.reliefLevels = $reliefLevels
+    s.urbanSize = $urbanSize
+    s.citiesType = $citiesType
+    s.lyrCSS = $lyrCSS
+    s.scaleDist = $scaleDist
+    s.scaleBarLeft = $scaleBarLeft
+    s.scaleBarTop = $scaleBarTop
+    // RESOLUTION
+    s.resType = $resType
+    s.res = $res
+    
+    clean = cleanURL(s)
+    // addToURL(clean)
+
+    // // Encoder en base64
+    // const storageEncoded = btoa(JSON.stringify(clean))
+    // // Ajouter à l'url
+    // const params = (new URL(document.location)).searchParams
+    //   params.set("p", storageEncoded)
+    //   history.replaceState(history.state,'',`?${params.toString()}`)
+
+  }
+  $: console.log(clean)
 
   onMount( () => {
     canRender = true
