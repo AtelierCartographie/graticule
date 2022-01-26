@@ -23,7 +23,7 @@ export const countrybbox = writable()
 export const zResetMessage = writable()
 export const callZoomReset = writable(false)
 // Projection
-export const projName = writable( fromSS('projName', 'Equal Earth') )
+export const projID = writable( fromSS('projID', 'equalEarth') )
 export const proj = writable()
 export const projSettings = writable( fromSS('projSettings', {}) ) // {lambda: 0, phi: 0, gamma: 0,...}
 // Layers
@@ -68,7 +68,7 @@ zTransform.subscribe(d => toSS("zTransform", d))
 regSelect.subscribe(d => toSS("regSelect", d))
 countrySelect.subscribe(d => toSS("countrySelect", d))
 // Projection
-projName.subscribe(d => toSS("projName", d))
+projID.subscribe(d => toSS("projID", d))
 projSettings.subscribe(d => toSS("projSettings", d))
 // Layers
 lyr.subscribe(d => toSS("lyr", d))

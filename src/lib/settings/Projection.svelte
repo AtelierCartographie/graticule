@@ -1,8 +1,8 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projName, proj, projSettings, isModalOpen, modalContent } from '../../stores.js'
+    import { projID, proj, projSettings, isModalOpen, modalContent } from '../../stores.js'
     import Tip from './Tip.svelte'
-    import projList from '../../assets/projList.js'
+    import { projParams, projListSort } from '../../assets/projList.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
     import tooltip from '../../assets/tooltip.js'
@@ -12,10 +12,10 @@
 
 
     // Paramètres des projections : par défaut selon 'projList' puis dynamique via les input
-    // Vérifier si valeurs dans le localStorage (LS) différente des valeurs par défaut
-    const fromLS = (v) => {
+    // Vérifier si valeurs dans la sessionStorage (SS) différente des valeurs par défaut
+    const fromSS = (v) => {
         const storage = $projSettings[v]
-        const projDefault = projList.find( d => d.name === $projName)[v]
+        const projDefault = projParams.find( d => d.id === $projID)[v]
 
         if (projDefault == undefined) return undefined
         if (storage == undefined) return projDefault
@@ -23,12 +23,12 @@
     }
 
     const setProjSettings = () => {
-        lambda = fromLS('lambda')
-        phi = fromLS('phi')
-        gamma = fromLS('gamma')
-        parallel = fromLS('parallel')
-        distance = fromLS('distance')
-        tilt = fromLS('tilt')
+        lambda = fromSS('lambda')
+        phi = fromSS('phi')
+        gamma = fromSS('gamma')
+        parallel = fromSS('parallel')
+        distance = fromSS('distance')
+        tilt = fromSS('tilt')
     }
 
     let onLoad = true, projOnLoad
@@ -37,11 +37,11 @@
     $: if (onLoad) {
         setProjSettings()
         onLoad = false
-        projOnLoad = $projName
+        projOnLoad = $projID
     }
 
     // Au changement de projection : préférence paramètres par défaut
-    $: if (!onLoad && projOnLoad != $projName) {
+    $: if (!onLoad && projOnLoad != $projID) {
         setProjSettings()
         projOnLoad = '' // reset
     }
@@ -57,7 +57,7 @@
     
     // Ajouts des paramètres à la projection d3
     $: {
-        let p = projList.find( d => d.name === $projName).fn.rotate([lambda, phi, gamma])
+        let p = projParams.find( d => d.id === $projID).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distanceD3]).tilt([tilt]).clipAngle([clipAngle])
         $proj = p
@@ -65,6 +65,28 @@
 
     // Projection non paramétrable : input disabled
     const projInputDisabled = ['Bertin 1953', 'Fuller (Airocean']
+
+    // Système de notation des projections
+    $: currentProjData = projListSort.filter(d => d.id == $projID)[0]
+    
+    const dot0 = `<span class="material-icons" id="score" style="font-size: var(--text-medium); color: var(--accent-color);">radio_button_unchecked</span>`
+    const dot1 = `<span class="material-icons" id="score" style="font-size: var(--text-medium); color: var(--accent-color);">radio_button_checked</span>`
+    const addScore = (score) => {
+        switch (score) {
+            case 0:
+                return dot0 + dot0 + dot0
+                break;
+            case 1:
+                return dot1 + dot0 + dot0
+                break;
+            case 2:
+                return dot1 + dot1 + dot0
+                break;
+            case 3:
+                return dot1 + dot1 + dot1
+                break;
+        }
+    }
 </script>
 
 <section id="projection" class="settings-section" 
@@ -85,37 +107,51 @@
 
     
 
-    <select bind:value={$projName} name="projection" id="input_projSelect">
+    <select bind:value={$projID} name="projection" id="input_projSelect">
         <optgroup label="Incontournables">
-            {#each projList.filter(d => d.top == true) as d}
-                <option value={d.name}>{d.name}</option>
+            {#each projListSort.filter(d => d.top == true) as d}
+                <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
         <optgroup label="Autres">
-            {#each projList.filter(d => d.top == false) as d}
-                <option value={d.name}>{d.name}</option>
+            {#each projListSort.filter(d => d.top == false) as d}
+                <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
     </select>
     
+    <p><b>Catégorie</b> <br>
+        {currentProjData.type}</p>
+    <p><b>Caractéristiques</b></p>
+    <ul id="scores">
+        <li><p>Surface</p>
+            <p>{@html addScore(currentProjData.area)}</p>
+        </li>
+        <li><p>Distance</p>
+            <p>{@html addScore(currentProjData.distance)}</p>
+        </li>
+        <li><p>Angle</p>
+            <p>{@html addScore(currentProjData.angle)}</p>
+        </li>
+    </ul>
 
 
     <h3>Paramètres</h3>
-    <ul>
+    <ul id="projParams">
         <li>
             <label for="lon">Longitude</label>
-            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projName)}>
-            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projName)}>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projID)}>
+            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projID)}>
         </li>
         <li>
             <label for="lat">Latitude</label>
-            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projName)}>
-            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projName)}>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projID)}>
+            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projID)}>
         </li>
         <li>
             <label for="rot">Rotation</label>
-            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projName)}>
-            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projName)}>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projID)}>
+            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projID)}>
         </li>
 
         {#if parallel || parallel == 0}
@@ -144,6 +180,18 @@
 
 
 <style>
+    p {
+        font-size: var(--text-small);
+        margin-bottom: 0;
+    }
+    li p { margin: 0; }
+    #scores {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 1fr;
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+    }
     label.fontTitle {
         font-size: var(--text-medium);
         font-weight: bold;
@@ -155,7 +203,7 @@
         padding: 0;
         margin: 0;
     }
-    li {
+    ul#projParams li {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-around;
