@@ -119,22 +119,6 @@
             {/each}
         </optgroup>
     </select>
-    
-    <p><b>Catégorie</b> <br>
-        {currentProjData.type}</p>
-    <p><b>Caractéristiques</b></p>
-    <ul id="scores">
-        <li><p>Surface</p>
-            <p>{@html addScore(currentProjData.area)}</p>
-        </li>
-        <li><p>Distance</p>
-            <p>{@html addScore(currentProjData.distance)}</p>
-        </li>
-        <li><p>Angle</p>
-            <p>{@html addScore(currentProjData.angle)}</p>
-        </li>
-    </ul>
-
 
     <h3>Paramètres</h3>
     <ul id="projParams">
@@ -175,16 +159,34 @@
         </li>
         {/if}
     </ul>
+
+    <h3>Catégorie</h3>
+    <p>{currentProjData.type}</p>
+
+    <h3>Caractéristiques</h3>
+    <ul id="scores">
+        <li><p>Surface</p>
+            <p>{@html addScore(currentProjData.area)}</p>
+        </li>
+        <li><p>Distance</p>
+            <p>{@html addScore(currentProjData.distance)}</p>
+        </li>
+        <li><p>Angle</p>
+            <p>{@html addScore(currentProjData.angle)}</p>
+        </li>
+    </ul>
+
+    <h3>Description</h3>
+    <p><i>Présentation à venir</i></p>
 </section>
 
 
 
 <style>
     p {
-        font-size: var(--text-small);
-        margin-bottom: 0;
+        font-size: var(--text-medium);
+        margin: 0;
     }
-    li p { margin: 0; }
     #scores {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
