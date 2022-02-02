@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -53,9 +53,10 @@
 
     // PATH : centrage carte + clip au cadrage
     let outline = ({type: "Sphere"})
-    $: path = geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline)
-        .clipExtent(extent))
-
+    $: path = $downloadStep
+        ? geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline).clipExtent(extent))
+        : geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline).clipExtent(null))
+    // $: $downloadStep ? $proj.clipExtent(extent) : $proj.clipExtent(null)
 
     
     /* --------------------------------- */
@@ -197,6 +198,7 @@
         .scaleExtent([zmin, zmax]) // min, max du zoom
         .translateExtent([[0, mapMargin], [width, mapHeight]]) // bornes extérieures du translate
         .on("zoom", ({ transform }) => {
+            $isZooming = true
             select(zApply).attr("transform", transform).attr("cursor", "grabbing")
             
             // utiliser par scaleBar
@@ -205,7 +207,10 @@
             zx = transform.x
             zy = transform.y
         })
-        .on("end", () => select(zApply).attr("cursor", "grab"))
+        .on("end", () => {
+            $isZooming = false
+            select(zApply).attr("cursor", "grab")
+        })
 
     const d3zoomReload = zoom()
         .scaleExtent([zmin, zmax])
@@ -336,7 +341,7 @@
     <style>
         #cadrage { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-dasharray: 0 6; stroke-linecap: round; transition-property: stroke, stroke-width, stroke-dasharray; transition-duration: .5s; }
         #cadrage.inView { stroke-width: 3; stroke-dasharray: none; }
-        .crop { fill: var(--accent-color); opacity: 0; transition: opacity .5s; }
+        .crop { fill: var(--accent-color); opacity: 0; transition: opacity .5s; pointer-events: none; }
         #cadrage.inView ~ .crop { opacity: 1; }
         #mapSvg { background-color: white; }
         #mapTitle { font-size: 16px; font-weight: bold; font-family: "Fira Code", monospace; fill: var(--dark-grey); visibility: hidden; }
@@ -424,7 +429,7 @@
             --urban-stroke-o: 1;
             --urban-stroke-w: none; */
         }
-        #outline { fill: none; stroke: var(--ocean-stroke); stroke-opacity: var(--ocean-stroke-o); stroke-width: var(--ocean-stroke-w);}
+        #outline { fill: none; stroke: black; stroke-opacity: 0.3; }
         #ocean { fill: var(--ocean-fill); fill-opacity: var(--ocean-fill-o); stroke: none; }
         #graticule { fill: none; stroke: var(--grat-stroke); stroke-opacity: var(--grat-stroke-o); stroke-width: var(--grat-stroke-w); }
         #coastline { fill: none; stroke: var(--coastline-stroke); stroke-opacity: var(--coastline-stroke-o); stroke-width: var(--coastline-stroke-w); }

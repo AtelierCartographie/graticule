@@ -7,7 +7,7 @@
     import { geo110m } from '../../assets/geo110m.js'
     import tooltip from '../../assets/tooltip.js'
     import { isLyr } from '../../assets/isLyr.js'
-    import { zTransform, zCat, proj, gratType, gratStep, lyr, urbanSize,
+    import { zTransform, zCat, isZooming, proj, gratType, gratStep, lyr, urbanSize,
              citiesType, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
 
     import { contours } from 'd3-contour'
@@ -232,7 +232,7 @@
 
     let geo, zRelief
     // Dynamique -> cas par défaut 
-    $: { if ($resType == "dynamic") { 
+    $: { if ($resType == "dynamic" && !$isZooming) { 
         switch ($zCat) {
             case 'low':
                 geo = geo110m
@@ -269,6 +269,9 @@
           }
       }
     }
+
+    // Pendant le zoom bascule sur la plus faible résolution pour un gain de performance
+    $: if ($isZooming) { geo = geo110m; zRelief = r110m }
 
     /* --------------------------------- */
     /* TOOLTIP DES PAYS
@@ -334,7 +337,7 @@
 
     <path id="ocean" d="{path(geo.ocean)}" style="visibility: hidden"/>
 
-    <path id="outline" d="{path(outline)}" style="visibility: visible !important"/>
+    <path id="outline" d="{path(outline)}" style="visibility: visible !important; stroke-width:{2 / $zTransform.k}px;"/>
     
     <g id='graticule'>
         {#if $gratType == 'top'}

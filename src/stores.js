@@ -13,6 +13,7 @@ export const mapReady = writable(false)
 export const rectBrush = writable( fromSS('rectBrush', {rx: null, ry: null, rw: null, rh: null}) )
 export const zTransform = writable( fromSS('zTransform', {k: 1, x: 0, y: 0}) )
 export const zCat = writable()
+export const isZooming = writable(false)
 
 // SETTINGS
 // Frame
@@ -47,6 +48,9 @@ export const scaleBarTop = writable( fromSS('scaleBarTop', null) )
 // Resolution
 export const resType = writable( fromSS('resType', ['dynamic']) )
 export const res = writable( fromSS('res', '110m') )
+
+// Download
+export const downloadStep = writable(false)
 
 // MODAL
 export const isModalOpen = writable(false)

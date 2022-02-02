@@ -1,5 +1,5 @@
 <script>
-    import { zCat, proj, lyr, mapReady } from '../../stores.js'
+    import { zCat, proj, lyr, mapReady, downloadStep } from '../../stores.js'
     import { select } from 'd3-selection'
     import Tip from './Tip.svelte'
     import inView from '../../assets/inView.js'
@@ -170,13 +170,14 @@
         $lyr
         downloadMap(cleaningSVG(), 'svg')
         downloadMap(cleaningSVG(), 'png')
-    }  
+    }
 </script>
 
 
 <section id="download" class="settings-section"
     use:inView 
-    on:enter={() => stepEnter("headerDownload")}
+    on:enter={() => { stepEnter("headerDownload"); $downloadStep = true }}
+ 	on:exit={() => $downloadStep = false}
 >
     <h2><span class="material-icons">download</span> Télécharger</h2>
 
