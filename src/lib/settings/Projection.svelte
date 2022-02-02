@@ -64,7 +64,7 @@
     }
 
     // Projection non paramétrable : input disabled
-    const projInputDisabled = ['Bertin 1953', 'Fuller (Airocean']
+    const projInputDisabled = ['bertin53', 'fuller']
 
     // Système de notation des projections
     $: currentProjData = projListSort.filter(d => d.id == $projID)[0]
