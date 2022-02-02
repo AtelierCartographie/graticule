@@ -162,12 +162,10 @@
     }
 
     // ----------------- FILE SIZE ----------------- //
-    // Mettre à jour le blob à chaque changement de couches actives
-    // pour afficher le bon poids de fichier dans les boutons de téléchargement
-    $: if ($mapReady) {
+    // À l'ouverture de l'étape Télécharger
+    // calculer le poids des fichiers exportables
+    $: if ($downloadStep) {
         $zCat
-        $proj
-        $lyr
         downloadMap(cleaningSVG(), 'svg')
         downloadMap(cleaningSVG(), 'png')
     }

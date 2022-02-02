@@ -200,7 +200,7 @@
 		return (distance > angleRad ) ? 'hidden' : 'visible'
     }
 
-    $: if (isCities && !citiesOnce) {
+    $: if (isCities && !citiesOnce && !$isZooming) {
         switch ($citiesType) {
             case 'cap':
                 citiesFilter = cities.filter(d => d.capital == 1)
@@ -271,7 +271,11 @@
     }
 
     // Pendant le zoom bascule sur la plus faible résolution pour un gain de performance
-    $: if ($isZooming) { geo = geo110m; zRelief = r110m }
+    $: if ($isZooming) { 
+        geo = geo110m
+        zRelief = r110m
+        citiesFilter = cities.filter(d => d.capital == 1)
+    }
 
     /* --------------------------------- */
     /* TOOLTIP DES PAYS

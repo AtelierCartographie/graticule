@@ -37,7 +37,8 @@
     /* --------------------------------- */
     /* PROJECTION
     /* Calcul du geoPath en fonction de la projection
-    /* Application d'un clip
+    /* Application d'un clip à l'étape télécharger
+    /* pour un véritable clip à l'export
     /* --------------------------------- */
     // Clip à la volée au rectangle de cadrage initial
     // /!\ ne prend pas en compte le brush manuel de l'utilisateur
@@ -54,11 +55,12 @@
     // PATH : centrage carte + clip au cadrage
     let outline = ({type: "Sphere"})
     $: path = $downloadStep
+        // Si étape Télécharger
         ? geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline).clipExtent(extent))
+        // le reste du temps
         : geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline).clipExtent(null))
-    // $: $downloadStep ? $proj.clipExtent(extent) : $proj.clipExtent(null)
 
-    
+
     /* --------------------------------- */
     /* BRUSH
     /* Utilise d3-brush pour générer et modifier un rectangle de cadrage
