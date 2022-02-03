@@ -1,7 +1,8 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projID, proj, projSettings, isModalOpen, modalContent } from '../../stores.js'
+    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot } from '../../stores.js'
     import Tip from './Tip.svelte'
+    import Badge from './Badge.svelte'
     import { projParams, projListSort } from '../../assets/projList.js'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
@@ -164,6 +165,7 @@
         {/if}
     </ul>
 
+
     <h3>Catégorie</h3>
     <p>{currentProjData.type}</p>
 
@@ -179,6 +181,12 @@
             <p>{@html addScore(currentProjData.angle)}</p>
         </li>
     </ul>
+
+    <Badge onClick={() => $showTissot = !$showTissot}
+        classActive={$showTissot}
+        tooltipParams={{placement: 'right'}}
+        title="L'application régulière de cercles de diamètre constant indique visuellement les déformations de surface et de forme de la projection"
+        text="Indicateur de Tissot" />
 
     <h3>Description</h3>
     <p><i>Présentation à venir</i></p>
@@ -215,6 +223,9 @@
         justify-content: space-around;
         align-items: center;
         gap: 1ch;
+    }
+    ul#scores {
+        margin-bottom: 0.5rem;
     }
     li label {
         /* Taille du label */

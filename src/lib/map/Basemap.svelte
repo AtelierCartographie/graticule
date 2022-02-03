@@ -2,13 +2,13 @@
     // import { feature } from 'topojson-client'
     import { select } from 'd3-selection'
     import { range } from 'd3-array'
-    import { geoGraticule, geoGraticule10, geoDistance } from 'd3-geo'
+    import { geoGraticule, geoGraticule10, geoDistance, geoCircle } from 'd3-geo'
     import { symbol, symbolCircle, symbolSquare } from 'd3-shape'
     import { geo110m } from '../../assets/geo110m.js'
     import tooltip from '../../assets/tooltip.js'
     import { isLyr } from '../../assets/isLyr.js'
     import { zTransform, zCat, isZooming, proj, gratType, gratStep, lyr, urbanSize,
-             citiesType, reliefLevels, reliefColor, resType, res, showSnackbar } from '../../stores.js'
+             citiesType, reliefLevels, reliefColor, resType, res, showSnackbar, showTissot } from '../../stores.js'
 
     import { contours } from 'd3-contour'
     import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
@@ -90,6 +90,25 @@
             : geoGraticule().step([$gratStep, $gratStep])()
     )
 
+
+    /* --------------------------------- */
+    /* INDICATEUR DE TISSOT
+    /* D'après Mike Bostock, https://observablehq.com/@d3/tissots-indicatrix
+    /* Génération de cercles de diamètre constant
+    /* Révèle les distorsions de surface et de forme
+    /* --------------------------------- */
+    const addTissot = () => {
+        const step = 20;
+        const circle = geoCircle().center(d => d).radius(step / 6).precision(10);
+        const coordinates = [];
+        for (let y = -80; y <= 80; y += step) {
+            for (let x = -180; x < 180; x += step) {
+            coordinates.push(circle([x, y]).coordinates);
+            }
+        }
+        return {type: "MultiPolygon", coordinates};
+    }
+    const tissot = addTissot()
     /* --------------------------------- */
     /* CHARGEMENT ASYNCHRONE DE COUCHE
     /* --------------------------------- */
@@ -402,6 +421,10 @@
         {/if}
     </g>
 
+    {#if $showTissot}
+    <path id="tissot" d="{path(tissot)}" style="visibility: visible !important"/>
+    {/if}
+
     <!-- <path id='urban' d="{path(urbanFilter)}" style="visibility: hidden"></path> -->
 </g>
 
@@ -409,4 +432,5 @@
 <style>
     .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }
     .countries:focus, .gratTop:hover, .city:hover { outline: none; }
+    #tissot { fill: var(--accent-color); fill-opacity: 0.3; stroke: none; }
 </style>
