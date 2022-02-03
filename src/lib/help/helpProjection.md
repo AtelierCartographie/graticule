@@ -1,15 +1,20 @@
 ## Les projections disponibles
 
-Paragraphe introductif avant de présenter chaque projection
+*Accompagnement en cours de création*
 
-### Equal Earth
-Crée par Bojan Šavrič, Bernhard Jenny et Tom Patterson en 2018.
-
-Exemple d'image
-
-Projection pseudo-cylindrique équivalente inspiré de la projection Robinson.
-Principales caractéristiques :
-- Les côtés incurvés de la projection suggèrent la forme sphérique de la Terre.
-- Les parallèles droites facilitent la comparaison de la distance qui sépare les lieux nord et sud de l'équateur.
-- Les méridiens sont espacés régulièrement le long de n'importe quelle latitude.
+| Projection | Catégorie | Surface (0-3) | Distance (0-3) | Angle   (0-3) | Type |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Bertin (1953) | Incontournables | 🟠🟠⚪ | 🟠⚪️⚪ | ⚪️⚪️⚪ | Autre |
+| Equal Earth | Incontournables | 🟠🟠🟠 | 🟠⚪️⚪ | 🟠⚪️⚪ | Pseudo-cylindrique |
+| Orthographique | Incontournables | 🟠⚪️⚪ | 🟠⚪️⚪ | 🟠⚪️⚪ | Azimutale |
+| Plate carrée | Incontournables | 🟠⚪️⚪ | 🟠🟠🟠 | 🟠⚪️⚪ | Cylindrique |
+| Azimutale équivalente (Lambert) | Autres | 🟠🟠🟠 | 🟠⚪️⚪ | ⚪️⚪️⚪ | Azimutale |
+| Armadillo | Autres | 🟠⚪️⚪ | ⚪️⚪️⚪ | 🟠⚪️⚪ | Autre |
+| Atlantis | Autres | 🟠🟠🟠 | 🟠⚪️⚪ | ⚪️⚪️⚪ | Pseudo-cylindrique |
+| Bonne | Autres | 🟠⚪️⚪ | 🟠⚪️⚪ | ⚪️⚪️⚪ | Pseudo-conique |
+| Mercator | Autres | ⚪️⚪️⚪ | ⚪️⚪️⚪ | 🟠🟠🟠 | Cylindrique |
+| Mollweide interrompue | Autres | 🟠🟠🟠 | 🟠⚪️⚪ | ⚪️⚪️⚪ | Pseudo-cylindrique |
+| Mollweide interrompue en 2 hémisphères | Autres | 🟠🟠🟠 | 🟠⚪️⚪ | ⚪️⚪️⚪ | Pseudo-cylindrique |
+| Natural Earth | Autres | 🟠🟠⚪ | 🟠🟠🟠 | 🟠⚪️⚪ | Pseudo-cylindrique |
+| Satellite | Autres | 🟠⚪️⚪ | 🟠⚪️⚪ | 🟠⚪️⚪ | Autre |
 

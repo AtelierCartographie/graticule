@@ -32,6 +32,7 @@ export const mapReady = writable(false)
 export const rectBrush = writable( fromSS('rectBrush', {rx: null, ry: null, rw: null, rh: null}) )
 export const zTransform = writable( fromSS('zTransform', {k: 1, x: 0, y: 0}) )
 export const zCat = writable()
+export const isZooming = writable(false)
 
 // SETTINGS
 // Frame
@@ -42,9 +43,10 @@ export const countrybbox = writable()
 export const zResetMessage = writable()
 export const callZoomReset = writable(false)
 // Projection
-export const projName = writable( fromSS('projName', 'Equal Earth') )
+export const projID = writable( fromSS('projID', 'equalEarth') )
 export const proj = writable()
 export const projSettings = writable( fromSS('projSettings', {}) ) // {lambda: 0, phi: 0, gamma: 0,...}
+export const showTissot = writable( fromSS('showTissot', false) )
 // Layers
 export const mapTheme = writable( fromSS('mapTheme', 'colorMode') )  // colorMode ou outlineMode
 export const mapTitle = writable( fromSS('mapTitle', "Titre de la carte") )
@@ -65,6 +67,9 @@ export const scaleBarTop = writable( fromSS('scaleBarTop', null) )
 // Resolution
 export const resType = writable( fromSS('resType', ['dynamic']) )
 export const res = writable( fromSS('res', '110m') )
+
+// Download
+export const downloadStep = writable(false)
 
 // MODAL
 export const isModalOpen = writable(false)
@@ -87,8 +92,9 @@ zTransform.subscribe(d => toSS("zTransform", d))
 regSelect.subscribe(d => toSS("regSelect", d))
 countrySelect.subscribe(d => toSS("countrySelect", d))
 // Projection
-projName.subscribe(d => toSS("projName", d))
+projID.subscribe(d => toSS("projID", d))
 projSettings.subscribe(d => toSS("projSettings", d))
+showTissot.subscribe(d => toSS("showTissot", d))
 // Layers
 lyr.subscribe(d => toSS("lyr", d))
 mapTheme.subscribe(d => toSS("mapTheme", d))

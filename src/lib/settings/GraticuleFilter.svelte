@@ -19,7 +19,7 @@
         <Badge onClick={() => $gratType = 'all'}
             classActive={$gratType === 'all'}
             title="Grille à espacement régulier"
-            text="Réguliés" />
+            text="Réguliers" />
 
         {#if $gratType == 'all'}
             <input use:tooltip={{ content: 'Espacement en degré', placement: 'top' }} 
