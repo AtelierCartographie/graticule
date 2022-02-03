@@ -14,7 +14,7 @@
   import Help from './lib/help/Help.svelte'
   import Snackbar from './lib/Snackbar.svelte'
   import { isModalOpen, modalContent } from "./stores"
-  import { mapTheme, projName, countrySelect, reliefColor, mapTitle, citiesType, rectBrush, 
+  import { mapTheme, projID, countrySelect, reliefColor, mapTitle, citiesType, rectBrush, 
           res, gratStep, lyr, reliefLevels, regSelect, resType, urbanSize, projSettings,
           scaleBarLeft, scaleDist, scaleBarTop, gratType, zTransform, lyrCSS, reliefShowLevels } from './stores'
   import { cleanURL, addToURL } from './assets/cleanURL.js'
@@ -45,7 +45,7 @@
     s.countrySelect = $countrySelect
     s.regSelect = $regSelect
     // PROJ
-    s.projName = $projName
+    s.projID = $projID
     s.projSettings = $projSettings
     // LAYERS
     s.mapTheme = $mapTheme

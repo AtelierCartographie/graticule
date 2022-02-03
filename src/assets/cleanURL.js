@@ -1,4 +1,4 @@
-import projList from './projList.js'
+import { projListSort } from './projList.js'
 import layersList from './layersList.js'
 import regionsBbox from './regionsBbox.js'
 import {countriesBbox} from './countriesBbox.js'
@@ -40,7 +40,7 @@ const dicoReg = Object.fromEntries( regionsBbox.map((d,i) => [d.id, i+1]) )
 // Pays
 const dicoCountry = Object.fromEntries( countriesBbox.map((d,i) => [d.id, i+1]) )
 // Projections, [projName, indice]
-const dicoProj = Object.fromEntries( projList.map((d,i) => [d.name, i+1]) )
+const dicoProj = Object.fromEntries( projListSort.map((d,i) => [d.name, i+1]) )
 // Layers, [layer id, indice]
 const dicoLyr = Object.fromEntries( layersList.map((d,i) => [d.id, i+1]) )
 // Map theme
