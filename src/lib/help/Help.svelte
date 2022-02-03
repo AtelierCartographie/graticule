@@ -8,7 +8,7 @@
     import helpScale from './helpScalBar.md?raw'
     import helpScreenSize from './helpScreenSize.md?raw'
     import helpAbout from './helpAbout.md?raw'
-    console.log(helpAbout)
+
     let markdown
     $: { switch ($modalContent) {
             case 'proj':
