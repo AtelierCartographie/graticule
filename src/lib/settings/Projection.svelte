@@ -64,7 +64,11 @@
     }
 
     // Projection non paramétrable : input disabled
-    const projInputDisabled = ['bertin53', 'fuller']
+    const projInputDisabled = {
+        lambda: ['bertin53', 'fuller', 'atlantis'],
+        phi: ['bertin53', 'fuller'],
+        gamma: ['bertin53', 'fuller', 'atlantis']
+    }
 
     // Système de notation des projections
     $: currentProjData = projListSort.filter(d => d.id == $projID)[0]
@@ -124,18 +128,18 @@
     <ul id="projParams">
         <li>
             <label for="lon">Longitude</label>
-            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projID)}>
-            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.includes($projID)}>
+            <input type="range" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.lambda.includes($projID)}>
+            <input type="number" bind:value={lambda} id="lon" min="-180" max="180" step="1" disabled={isNaN(lambda) || projInputDisabled.lambda.includes($projID)}>
         </li>
         <li>
             <label for="lat">Latitude</label>
-            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projID)}>
-            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.includes($projID)}>
+            <input type="range" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.phi.includes($projID)}>
+            <input type="number" bind:value={phi} id="lat" min="-90" max="90" step="1" disabled={isNaN(phi) || projInputDisabled.phi.includes($projID)}>
         </li>
         <li>
             <label for="rot">Rotation</label>
-            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projID)}>
-            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.includes($projID)}>
+            <input type="range" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.gamma.includes($projID)}>
+            <input type="number" bind:value={gamma} id="rot" min="-180" max="180" step="1" disabled={isNaN(gamma) || projInputDisabled.gamma.includes($projID)}>
         </li>
 
         {#if parallel || parallel == 0}
