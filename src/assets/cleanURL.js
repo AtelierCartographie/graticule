@@ -32,7 +32,7 @@ const recodeValues = (obj, newValues) => {
 
 // DICTIONNAIRE, dynamique quand c'est possible
 // Général
-const keyList = ["citiesType", "countrySelect", "gratStep", "gratType", "lyr", "lyrCSS", "mapTheme", "mapTitle", "projName", "projSettings", "regSelect", "reliefColor", "reliefLevels", "reliefShowLevels", "res", "resType", "scaleBarLeft", "scaleBarTop", "scaleDist", "urbanSize", "zTransform"]
+const keyList = ["citiesType", "countrySelect", "gratStep", "gratType", "lyr", "lyrCSS", "mapTheme", "mapTitle", "projID", "projSettings", "regSelect", "reliefColor", "reliefLevels", "reliefShowLevels", "res", "resType", "scaleBarLeft", "scaleBarTop", "scaleDist", "urbanSize", "zTransform"]
 // [key, indice]
 const dicoKey = Object.fromEntries( keyList.map((d,i) => [d, i+1]) )
 // Régions
@@ -65,12 +65,13 @@ export function cleanURL(obj) {
     // MAP
     if (isEqual(s.zTransform, {k:1,x:0,y:0})) s.zTransform = null
     // PROJ
-    s.projName == 'Equal Earth'
-        ? s.projName = null
-        : s.projName = dicoProj[s.projName]
-    s.projName == null && isEqual(s.projSettings, {"lambda":0,"phi":0,"gamma":0,"clipAngle":null})
+    s.projID == 'equalEarth'
+        ? s.projID = null
+        : s.projID = dicoProj[s.projID]
+    s.projID == null && isEqual(s.projSettings, {"lambda":0,"phi":0,"gamma":0,"clipAngle":null})
         ? s.projSettings = null
         : s.projSettings = JSON.stringify(s.projSettings)
+    if (!s.showTissot) s.showTissot = null
     // LAYERS
     s.mapTheme = dicoMapTheme[s.mapTheme]
     if (s.mapTitle == 'Titre de la carte') s.mapTitle = null
@@ -86,7 +87,7 @@ export function cleanURL(obj) {
 
     s.citiesType = dicoCitiesType[s.citiesType]
 
-    if (isEqual(s.lyrCSS, {"ocean":{},"graticule":{},"coastline":{},"relief":{},"hydro":{},"countries":{},"borders":{},"cities":{}})) s.lyrCSS = null
+    if (s.lyrCSS == {} || isEqual(s.lyrCSS, {"ocean":{},"graticule":{},"coastline":{},"relief":{},"hydro":{},"countries":{},"borders":{},"cities":{}})) s.lyrCSS = null
     if (s.lyrCSS != null) s.lyrCSS = JSON.stringify(s.lyrCSS)
     // RESOLUTION
     if (s.resType.includes('constant') == null) s.resType = null
@@ -110,5 +111,7 @@ export function addToURL(obj) {
             ? (params.delete(key), console.log('delete'))
             : params.set(key, value)
         })
-    history.replaceState(history.state,'',`?${params.toString()}`)
+    console.log(params.toString())
+    history.pushState({}, '', `?${params.toString()}`)
+    // history.replaceState(history.state,'',`?${params.toString()}`)
 }

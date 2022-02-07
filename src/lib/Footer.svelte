@@ -1,6 +1,5 @@
 <script>
     import { modalContent, isModalOpen } from '../stores.js'
-    $: console.log($isModalOpen)
 </script>
 
 <footer>

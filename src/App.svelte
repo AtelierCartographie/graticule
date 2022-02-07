@@ -15,7 +15,7 @@
   import Snackbar from './lib/Snackbar.svelte'
   import { isModalOpen, modalContent } from "./stores"
   import { mapTheme, projID, countrySelect, reliefColor, mapTitle, citiesType, rectBrush, 
-          res, gratStep, lyr, reliefLevels, regSelect, resType, urbanSize, projSettings,
+          res, gratStep, lyr, reliefLevels, regSelect, resType, urbanSize, projSettings, showTissot,
           scaleBarLeft, scaleDist, scaleBarTop, gratType, zTransform, lyrCSS, reliefShowLevels } from './stores'
   import { cleanURL, addToURL } from './assets/cleanURL.js'
 
@@ -36,7 +36,7 @@
   // génère un objet "s" rassemblant tous les données stockées
   let s = {}
   let clean = {}
-  $: {
+  $: if (canRender) {
     // $rectBrush
 
     // MAP
@@ -47,6 +47,7 @@
     // PROJ
     s.projID = $projID
     s.projSettings = $projSettings
+    s.showTissot = $showTissot
     // LAYERS
     s.mapTheme = $mapTheme
     s.mapTitle = $mapTitle
@@ -78,6 +79,8 @@
 
   }
   $: console.log(clean)
+  $: console.log($regSelect)
+
 
   onMount( () => {
     canRender = true
