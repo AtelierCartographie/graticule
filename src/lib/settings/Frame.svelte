@@ -1,6 +1,6 @@
 <script>
     import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage, callZoomReset } from '../../stores.js'
-    import Tip from './Tip.svelte'
+    import Tip from '../UI/Tip.svelte'
     import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
     import inView from '../../assets/inView.js'

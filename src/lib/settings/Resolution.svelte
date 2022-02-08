@@ -1,6 +1,6 @@
 <script>
-    import Tip from './Tip.svelte'
-    import Toggle from './Toggle.svelte'
+    import Tip from '../UI/Tip.svelte'
+    import Toggle from '../UI/Toggle.svelte'
     import { slide } from "svelte/transition"
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'

@@ -1,5 +1,5 @@
 <script>
-    import { showSnackbar } from '../stores.js'
+    import { showSnackbar } from '../../stores.js'
     import { slide } from "svelte/transition"
 
     $: if ($showSnackbar.state == 'loaded')  {

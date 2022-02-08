@@ -1,6 +1,6 @@
 <script>
     import { fade } from 'svelte/transition'
-    import { isModalOpen } from '../stores.js'
+    import { isModalOpen } from '../../stores.js'
 
     function closeModal() {
         $isModalOpen = !$isModalOpen

@@ -1,7 +1,7 @@
 <script>
     import { zCat, proj, lyr, mapReady, downloadStep } from '../../stores.js'
     import { select } from 'd3-selection'
-    import Tip from './Tip.svelte'
+    import Tip from '../UI/Tip.svelte'
     import inView from '../../assets/inView.js'
     import stepEnter from '../../assets/stepEnter.js'
 

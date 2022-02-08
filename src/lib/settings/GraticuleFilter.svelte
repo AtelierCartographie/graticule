@@ -3,7 +3,7 @@
     import { lyr, gratType, gratStep } from '../../stores.js'
     import tooltip from '../../assets/tooltip.js'
     import { isLyr } from '../../assets/isLyr.js'
-    import Badge from './Badge.svelte'
+    import Badge from '../UI/Badge.svelte'
 
     let isGrat
     $: { isGrat = isLyr('graticule') ; $lyr }

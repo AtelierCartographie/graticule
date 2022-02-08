@@ -10,9 +10,9 @@
   import Settings from './lib/settings/Settings.svelte'
   import Map from './lib/map/Map.svelte'
   import Footer from './lib/Footer.svelte'
-  import Modal from './lib/Modal.svelte'  
-  import Help from './lib/help/Help.svelte'
-  import Snackbar from './lib/Snackbar.svelte'
+  import Modal from './lib/UI/Modal.svelte'  
+  import Help from './lib/UI/Help.svelte'
+  import Snackbar from './lib/UI/Snackbar.svelte'
   import { isModalOpen, modalContent } from "./stores";
 
   let canRender = false

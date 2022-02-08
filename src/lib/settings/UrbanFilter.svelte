@@ -2,7 +2,7 @@
     import { slide } from "svelte/transition";
     import { lyr, urbanSize } from '../../stores.js'
     import { isLyr } from '../../assets/isLyr.js'
-    import Badge from './Badge.svelte'
+    import Badge from '../UI/Badge.svelte'
 
     let isUrban
     $: { isUrban = isLyr('urban') ; $lyr }
