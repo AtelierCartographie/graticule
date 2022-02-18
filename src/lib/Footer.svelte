@@ -13,7 +13,7 @@
             on:click={() => modalContent.set('about')}
             on:click={isModalOpen.set(!$isModalOpen)}>
         À propos</p>
-        <p id="version">Beta version</p>
+        <p id="version">v1</p>
     </div>
     
 </footer>
