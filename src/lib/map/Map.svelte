@@ -203,15 +203,20 @@
             $isZooming = true
             select(zApply).attr("transform", transform).attr("cursor", "grabbing")
             
+            // // utiliser par scaleBar
+            // $zTransform = transform
+            // k = transform.k
+            // zx = transform.x
+            // zy = transform.y
+        })
+        .on("end", ({ transform }) => {
+            $isZooming = false
+            select(zApply).attr("cursor", "grab")
             // utiliser par scaleBar
             $zTransform = transform
             k = transform.k
             zx = transform.x
             zy = transform.y
-        })
-        .on("end", () => {
-            $isZooming = false
-            select(zApply).attr("cursor", "grab")
         })
 
     const d3zoomReload = zoom()
