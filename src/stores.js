@@ -1,6 +1,25 @@
 import { writable } from 'svelte/store'
 
-// Get from sessionStorage
+/* --------------------------------- */
+/* PARTAGE D'URL
+/* URL.searchParams -> store
+/* --------------------------------- */
+// Récupérer le paramètre de l'url encodé en base64
+// const urlEncoded = (new URL(document.location)).searchParams.get('p')
+
+// if (urlEncoded) {
+//     const urlDecoded = atob(urlEncoded)
+//     const urlObject = JSON.parse(urlDecoded)
+
+//     // Loop sur urlObject pour ajouter chaque clé + valeur au sessionStorage
+//     Object.entries(urlObject).map( d => sessionStorage.setItem(d[0], d[1]))
+//     console.log(sessionStorage)
+// }
+  
+
+/* --------------------------------- */
+// GET from sessionStorage
+/* --------------------------------- */
 const fromSS = (variable, value) => {
     const storage = sessionStorage.getItem(variable)
     return storage != null
@@ -41,7 +60,6 @@ export const urbanSize = writable( fromSS('urbanSize', 50000) )
 export const citiesType = writable( fromSS('citiesType', 'cap') )
 export const lyrCSS = writable( fromSS('lyrCSS', {}) )
 
-
 export const scaleDist = writable( fromSS('scaleDist', null) )
 export const scaleBarLeft = writable( fromSS('scaleBarLeft', null) )
 export const scaleBarTop = writable( fromSS('scaleBarTop', null) )
@@ -60,8 +78,9 @@ export const modalContent = writable()
 // SNACKBAR
 export const showSnackbar = writable({state: null, message: null})
 
-
+/* --------------------------------- */
 // SYNC to sessionStorage
+/* --------------------------------- */
 const toSS = (variable, value) => sessionStorage.setItem(variable, JSON.stringify(value))
 
 // MAP
