@@ -1,7 +1,7 @@
-import { projListSort } from './projList.js'
-import layersList from './layersList.js'
-import regionsBbox from './regionsBbox.js'
-import {countriesBbox} from './countriesBbox.js'
+import { projListSort } from '../../assets/projList.js'
+import layersList from '../../assets/layersList.js'
+import regionsBbox from '../../assets/regionsBbox.js'
+import {countriesBbox} from '../../assets/countriesBbox.js'
 
 // Fonction de filtre d'un objet js
 const filterObject = (obj, filtre) => Object.fromEntries(Object.entries(obj).filter(filtre))
