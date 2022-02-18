@@ -1,7 +1,7 @@
 <script>
     import { slide } from "svelte/transition";
     import { lyr, citiesType } from '../../stores.js'
-    import { isLyr } from '../../assets/isLyr.js'
+    import { isLyr } from '../js/isLyr.js'
     import Badge from '../UI/Badge.svelte'
 
     let isCities

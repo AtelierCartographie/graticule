@@ -1,4 +1,4 @@
-import csv from '../assets/basemap/cities.csv?raw'
+import csv from '../../assets/basemap/cities.csv?raw'
 
 // D'après Nathan Sebhastian, https://github.com/nsebhastian/javascript-csv-array-example
 function csvToArray(str, delimiter = ",") {

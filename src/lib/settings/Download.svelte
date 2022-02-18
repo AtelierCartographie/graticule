@@ -2,8 +2,8 @@
     import { zCat, proj, lyr, mapReady, downloadStep } from '../../stores.js'
     import { select } from 'd3-selection'
     import Tip from '../UI/Tip.svelte'
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
 
     //Tips message
     let m1 = "SVG est un format vectoriel permettant l'édition et le changement de dimensions sans dégrader la résolution"

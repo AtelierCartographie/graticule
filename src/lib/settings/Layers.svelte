@@ -11,10 +11,10 @@
     import CitiesFilter from './CitiesFilter.svelte'
     import ReliefFilter from './ReliefFilter.svelte'
     import layersList from '../../assets/layersList.js'
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
-    import tooltip from '../../assets/tooltip.js'
-    import { isLyr } from '../../assets/isLyr.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
+    import tooltip from '../js/tooltip.js'
+    import { isLyr } from '../js/isLyr.js'
     
     export let canRender
 

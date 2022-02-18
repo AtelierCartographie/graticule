@@ -1,8 +1,8 @@
 import { feature, merge, mesh } from 'topojson-client'
 
-import countries_50m from './basemap/countries_50m.json'
-import rivers_50m from './basemap/rivers_50m.json'
-import lakes_50m from './basemap/lakes_50m.json'
+import countries_50m from '../../assets/basemap/countries_50m.json'
+import rivers_50m from '../../assets/basemap/rivers_50m.json'
+import lakes_50m from '../../assets/basemap/lakes_50m.json'
 
 const land = merge(countries_50m, countries_50m.objects.countries_50m.geometries)
 

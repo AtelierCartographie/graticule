@@ -7,9 +7,9 @@ import GeoTIFF, { fromUrl } from 'geotiff';
 // - convertit en projection EPSG:4326
 // - valeurs arrondi à la centaine et converti de Float32 à Int16
 // - compression
-import z0 from './basemap/z0.tif'
-import z1 from './basemap/z1.tif'
-import z2 from './basemap/z2.tif'
+import z0 from '../../assets/basemap/z0.tif'
+import z1 from '../../assets/basemap/z1.tif'
+import z2 from '../../assets/basemap/z2.tif'
 
 
 

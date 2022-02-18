@@ -1,8 +1,8 @@
 <script>
     import { slide } from "svelte/transition"
     import { lyr, reliefColor, reliefShowLevels, reliefLevels  } from '../../stores.js'
-    import tooltip from '../../assets/tooltip.js'
-    import { isLyr } from '../../assets/isLyr.js'
+    import tooltip from '../js/tooltip.js'
+    import { isLyr } from '../js/isLyr.js'
     import Badge from '../UI/Badge.svelte'
 
     let isRelief

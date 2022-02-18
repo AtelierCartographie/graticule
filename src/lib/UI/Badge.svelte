@@ -1,5 +1,5 @@
 <script>
-    import tooltip from '../../assets/tooltip.js'
+    import tooltip from '../js/tooltip.js'
 
     export let onClick,
         classActive,

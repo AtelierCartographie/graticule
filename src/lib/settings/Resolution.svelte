@@ -2,8 +2,8 @@
     import Tip from '../UI/Tip.svelte'
     import Toggle from '../UI/Toggle.svelte'
     import { slide } from "svelte/transition"
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
     import { resType, res } from '../../stores.js'
 
     //Tips message

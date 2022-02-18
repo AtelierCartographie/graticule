@@ -4,14 +4,14 @@
     import { range } from 'd3-array'
     import { geoGraticule, geoGraticule10, geoDistance, geoCircle } from 'd3-geo'
     import { symbol, symbolCircle, symbolSquare } from 'd3-shape'
-    import { geo110m } from '../../assets/geo110m.js'
-    import tooltip from '../../assets/tooltip.js'
-    import { isLyr } from '../../assets/isLyr.js'
+    import { geo110m } from '../js/geo110m.js'
+    import tooltip from '../js/tooltip.js'
+    import { isLyr } from '../js/isLyr.js'
     import { zTransform, zCat, isZooming, proj, gratType, gratStep, lyr, urbanSize,
              citiesType, reliefLevels, reliefColor, resType, res, showSnackbar, showTissot } from '../../stores.js'
 
     import { contours } from 'd3-contour'
-    import { invert, geoCurvePath } from '../../assets/reliefUtils.js'
+    import { invert, geoCurvePath } from '../js/reliefUtils.js'
 
     export let path, outline
 
@@ -115,13 +115,13 @@
     // geo50m et geo10m
     let geo50m, geo10m
     const getGeo50m = async () => { 
-        let {geo50m} = await import('../../assets/geo50m.js') 
+        let {geo50m} = await import('../js/geo50m.js') 
         return geo50m
     }
     getGeo50m().then(d => geo50m = d)
 
     const getGeo10m = async () => { 
-        let {geo10m} = await import('../../assets/geo10m.js')
+        let {geo10m} = await import('../js/geo10m.js')
         return geo10m
     }
     getGeo10m().then(d => geo10m = d)
@@ -136,16 +136,16 @@
         let r
         switch (rLevel) {
             case '0':
-                const { r110m } = await import('../../assets/relief.js')
+                const { r110m } = await import('../js/relief.js')
                 r = r110m
                 break;
         
             case '1':
-                const { r50m } = await import('../../assets/relief.js')
+                const { r50m } = await import('../js/relief.js')
                 r = r50m
                 break;
             case '2':
-                const { r10m } = await import('../../assets/relief.js')
+                const { r10m } = await import('../js/relief.js')
                 r = r10m
                 break;
         }
@@ -189,7 +189,7 @@
 
     // Récupère la liste des villes + capitales
     const getCities = async () => {
-        let {cities} = await import('../../assets/cities.js')
+        let {cities} = await import('../js/cities.js')
         return cities
     }
 

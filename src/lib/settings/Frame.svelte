@@ -3,8 +3,8 @@
     import Tip from '../UI/Tip.svelte'
     import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
 
     //Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."

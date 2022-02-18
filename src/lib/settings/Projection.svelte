@@ -4,9 +4,9 @@
     import Tip from '../UI/Tip.svelte'
     import Badge from '../UI/Badge.svelte'
     import { projParams, projListSort } from '../../assets/projList.js'
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
-    import tooltip from '../../assets/tooltip.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
+    import tooltip from '../js/tooltip.js'
 
     // Tips message
     let m1 = "Choisir parmi la liste de projections et régler si besoin les paramètres."
