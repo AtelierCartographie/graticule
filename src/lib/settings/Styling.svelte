@@ -74,7 +74,7 @@
 
 </script>
 
-<button type="button" aria-expanded={isOpen} on:click={toggle} {disabled}>
+<button type="button" aria-expanded={isOpen} title="Modifier le style" on:click={toggle} {disabled}>
     <span class="material-icons">edit</span>
 </button>
 

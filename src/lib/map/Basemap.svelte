@@ -432,5 +432,6 @@
 <style>
     .gratTop:hover { stroke: var(--accent-color-light); stroke-width: 4; }
     .countries:focus, .gratTop:hover, .city:hover { outline: none; }
+    .city:hover { stroke: var(--accent-color-medium); stroke-opacity: 1; }
     #tissot { fill: var(--accent-color); fill-opacity: 0.3; stroke: none; }
 </style>
