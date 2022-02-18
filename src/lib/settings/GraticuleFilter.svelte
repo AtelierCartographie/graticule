@@ -1,9 +1,9 @@
 <script>
     import { slide } from "svelte/transition"
     import { lyr, gratType, gratStep } from '../../stores.js'
-    import tooltip from '../../assets/tooltip.js'
-    import { isLyr } from '../../assets/isLyr.js'
-    import Badge from './Badge.svelte'
+    import tooltip from '../js/tooltip.js'
+    import { isLyr } from '../js/isLyr.js'
+    import Badge from '../UI/Badge.svelte'
 
     let isGrat
     $: { isGrat = isLyr('graticule') ; $lyr }

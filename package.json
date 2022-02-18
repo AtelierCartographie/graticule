@@ -21,9 +21,9 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.34",
-    "svelte": "^3.45.0",
-    "vite": "^2.7.1"
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.37",
+    "svelte": "^3.46.4",
+    "vite": "^2.8.4"
   },
   "dependencies": {
     "@fontsource/fira-code": "^4.5.2",
@@ -39,8 +39,8 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.1.0",
     "d3-zoom": "^3.0.0",
-    "geotiff": "^1.0.9",
-    "marked": "^4.0.3",
+    "geotiff": "^2.0.4",
+    "marked": "^4.0.12",
     "tippy.js": "^6.3.7",
     "topojson-client": "^3.1.0"
   }

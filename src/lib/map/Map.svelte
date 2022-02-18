@@ -8,8 +8,8 @@
     import { drag } from 'd3-drag'
     import { geoScaleBar } from 'd3-geo-scale-bar'
     import Basemap from './Basemap.svelte'
-    import tooltip from '../../assets/tooltip.js'
-    import { isLyr } from '../../assets/isLyr.js'
+    import tooltip from '../js/tooltip.js'
+    import { isLyr } from '../js/isLyr.js'
 
     export let width, height // dimensions du svg
 

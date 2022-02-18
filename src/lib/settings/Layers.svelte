@@ -2,19 +2,19 @@
     import { lyr, lyrCSS, mapTheme, mapTitle, scaleDist, isModalOpen, modalContent } from '../../stores.js'
     import { slide } from "svelte/transition"
     import { select } from 'd3-selection'
-    import Tip from './Tip.svelte'
+    import Tip from '../UI/Tip.svelte'
     import Styling from './Styling.svelte'
-    import Toggle from './Toggle.svelte'
-    import Badge from './Badge.svelte'
+    import Toggle from '../UI/Toggle.svelte'
+    import Badge from '../UI/Badge.svelte'
     import GraticuleFilter from './GraticuleFilter.svelte'
     // import UrbanFilter from './UrbanFilter.svelte'
     import CitiesFilter from './CitiesFilter.svelte'
     import ReliefFilter from './ReliefFilter.svelte'
     import layersList from '../../assets/layersList.js'
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
-    import tooltip from '../../assets/tooltip.js'
-    import { isLyr } from '../../assets/isLyr.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
+    import tooltip from '../js/tooltip.js'
+    import { isLyr } from '../js/isLyr.js'
     
     export let canRender
 

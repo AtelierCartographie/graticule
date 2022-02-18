@@ -1,9 +1,9 @@
 <script>
     import { zCat, proj, lyr, mapReady, downloadStep } from '../../stores.js'
     import { select } from 'd3-selection'
-    import Tip from './Tip.svelte'
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
+    import Tip from '../UI/Tip.svelte'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
 
     //Tips message
     let m1 = "SVG est un format vectoriel permettant l'édition et le changement de dimensions sans dégrader la résolution"
@@ -62,6 +62,11 @@
     // d'après https://observablehq.com/@mbostock/saving-svg
     function SVGtoPNG(svg, dpi) {
         if (dpi == null) dpi = devicePixelRatio;
+        // Bug Firefox => remplace width, height par des valeurs en pixel
+        // absence d'attribut ou pourcentage non supporté, https://stackoverflow.com/a/28692538
+        select(svg)
+            .attr('width', svg.viewBox.baseVal.width + "px")
+            .attr('height', svg.viewBox.baseVal.height + "px")
         let resolve, reject;
         const promise = new Promise((y, n) => (resolve = y, reject = n))
         const image = new Image
@@ -80,13 +85,13 @@
             // ensure all drawing operations are scaled
             context.scale(dpi, dpi)
             context.drawImage(image, 0, 0, rect.width, rect.height)
+            // canvas.toDataURL('image/png', 1).replace('image/png', 'image/octet-stream')
             canvas.toBlob(resolve)
             }
-        
         let svgUrl = serialize(svg)
         image.src = URL.createObjectURL(svgUrl)
         URL.revokeObjectURL(svgUrl)
-
+            
         return promise
     }
 
@@ -143,8 +148,8 @@
                         const size = (blob.size / 1024).toFixed(0) // octet => Ko
                         blobPNG = {size, url}
                         if (dl) {
-                            a.href = url
                             a.setAttribute("download", `basemap-${today}.png`)
+                            a.href = url
                             a.click()
                         }
                     }

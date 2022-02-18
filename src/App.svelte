@@ -10,14 +10,15 @@
   import Settings from './lib/settings/Settings.svelte'
   import Map from './lib/map/Map.svelte'
   import Footer from './lib/Footer.svelte'
-  import Modal from './lib/Modal.svelte'  
-  import Help from './lib/help/Help.svelte'
-  import Snackbar from './lib/Snackbar.svelte'
-  import { isModalOpen, modalContent } from "./stores"
+  import Modal from './lib/UI/Modal.svelte'  
+  import Help from './lib/UI/Help.svelte'
+  import Snackbar from './lib/UI/Snackbar.svelte'
+  import { isModalOpen, modalContent } from "./stores";
   import { mapTheme, projID, countrySelect, reliefColor, mapTitle, citiesType, rectBrush, 
           res, gratStep, lyr, reliefLevels, regSelect, resType, urbanSize, projSettings, showTissot,
           scaleBarLeft, scaleDist, scaleBarTop, gratType, zTransform, lyrCSS, reliefShowLevels } from './stores'
-  import { cleanURL, addToURL } from './assets/cleanURL.js'
+  import { cleanURL, addToURL } from './lib/js/cleanURL.js'
+  
 
   let canRender = false
   let width, height, clientWidth

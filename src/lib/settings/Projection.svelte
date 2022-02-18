@@ -1,12 +1,12 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
     import { projID, proj, projSettings, isModalOpen, modalContent, showTissot } from '../../stores.js'
-    import Tip from './Tip.svelte'
-    import Badge from './Badge.svelte'
+    import Tip from '../UI/Tip.svelte'
+    import Badge from '../UI/Badge.svelte'
     import { projParams, projListSort } from '../../assets/projList.js'
-    import inView from '../../assets/inView.js'
-    import stepEnter from '../../assets/stepEnter.js'
-    import tooltip from '../../assets/tooltip.js'
+    import inView from '../js/inView.js'
+    import stepEnter from '../js/stepEnter.js'
+    import tooltip from '../js/tooltip.js'
 
     // Tips message
     let m1 = "Choisir parmi la liste de projections et régler si besoin les paramètres."

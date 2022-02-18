@@ -1,6 +1,6 @@
 <script>
     import { fade } from 'svelte/transition'
-    import { isModalOpen } from '../stores.js'
+    import { isModalOpen } from '../../stores.js'
 
     function closeModal() {
         $isModalOpen = !$isModalOpen
@@ -53,7 +53,7 @@
         overflow-y: auto;
         width: calc(var(--settings-width) * 2.5);
         max-width: 80vw;
-        padding: 16px;
+        padding: 24px;
         background: white;
         /* display: flex; */
         /* flex-direction: column; */
