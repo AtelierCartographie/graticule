@@ -3,7 +3,8 @@
     import { projID, proj, projSettings, isModalOpen, modalContent, showTissot } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
     import Badge from '../UI/Badge.svelte'
-    import { projParams, projListSort } from '../../assets/projList.js'
+    // import { projParams, projListSort } from '../../assets/projList.js'
+    import * as projData from '../../assets/projList.js'
     import inView from '../js/inView.js'
     import stepEnter from '../js/stepEnter.js'
     import tooltip from '../js/tooltip.js'
@@ -16,7 +17,7 @@
     // Vérifier si valeurs dans la sessionStorage (SS) différente des valeurs par défaut
     const fromSS = (v) => {
         const storage = $projSettings[v]
-        const projDefault = projParams.find( d => d.id === $projID)[v]
+        const projDefault = projData.params.find( d => d.id === $projID)[v]
 
         if (projDefault == undefined) return undefined
         if (storage == undefined) return projDefault
@@ -58,7 +59,7 @@
     
     // Ajouts des paramètres à la projection d3
     $: {
-        let p = projParams.find( d => d.id === $projID).fn.rotate([lambda, phi, gamma])
+        let p = projData.params.find( d => d.id === $projID).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distanceD3]).tilt([tilt]).clipAngle([clipAngle])
         $proj = p
@@ -72,7 +73,7 @@
     }
 
     // Système de notation des projections
-    $: currentProjData = projListSort.filter(d => d.id == $projID)[0]
+    $: currentProjData = projData.listSort.filter(d => d.id == $projID)[0]
     
     const dot0 = `<span class="material-icons" id="score" style="font-size: var(--text-medium); color: var(--accent-color);">radio_button_unchecked</span>`
     const dot1 = `<span class="material-icons" id="score" style="font-size: var(--text-medium); color: var(--accent-color);">radio_button_checked</span>`
@@ -114,12 +115,12 @@
 
     <select bind:value={$projID} name="projection" id="input_projSelect">
         <optgroup label="Incontournables">
-            {#each projListSort.filter(d => d.top == true) as d}
+            {#each projData.listSort.filter(d => d.top == true) as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
         <optgroup label="Autres">
-            {#each projListSort.filter(d => d.top == false) as d}
+            {#each projData.listSort.filter(d => d.top == false) as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
@@ -165,10 +166,6 @@
         {/if}
     </ul>
 
-
-    <h3>Catégorie</h3>
-    <p>{currentProjData.type}</p>
-
     <h3>Caractéristiques</h3>
     <ul id="scores">
         <li><p>Surface</p>
@@ -188,8 +185,20 @@
         title="L'application régulière de cercles de diamètre constant indique visuellement les déformations de surface et de forme de la projection"
         text="Indicateur de Tissot" />
 
-    <h3>Description</h3>
-    <p><i>Présentation à venir</i></p>
+    <h3 id="infos">Infos</h3>
+    <!-- <h3>Catégorie</h3> -->
+    <p>Catégorie : <u>{currentProjData.type}</u></p>
+
+    <!-- <h3>Échelle</h3> -->
+    <p>Échelle : <u>{currentProjData.scale}</u></p>
+    
+    <!-- <h3>Description</h3> -->
+    <details>
+        <summary>Description</summary>
+        {currentProjData.description}
+    </details>
+    <!-- <p id="description">{currentProjData.description}</p> -->
+    
 </section>
 
 
@@ -198,6 +207,15 @@
     p {
         font-size: var(--text-medium);
         margin: 0;
+    }
+    #infos ~ p { margin-bottom: .5rem; }
+    details { 
+        font-size: var(--text-small);
+        margin-bottom: 1rem;
+    }
+    summary {
+        font-size: var(--text-medium);
+        margin-bottom: .5rem;
     }
     #scores {
         display: grid;
