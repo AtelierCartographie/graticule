@@ -185,19 +185,13 @@
         title="L'application régulière de cercles de diamètre constant indique visuellement les déformations de surface et de forme de la projection"
         text="Indicateur de Tissot" />
 
-    <h3 id="infos">Infos</h3>
-    <!-- <h3>Catégorie</h3> -->
-    <p>Catégorie : <u>{currentProjData.type}</u></p>
-
-    <!-- <h3>Échelle</h3> -->
-    <p>Échelle : <u>{currentProjData.scale}</u></p>
-    
-    <!-- <h3>Description</h3> -->
+    <h3 id="infos">Description</h3>
+    <p>Catégorie : {currentProjData.type}</p>
+    <p>Échelle : {currentProjData.scale}</p>
     <details>
-        <summary>Description</summary>
+        <summary>En savoir plus</summary>
         {currentProjData.description}
     </details>
-    <!-- <p id="description">{currentProjData.description}</p> -->
     
 </section>
 
