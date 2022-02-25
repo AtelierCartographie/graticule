@@ -458,7 +458,7 @@
 <div id="zoom-button">
     <button on:click={zoomIn} use:tooltip title="Zoom avant"><span class="material-icons">add</span></button>
     <button on:click={zoomOut} use:tooltip title="Zoom arrière"><span class="material-icons">remove</span></button>
-    <button on:click={zoomReset} use:tooltip={{content: $zResetMessage}}><span class="material-icons">restart_alt</span></button>
+    <button on:click={zoomReset} use:tooltip={{content: $zResetMessage}}><span class="material-icons">refresh</span></button>
 </div>
 
 

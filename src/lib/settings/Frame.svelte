@@ -5,6 +5,7 @@
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
     import inView from '../js/inView.js'
     import stepEnter from '../js/stepEnter.js'
+    import tooltip from '../js/tooltip.js'
 
     //Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
@@ -43,9 +44,9 @@
     const frameName = (list,value) => list.find(d => d.id == value).name
     $: $zResetMessage = 
         $regSelect != null
-            ? `Revenir au cadrage "${frameName(regionsBbox, $regSelect)}"`
+            ? `Réinitialiser le cadrage "${frameName(regionsBbox, $regSelect)}"`
         : $countrySelect != null
-            ? `Revenir au cadrage "${frameName(countriesBbox, $countrySelect)}"`
+            ? `Réinitialiser le cadrage "${frameName(countriesBbox, $countrySelect)}"`
             : `Revenir au cadrage "monde"`
 </script>
 
@@ -65,9 +66,15 @@
             {/each}
         </select>
         <button on:click={() => clearSelect("input_regSelect")}
-                disabled={$regSelect == null}>
+                disabled={$regSelect == null}
+                use:tooltip={{placement: 'top'}} title='Revenir au cadrage "monde"'>
             <span class="material-icons">clear</span>
-        </button>    
+        </button>
+        <button on:click={() => $callZoomReset = true}
+                disabled={$regSelect == null}
+                use:tooltip={{placement: 'top', content: $zResetMessage}}>
+            <span class="material-icons">refresh</span>
+        </button>  
     </div>
     
 
@@ -87,8 +94,14 @@
             {/each}
         </datalist>
         <button on:click={() => clearSelect("input_countrySelect")}
-                disabled={$countrySelect == null}>
+                disabled={$countrySelect == null}
+                use:tooltip={{placement: 'top'}} title='Revenir au cadrage "monde"'>
             <span class="material-icons">clear</span>
+        </button>
+        <button on:click={() => $callZoomReset = true}
+                disabled={$countrySelect == null}
+                use:tooltip={{placement: 'top', content: $zResetMessage}}>
+            <span class="material-icons">refresh</span>
         </button>   
     </div>
     
