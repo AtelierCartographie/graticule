@@ -178,6 +178,13 @@
         {/if}
     </ul>
 
+    <Badge onClick={() => setProjSettings()}
+        tooltipParams={{placement: 'right'}}
+        title="Retour aux paramètres par défaut"
+        text="Par défaut" />
+
+
+
     <h3>Caractéristiques</h3>
     <ul id="scores">
         <li><p>Surface</p>
