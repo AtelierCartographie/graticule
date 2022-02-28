@@ -114,13 +114,18 @@
     
 
     <select bind:value={$projID} name="projection" id="input_projSelect">
-        <optgroup label="Incontournables">
-            {#each projData.listSort.filter(d => d.top == true) as d}
+        <optgroup label="Échelle globale">
+            {#each projData.listSort.filter(d => d.list.includes('global')) as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
-        <optgroup label="Autres">
-            {#each projData.listSort.filter(d => d.top == false) as d}
+        <optgroup label="Échelle régionale">
+            {#each projData.listSort.filter(d => d.list.includes('regional')) as d}
+                <option value={d.id}>{d.name}</option>
+            {/each}
+        </optgroup>
+        <optgroup label="Échelle locale">
+            {#each projData.listSort.filter(d => d.list.includes('local')) as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
