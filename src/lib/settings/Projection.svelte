@@ -126,6 +126,13 @@
         </optgroup>
     </select>
 
+    <p class='infos'>Catégorie : {currentProjData.type}</p>
+    <p class='infos'>Échelle : {currentProjData.scale}</p>
+    <details>
+        <summary>En savoir plus</summary>
+        {currentProjData.description}
+    </details>
+
     <h3>Paramètres</h3>
     <ul id="projParams">
         <li>
@@ -186,12 +193,6 @@
         text="Indicateur de Tissot" />
 
     <h3 id="infos">Description</h3>
-    <p>Catégorie : {currentProjData.type}</p>
-    <p>Échelle : {currentProjData.scale}</p>
-    <details>
-        <summary>En savoir plus</summary>
-        {currentProjData.description}
-    </details>
     
 </section>
 
@@ -202,14 +203,13 @@
         font-size: var(--text-medium);
         margin: 0;
     }
-    #infos ~ p { margin-bottom: .5rem; }
+    .infos:first-of-type { margin-top: .5rem; }
+    .infos { margin-bottom: .5rem; }
     details { 
         font-size: var(--text-small);
-        margin-bottom: 1rem;
     }
     summary {
         font-size: var(--text-medium);
-        margin-bottom: .5rem;
     }
     #scores {
         display: grid;

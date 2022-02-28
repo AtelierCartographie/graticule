@@ -90,7 +90,7 @@
     <h3>Géographie humaine
         <span 
         use:tooltip title="Cliquer pour en savoir plus"
-        on:click={() => modalContent.set('proj')}
+        on:click={() => modalContent.set('basemap')}
         on:click={isModalOpen.set(!$isModalOpen)}
         class="material-icons tooltip">help_outline</span>
     </h3>
