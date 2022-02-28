@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep, adaptProj, frameCenter } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -42,14 +42,14 @@
     /* --------------------------------- */
     // Clip à la volée au rectangle de cadrage initial
     // /!\ ne prend pas en compte le brush manuel de l'utilisateur
-    const xInvert = (d) => (d - $zTransform.x) / $zTransform.k
-    const yInvert = (d) => (d - $zTransform.y) / $zTransform.k
+    const xProjected = (d) => (d - $zTransform.x) / $zTransform.k
+    const yProjected = (d) => (d - $zTransform.y) / $zTransform.k
     let extent = null
     $: {
         $zTransform // recalcule l'extent à chaque changement de zoom (translate + scale)
         $proj // idem pour la projection et ses paramètres
         // [[x0,y0], [x1,y1]], coordonnées projetées planes de la carte (en pixels)
-        extent = [[xInvert(0-10),yInvert(mapMargin-10)], [xInvert(width+10),yInvert(mapHeight+10)]]
+        extent = [[xProjected(0-10),yProjected(mapMargin-10)], [xProjected(width+10),yProjected(mapHeight+10)]]
     }
 
     // PATH : centrage carte + clip au cadrage
@@ -60,7 +60,22 @@
         // le reste du temps
         : geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline).clipExtent(null))
 
+    // ADAPTER la projection au cadrage
+    // récupérer les coordonnées projetées en pixel de la carte du centre du cadrage
+    // convertir en coordonnées non-projetées [longitude, latitude]
+    const getCenter = () => {
+        const x = xProjected(rx + rw / 2)
+        const y = yProjected(ry + rh / 2)
 
+        return $proj.invert([x,y]) // [lon,lat]
+    }
+
+    $: if ($adaptProj) {
+        $frameCenter = getCenter()
+        $adaptProj = false
+    }
+
+    
     /* --------------------------------- */
     /* BRUSH
     /* Utilise d3-brush pour générer et modifier un rectangle de cadrage

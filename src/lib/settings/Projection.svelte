@@ -1,6 +1,6 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot } from '../../stores.js'
+    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot, adaptProj, frameCenter } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
     import Badge from '../UI/Badge.svelte'
     // import { projParams, projListSort } from '../../assets/projList.js'
@@ -93,6 +93,16 @@
                 break;
         }
     }
+    
+    // ADAPTER la projection au cadrage
+    // TODO
+    // - si freeFrame conserver le cadrage après adaptation
+    // - prendre en compte les verrouillages de paramètres de certaines projections
+    $: if ($frameCenter) {
+        const [lon,lat] = $frameCenter
+        lambda = -lon
+        phi = -lat
+    }
 </script>
 
 <section id="projection" class="settings-section" 
@@ -182,6 +192,11 @@
         tooltipParams={{placement: 'right'}}
         title="Retour aux paramètres par défaut"
         text="Par défaut" />
+    
+    <Badge onClick={() => adaptProj.set(true)}
+        tooltipParams={{placement: 'right'}}
+        title="Adapter les paramètres de la projection au cadrage"
+        text="Adapter au cadrage" />
 
 
 
@@ -203,9 +218,6 @@
         tooltipParams={{placement: 'right'}}
         title="L'application régulière de cercles de diamètre constant indique visuellement les déformations de surface et de forme de la projection"
         text="Indicateur de Tissot" />
-
-    <h3 id="infos">Description</h3>
-    
 </section>
 
 
@@ -240,6 +252,7 @@
         list-style-type: none;
         padding: 0;
         margin: 0;
+        margin-bottom: .5rem;
     }
     ul#projParams li {
         display: flex;
@@ -247,9 +260,6 @@
         justify-content: space-around;
         align-items: center;
         gap: 1ch;
-    }
-    ul#scores {
-        margin-bottom: 0.5rem;
     }
     li label {
         /* Taille du label */

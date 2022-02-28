@@ -33,6 +33,7 @@ export const rectBrush = writable( fromSS('rectBrush', {rx: null, ry: null, rw: 
 export const zTransform = writable( fromSS('zTransform', {k: 1, x: 0, y: 0}) )
 export const zCat = writable()
 export const isZooming = writable(false)
+export const frameCenter = writable()
 
 // SETTINGS
 // Frame
@@ -47,6 +48,7 @@ export const projID = writable( fromSS('projID', 'equalEarth') )
 export const proj = writable()
 export const projSettings = writable( fromSS('projSettings', {}) ) // {lambda: 0, phi: 0, gamma: 0,...}
 export const showTissot = writable( fromSS('showTissot', false) )
+export const adaptProj = writable(false)
 // Layers
 export const mapTheme = writable( fromSS('mapTheme', 'colorMode') )  // colorMode ou outlineMode
 export const mapTitle = writable( fromSS('mapTitle', "Titre de la carte") )
