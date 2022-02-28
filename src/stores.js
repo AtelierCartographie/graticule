@@ -71,6 +71,9 @@ export const res = writable( fromSS('res', '110m') )
 // Download
 export const downloadStep = writable(false)
 
+// Nav settings
+export const stepActive = writable('test')
+
 // MODAL
 export const isModalOpen = writable(false)
 export const modalContent = writable()

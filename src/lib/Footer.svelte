@@ -24,7 +24,7 @@
         bottom: 0;
         width: var(--settings-width);
         padding: 1rem;
-        border-top: 1px solid #ccc;
+        /* border-top: 1px solid #ccc; */
         z-index: 10;
         display: flex;
         align-items: flex-end;

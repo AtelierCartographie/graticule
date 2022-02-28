@@ -1,5 +1,6 @@
 <script>
-    import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage, callZoomReset } from '../../stores.js'
+    import { regSelect, countrySelect, regbbox, countrybbox,
+             zResetMessage, callZoomReset, isModalOpen, modalContent } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
     import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
@@ -81,7 +82,13 @@
     <p><strong>ou</strong></p>
 
 
-    <h3>Pays du monde</h3>
+    <h3>Pays du monde
+        <span 
+        use:tooltip title="Cliquer pour en savoir plus"
+        on:click={() => modalContent.set('proj')}
+        on:click={isModalOpen.set(!$isModalOpen)}
+        class="material-icons tooltip">help_outline</span>
+    </h3>
     <div>
         <input list="countryList"
             id="input_countrySelect"

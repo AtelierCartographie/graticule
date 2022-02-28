@@ -33,7 +33,9 @@
 </script>
 
 <Header />
+
 <main id="app" bind:clientWidth={clientWidth}>
+
   <Settings {canRender} />
 
   <figure id="svg-container">
@@ -41,6 +43,7 @@
       <Map {width} {height} />
     {/if}
   </figure>
+
 </main>
 
 <Footer />
@@ -50,6 +53,7 @@
 </Modal>
 
 <Snackbar />
+
 <style>
   :root {
     font-family: "Open sans", sans-serif;
@@ -157,5 +161,11 @@
   }
   :global(.material-icons.tooltip) { font-size: 20px; cursor: help; }
   :global(.material-icons.tooltip:hover) { color: var(--accent-color); }
+
+  :global(.tippy-box[data-theme~='grey']) {
+    background-color: var(--dark-grey);
+    color: white;
+    font-size: var(--text-small)
+  }
   /* -------------------------- */
 </style>
