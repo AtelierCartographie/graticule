@@ -1,6 +1,6 @@
 <script>
     import { regSelect, countrySelect, regbbox, countrybbox,
-             zResetMessage, callZoomReset, isModalOpen, modalContent } from '../../stores.js'
+             zResetMessage, callZoomReset, isModalOpen, modalContent, bboxType } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
     import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
     import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
@@ -18,6 +18,10 @@
         ? null
         : country
 
+    $: $bboxType = $regSelect ? 'region' :
+                   $countrySelect ? 'country' :
+                   'freeFrame'
+    
     // Récupère les bbox de la région ou du pays sélectionné
     $: $regbbox = regionsBbox.find( d => d.id === $regSelect).bbox
     $: $countrybbox = countriesBbox.find( d => d.id === $countrySelect).bbox

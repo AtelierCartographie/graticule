@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep, adaptProj, frameCenter } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep, adaptProj, frameCenter, adaptZoom } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -67,15 +67,30 @@
         const x = xProjected(rx + rw / 2)
         const y = yProjected(ry + rh / 2)
 
-        return $proj.invert([x,y]) // [lon,lat]
+        const coords = $proj.invert([x,y])
+
+        // cadrage courant en coordonnées non-projetées
+        const [x0,y0] = $proj.invert( [xProjected(rx), yProjected(ry)] )
+        const [x1,y1] = $proj.invert( [xProjected(rx + rw), yProjected(ry + rh)] )
+
+        // Polygone geojson du cadrage courant
+        const bbox = { "type": "Feature", "geometry": { "type": "Polygon",
+        "coordinates": [[ [x0,y0], [x1, y0], [x1, y1], [x0, y1], [x0, y0] ]] }}
+
+        return {coords, bbox} // [lon,lat]
     }
 
+    let bbox
     $: if ($adaptProj) {
-        $frameCenter = getCenter()
+        const center = getCenter()
+        $frameCenter = center.coords
+        bbox = center.bbox
+
         $adaptProj = false
     }
+    $: if ($adaptZoom) zoomRegion(bbox)
 
-    
+
     /* --------------------------------- */
     /* BRUSH
     /* Utilise d3-brush pour générer et modifier un rectangle de cadrage
@@ -240,10 +255,10 @@
         .on("zoom", ({ transform }) => select(zApply).attr("transform", transform))
 
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
-    function zoomRegion(b) {
-        if (b != null) {
+    function zoomRegion(d) {
+        if (d != null) {
             // Récupère les coordonnées en pixel de la bbox d'un geosjon
-            const [[x0, y0], [x1, y1]] = path.bounds(b)
+            const [[x0, y0], [x1, y1]] = path.bounds(d)
 
             // Voir exemple : https://observablehq.com/@d3/zoom-to-bounding-box
             select(zCall).transition().duration(1750).call(
@@ -280,7 +295,8 @@
 
 
     // RELIEF -> taille de l'ombrage de l'effet Tanaka contours
-    $: dropShadowOffset = (1 / k).toFixed(3)
+    let dropShadowOffset = "1"
+    $: if (isRelief) dropShadowOffset = (1 / k).toFixed(3)
 
 
     onMount( () => {

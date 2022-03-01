@@ -43,6 +43,8 @@ export const regbbox = writable()
 export const countrybbox = writable()
 export const zResetMessage = writable()
 export const callZoomReset = writable(false)
+export const bboxType = writable()
+export const adaptZoom = writable(false)
 // Projection
 export const projID = writable( fromSS('projID', 'equalEarth') )
 export const proj = writable()

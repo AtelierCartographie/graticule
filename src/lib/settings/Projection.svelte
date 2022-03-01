@@ -1,6 +1,6 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot, adaptProj, frameCenter } from '../../stores.js'
+    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot, adaptProj, adaptZoom, frameCenter, bboxType } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
     import Badge from '../UI/Badge.svelte'
     // import { projParams, projListSort } from '../../assets/projList.js'
@@ -68,8 +68,8 @@
     // Projection non paramétrable : input disabled
     const projInputDisabled = {
         lambda: ['bertin53', 'fuller', 'atlantis'],
-        phi: ['bertin53', 'fuller'],
-        gamma: ['bertin53', 'fuller', 'atlantis']
+        phi: ['bertin53', 'fuller', 'armadillo'],
+        gamma: ['bertin53', 'fuller', 'atlantis', 'armadillo']
     }
 
     // Système de notation des projections
@@ -95,13 +95,13 @@
     }
     
     // ADAPTER la projection au cadrage
-    // TODO
-    // - si freeFrame conserver le cadrage après adaptation
-    // - prendre en compte les verrouillages de paramètres de certaines projections
+    // TODO : prendre en compte les verrouillages de paramètres de certaines projections
     $: if ($frameCenter) {
         const [lon,lat] = $frameCenter
-        lambda = -lon
-        phi = -lat
+        if (!projInputDisabled.lambda.includes($projID)) lambda = -lon
+        if (!projInputDisabled.phi.includes($projID)) phi = -lat
+        
+        if ($bboxType == 'freeFrame') $adaptZoom = true
     }
 </script>
 
@@ -188,15 +188,18 @@
         {/if}
     </ul>
 
-    <Badge onClick={() => setProjSettings()}
-        tooltipParams={{placement: 'right'}}
-        title="Retour aux paramètres par défaut"
-        text="Par défaut" />
+    <div>
+        <Badge onClick={() => setProjSettings()}
+            tooltipParams={{placement: 'right'}}
+            title="Retour aux paramètres par défaut"
+            text="Par défaut" />
+        
+        <Badge onClick={() => adaptProj.set(true)}
+            tooltipParams={{placement: 'right'}}
+            title="Adapter les paramètres de la projection au cadrage"
+            text="Adapter au cadrage" />
+    </div>
     
-    <Badge onClick={() => adaptProj.set(true)}
-        tooltipParams={{placement: 'right'}}
-        title="Adapter les paramètres de la projection au cadrage"
-        text="Adapter au cadrage" />
 
 
 
