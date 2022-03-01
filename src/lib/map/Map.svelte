@@ -80,15 +80,17 @@
         return {coords, bbox} // [lon,lat]
     }
 
-    let bbox
+    let center
     $: if ($adaptProj) {
-        const center = getCenter()
+        center = getCenter()
         $frameCenter = center.coords
-        bbox = center.bbox
-
         $adaptProj = false
     }
-    $: if ($adaptZoom) zoomRegion(bbox)
+    $: if ($adaptZoom) {
+        zoomRegion(center.bbox)
+        $adaptZoom = false
+        $frameCenter = null
+    }
 
 
     /* --------------------------------- */

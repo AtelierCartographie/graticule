@@ -69,7 +69,8 @@
     const projInputDisabled = {
         lambda: ['bertin53', 'fuller', 'atlantis'],
         phi: ['bertin53', 'fuller', 'armadillo'],
-        gamma: ['bertin53', 'fuller', 'atlantis', 'armadillo']
+        gamma: ['bertin53', 'fuller', 'atlantis', 'armadillo'],
+        phiAdaptProj: ['equalEarth', 'naturalEarth2', 'mercator', 'equirectangular']
     }
 
     // Système de notation des projections
@@ -99,9 +100,11 @@
     $: if ($frameCenter) {
         const [lon,lat] = $frameCenter
         if (!projInputDisabled.lambda.includes($projID)) lambda = -lon
-        if (!projInputDisabled.phi.includes($projID)) phi = -lat
+        if (!projInputDisabled.phi.includes($projID) &&
+            !projInputDisabled.phiAdaptProj.includes($projID)) phi = -lat
         
         if ($bboxType == 'freeFrame') $adaptZoom = true
+        else $frameCenter = null
     }
 </script>
 
@@ -189,15 +192,19 @@
     </ul>
 
     <div>
+        {#if $projID != 'bertin53'}
         <Badge onClick={() => setProjSettings()}
             tooltipParams={{placement: 'right'}}
             title="Retour aux paramètres par défaut"
             text="Par défaut" />
+        {/if}
         
+        {#if $projID != 'bertin53' && $projID != 'interruptedMollweide' && $projID != 'mollweideHemisphere'}
         <Badge onClick={() => adaptProj.set(true)}
             tooltipParams={{placement: 'right'}}
             title="Adapter les paramètres de la projection au cadrage"
             text="Adapter au cadrage" />
+        {/if}
     </div>
     
 
