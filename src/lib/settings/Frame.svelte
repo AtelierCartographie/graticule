@@ -2,8 +2,8 @@
     import { regSelect, countrySelect, regbbox, countrybbox,
              zResetMessage, callZoomReset, isModalOpen, modalContent, bboxType } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
-    import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
-    import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
+    import regionsBbox from '../../assets/regionsBbox.json'         // cadrage régionaux 
+    import countriesBbox from '../../assets/countriesBbox.json'     // cadrage nationaux
     import inView from '../js/inView.js'
     import stepEnter from '../js/stepEnter.js'
     import tooltip from '../js/tooltip.js'
@@ -22,10 +22,17 @@
                    $countrySelect ? 'country' :
                    'freeFrame'
     
+    // Bbox -> polygone (geojson)
+    const bbox2polygon = (bbox) => {
+        if (bbox == null) return null
+        const [x0, y0, x1, y1] = bbox
+        // attention au sens des coordonnées !
+        return { "type": "Feature", "geometry": { "type": "Polygon",
+        "coordinates": [[ [x0, y0], [x0, y1], [x1, y1], [x1, y0], [x0, y0] ]] }}
+    }
     // Récupère les bbox de la région ou du pays sélectionné
-    $: $regbbox = regionsBbox.find( d => d.id === $regSelect).bbox
-    $: $countrybbox = countriesBbox.find( d => d.id === $countrySelect).bbox
-    
+    $: $regbbox = bbox2polygon( regionsBbox.find( d => d.id === $regSelect).bbox )
+    $: $countrybbox = bbox2polygon( countriesBbox.find( d => d.id === $countrySelect).bbox )
 
     // Rends exclusif les deux select (région OU pays)
     function resetSelect(el) {
