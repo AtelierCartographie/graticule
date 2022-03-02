@@ -109,19 +109,31 @@
         return {type: "MultiPolygon", coordinates};
     }
     const tissot = addTissot()
+
     /* --------------------------------- */
     /* CHARGEMENT ASYNCHRONE DE COUCHE
+    /* geo10m -> si connection lente (>3s), notification à l'utilisateur
     /* --------------------------------- */
     // geo50m et geo10m
     let geo50m, geo10m
-    const getGeo50m = async () => { 
-        let {geo50m} = await import('../js/geo50m.js') 
+    const getGeo50m = async () => {
+        let {geo50m} = await import('../js/geo50m.js')
         return geo50m
     }
     getGeo50m().then(d => geo50m = d)
 
     const getGeo10m = async () => { 
+        let isSlow = false
+        const network = setTimeout(() => {
+            isSlow = true
+            showSnackbar.set({state: 'loading', message: 'Connexion lente... Chargement de la totalité du fond'})
+        }, 3000);
+
         let {geo10m} = await import('../js/geo10m.js')
+
+        clearTimeout(network)
+        if (isSlow) showSnackbar.set({state: 'loaded', message: 'Fond chargé'})
+
         return geo10m
     }
     getGeo10m().then(d => geo10m = d)
