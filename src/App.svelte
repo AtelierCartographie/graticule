@@ -69,7 +69,7 @@
     s.res = $res
     
     clean = cleanURL(s)
-    // addToURL(clean)
+    addToURL(clean)
 
     // // Encoder en base64
     // const storageEncoded = btoa(JSON.stringify(clean))
@@ -79,8 +79,6 @@
     //   history.replaceState(history.state,'',`?${params.toString()}`)
 
   }
-  $: console.log(clean)
-  $: console.log($regSelect)
 
 
   onMount( () => {
@@ -215,5 +213,11 @@
   }
   :global(.material-icons.tooltip) { font-size: 20px; cursor: help; }
   :global(.material-icons.tooltip:hover) { color: var(--accent-color); }
+
+  :global(.tippy-box[data-theme~='grey']) {
+    background-color: var(--dark-grey);
+    color: white;
+    font-size: var(--text-small)
+  }
   /* -------------------------- */
 </style>

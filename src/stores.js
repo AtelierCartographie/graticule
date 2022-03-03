@@ -4,6 +4,7 @@ import { writable } from 'svelte/store'
 /* PARTAGE D'URL
 /* URL.searchParams -> store
 /* --------------------------------- */
+
 // Récupérer le paramètre de l'url encodé en base64
 // const urlEncoded = (new URL(document.location)).searchParams.get('p')
 
@@ -15,7 +16,19 @@ import { writable } from 'svelte/store'
 //     Object.entries(urlObject).map( d => sessionStorage.setItem(d[0], d[1]))
 //     console.log(sessionStorage)
 // }
-  
+const params = (new URL(document.location)).searchParams
+
+if (params) {
+    const urlObject = Object.fromEntries(params)
+    console.log(urlObject)
+
+    // test de désencodage avec le cas de tissot (cf dicoTissot dans cleanURL.js)
+    if (urlObject.hasOwnProperty(22)) urlObject.showTissot = true
+
+    Object.entries(urlObject).map( d => sessionStorage.setItem(d[0], d[1]))
+}
+console.log(sessionStorage)
+
 
 /* --------------------------------- */
 // GET from sessionStorage

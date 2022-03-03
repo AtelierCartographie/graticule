@@ -32,7 +32,7 @@ const recodeValues = (obj, newValues) => {
 
 // DICTIONNAIRE, dynamique quand c'est possible
 // Général
-const keyList = ["citiesType", "countrySelect", "gratStep", "gratType", "lyr", "lyrCSS", "mapTheme", "mapTitle", "projID", "projSettings", "regSelect", "reliefColor", "reliefLevels", "reliefShowLevels", "res", "resType", "scaleBarLeft", "scaleBarTop", "scaleDist", "urbanSize", "zTransform"]
+const keyList = ["citiesType", "countrySelect", "gratStep", "gratType", "lyr", "lyrCSS", "mapTheme", "mapTitle", "projID", "projSettings", "regSelect", "reliefColor", "reliefLevels", "reliefShowLevels", "res", "resType", "scaleBarLeft", "scaleBarTop", "scaleDist", "urbanSize", "zTransform", "showTissot"]
 // [key, indice]
 const dicoKey = Object.fromEntries( keyList.map((d,i) => [d, i+1]) )
 // Régions
@@ -40,7 +40,7 @@ const dicoReg = Object.fromEntries( regionsBbox.map((d,i) => [d.id, i+1]) )
 // Pays
 const dicoCountry = Object.fromEntries( countriesBbox.map((d,i) => [d.id, i+1]) )
 // Projections, [projName, indice]
-const dicoProj = Object.fromEntries( listSort.map((d,i) => [d.name, i+1]) )
+const dicoProj = Object.fromEntries( listSort.map((d,i) => [d.id, i+1]) )
 // Layers, [layer id, indice]
 const dicoLyr = Object.fromEntries( layersList.map((d,i) => [d.id, i+1]) )
 // Map theme
@@ -49,6 +49,11 @@ const dicoMapTheme = Object.fromEntries( [ ['colorMode', null], ['outlineMode', 
 const dicoGratType = Object.fromEntries( [ ['top', null], ['all', 2] ] )
 // Cities
 const dicoCitiesType = Object.fromEntries( [ ['cap', null], ['>100k', 2], ['>250k', 3], ['>500k', 4] ] )
+// ResType
+const dicoResType = Object.fromEntries( [ ['dynamic', null], [['dynamic', 'constant'], 2] ] )
+// Tissot
+const dicoTissot = Object.fromEntries( [ ['false', null], ['true', 2] ] )
+
 
 /* LOGIQUE
 /* 1. Renvoyer null pour les valeurs par défaut
@@ -62,6 +67,13 @@ const dicoCitiesType = Object.fromEntries( [ ['cap', null], ['>100k', 2], ['>250
 export function cleanURL(obj) {
     let s = obj
     // Object.filter(s, ([key,value]) => value != null)
+    // FRAME
+    s.regSelect = dicoReg[s.regSelect]
+    if (s.regSelect == 1) s.regSelect = null
+
+    s.countrySelect = dicoCountry[s.countrySelect]
+    if (s.countrySelect == 1) s.countrySelect = null
+
     // MAP
     if (isEqual(s.zTransform, {k:1,x:0,y:0})) s.zTransform = null
     // PROJ
@@ -71,7 +83,7 @@ export function cleanURL(obj) {
     s.projID == null && isEqual(s.projSettings, {"lambda":0,"phi":0,"gamma":0,"clipAngle":null})
         ? s.projSettings = null
         : s.projSettings = JSON.stringify(s.projSettings)
-    if (!s.showTissot) s.showTissot = null
+    s.showTissot = dicoTissot[s.showTissot]
     // LAYERS
     s.mapTheme = dicoMapTheme[s.mapTheme]
     if (s.mapTitle == 'Titre de la carte') s.mapTitle = null
@@ -90,11 +102,12 @@ export function cleanURL(obj) {
     if (s.lyrCSS == {} || isEqual(s.lyrCSS, {"ocean":{},"graticule":{},"coastline":{},"relief":{},"hydro":{},"countries":{},"borders":{},"cities":{}})) s.lyrCSS = null
     if (s.lyrCSS != null) s.lyrCSS = JSON.stringify(s.lyrCSS)
     // RESOLUTION
-    if (s.resType.includes('constant') == null) s.resType = null
-    if (s.resType.includes('constant') == null) s.res = null
+    s.resType = dicoResType[s.resType]
+    if (s.resType == null) s.res = null
     
     let r = recodeKeys(s, dicoKey)
-    return filterObject(r, ([k,v]) => v != null)
+    // return filterObject(r, ([k,v]) => v != null)
+    return r
 }
 
 export function encodeURL(obj) {
@@ -104,11 +117,12 @@ export function encodeURL(obj) {
 // Ajouter à l'url
 // si la valeur est null, on supprime le paramètre de l'url
 export function addToURL(obj) {
+    console.log(obj)
     const params = (new URL(document.location)).searchParams
     Object.entries(obj)
         .map( ([key,value]) => {
             value == null
-            ? (params.delete(key), console.log('delete'))
+            ? params.delete(key)
             : params.set(key, value)
         })
     console.log(params.toString())
