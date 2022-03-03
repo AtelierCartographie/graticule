@@ -306,6 +306,9 @@
         geo = geo110m
         zRelief = r110m
         citiesFilter = cities.filter(d => d.capital == 1)
+
+        // Nettoie les doublons de pays highlight
+        tooltipOFF()
     }
 
     /* --------------------------------- */
@@ -315,8 +318,8 @@
     /* à la sortie du survol, le path copié est supprimé
     /* --------------------------------- */
     function tooltipON(e) {
-        select("#gBasemap").append(
-            () => e.target.cloneNode(false))
+        select("#gBasemap")
+            .append( () => e.target.cloneNode(false) )
             .classed('hover', true)
             .style("pointer-events", "none")
     }
