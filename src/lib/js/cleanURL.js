@@ -1,7 +1,7 @@
-import { projListSort } from '../../assets/projList.js'
+import { listSort } from '../../assets/projList.js'
 import layersList from '../../assets/layersList.js'
-import regionsBbox from '../../assets/regionsBbox.js'
-import {countriesBbox} from '../../assets/countriesBbox.js'
+import regionsBbox from '../../assets/regionsBbox.json'
+import countriesBbox from '../../assets/countriesBbox.json'
 
 // Fonction de filtre d'un objet js
 const filterObject = (obj, filtre) => Object.fromEntries(Object.entries(obj).filter(filtre))
@@ -40,7 +40,7 @@ const dicoReg = Object.fromEntries( regionsBbox.map((d,i) => [d.id, i+1]) )
 // Pays
 const dicoCountry = Object.fromEntries( countriesBbox.map((d,i) => [d.id, i+1]) )
 // Projections, [projName, indice]
-const dicoProj = Object.fromEntries( projListSort.map((d,i) => [d.name, i+1]) )
+const dicoProj = Object.fromEntries( listSort.map((d,i) => [d.name, i+1]) )
 // Layers, [layer id, indice]
 const dicoLyr = Object.fromEntries( layersList.map((d,i) => [d.id, i+1]) )
 // Map theme

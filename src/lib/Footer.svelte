@@ -13,7 +13,7 @@
             on:click={() => modalContent.set('about')}
             on:click={isModalOpen.set(!$isModalOpen)}>
         À propos</p>
-        <p id="version">Beta version</p>
+        <p id="version">v1</p>
     </div>
     
 </footer>
@@ -24,7 +24,7 @@
         bottom: 0;
         width: var(--settings-width);
         padding: 1rem;
-        border-top: 1px solid #ccc;
+        /* border-top: 1px solid #ccc; */
         z-index: 10;
         display: flex;
         align-items: flex-end;

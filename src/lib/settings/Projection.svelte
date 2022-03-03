@@ -1,9 +1,10 @@
 <script>
     // Exemple simplifié avec un seul composant : https://svelte.dev/repl/ee4070a850944f92b0127ce5cebf0120?version=3.43.1
-    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot } from '../../stores.js'
+    import { projID, proj, projSettings, isModalOpen, modalContent, showTissot, adaptProj, adaptZoom, frameCenter, bboxType } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
     import Badge from '../UI/Badge.svelte'
-    import { projParams, projListSort } from '../../assets/projList.js'
+    // import { projParams, projListSort } from '../../assets/projList.js'
+    import * as projData from '../../assets/projList.js'
     import inView from '../js/inView.js'
     import stepEnter from '../js/stepEnter.js'
     import tooltip from '../js/tooltip.js'
@@ -16,7 +17,7 @@
     // Vérifier si valeurs dans la sessionStorage (SS) différente des valeurs par défaut
     const fromSS = (v) => {
         const storage = $projSettings[v]
-        const projDefault = projParams.find( d => d.id === $projID)[v]
+        const projDefault = projData.params.find( d => d.id === $projID)[v]
 
         if (projDefault == undefined) return undefined
         if (storage == undefined) return projDefault
@@ -58,7 +59,7 @@
     
     // Ajouts des paramètres à la projection d3
     $: {
-        let p = projParams.find( d => d.id === $projID).fn.rotate([lambda, phi, gamma])
+        let p = projData.params.find( d => d.id === $projID).fn.rotate([lambda, phi, gamma])
         if (parallel || parallel == 0) p.parallel([parallel])
         if (distance) p.distance([distanceD3]).tilt([tilt]).clipAngle([clipAngle])
         $proj = p
@@ -67,12 +68,14 @@
     // Projection non paramétrable : input disabled
     const projInputDisabled = {
         lambda: ['bertin53', 'fuller', 'atlantis'],
-        phi: ['bertin53', 'fuller'],
-        gamma: ['bertin53', 'fuller', 'atlantis']
+        phi: ['bertin53', 'fuller', 'armadillo'],
+        gamma: ['bertin53', 'fuller', 'atlantis', 'armadillo'],
+        phiAdaptProj: ['equalEarth', 'naturalEarth2', 'mercator', 'equirectangular'],
+        noAdaptProj: ['bertin53', 'armadillo', 'interruptedMollweide', 'mollweideHemisphere']
     }
 
     // Système de notation des projections
-    $: currentProjData = projListSort.filter(d => d.id == $projID)[0]
+    $: currentProjData = projData.listSort.filter(d => d.id == $projID)[0]
     
     const dot0 = `<span class="material-icons" id="score" style="font-size: var(--text-medium); color: var(--accent-color);">radio_button_unchecked</span>`
     const dot1 = `<span class="material-icons" id="score" style="font-size: var(--text-medium); color: var(--accent-color);">radio_button_checked</span>`
@@ -91,6 +94,17 @@
                 return dot1 + dot1 + dot1
                 break;
         }
+    }
+    
+    // ADAPTER la projection au cadrage
+    $: if ($frameCenter) {
+        const [lon,lat] = $frameCenter
+        if (!projInputDisabled.lambda.includes($projID)) lambda = -lon
+        if (!projInputDisabled.phi.includes($projID) &&
+            !projInputDisabled.phiAdaptProj.includes($projID)) phi = -lat
+        
+        if ($bboxType == 'freeFrame') $adaptZoom = true
+        else $frameCenter = null
     }
 </script>
 
@@ -113,17 +127,29 @@
     
 
     <select bind:value={$projID} name="projection" id="input_projSelect">
-        <optgroup label="Incontournables">
-            {#each projListSort.filter(d => d.top == true) as d}
+        <optgroup label="Échelle globale">
+            {#each projData.listSort.filter(d => d.list.includes('global')) as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
-        <optgroup label="Autres">
-            {#each projListSort.filter(d => d.top == false) as d}
+        <optgroup label="Échelle régionale">
+            {#each projData.listSort.filter(d => d.list.includes('regional')) as d}
+                <option value={d.id}>{d.name}</option>
+            {/each}
+        </optgroup>
+        <optgroup label="Échelle locale">
+            {#each projData.listSort.filter(d => d.list.includes('local')) as d}
                 <option value={d.id}>{d.name}</option>
             {/each}
         </optgroup>
     </select>
+
+    <p class='infos'>Catégorie : {currentProjData.type}</p>
+    <p class='infos'>Échelle : {currentProjData.scale}</p>
+    <details>
+        <summary>En savoir plus</summary>
+        {currentProjData.description}
+    </details>
 
     <h3>Paramètres</h3>
     <ul id="projParams">
@@ -165,9 +191,24 @@
         {/if}
     </ul>
 
+    <div>
+        {#if $projID != 'bertin53'}
+        <Badge onClick={() => setProjSettings()}
+            tooltipParams={{placement: 'right'}}
+            title="Retour aux paramètres par défaut"
+            text="Par défaut" />
+        {/if}
+        
+        {#if !projInputDisabled.noAdaptProj.includes($projID)}
+        <Badge onClick={() => adaptProj.set(true)}
+            tooltipParams={{placement: 'right'}}
+            title="Adapter les paramètres de la projection au cadrage"
+            text="Adapter au cadrage" />
+        {/if}
+    </div>
+    
 
-    <h3>Catégorie</h3>
-    <p>{currentProjData.type}</p>
+
 
     <h3>Caractéristiques</h3>
     <ul id="scores">
@@ -187,9 +228,6 @@
         tooltipParams={{placement: 'right'}}
         title="L'application régulière de cercles de diamètre constant indique visuellement les déformations de surface et de forme de la projection"
         text="Indicateur de Tissot" />
-
-    <h3>Description</h3>
-    <p><i>Présentation à venir</i></p>
 </section>
 
 
@@ -198,6 +236,14 @@
     p {
         font-size: var(--text-medium);
         margin: 0;
+    }
+    .infos:first-of-type { margin-top: .5rem; }
+    .infos { margin-bottom: .5rem; }
+    details { 
+        font-size: var(--text-small);
+    }
+    summary {
+        font-size: var(--text-medium);
     }
     #scores {
         display: grid;
@@ -216,6 +262,7 @@
         list-style-type: none;
         padding: 0;
         margin: 0;
+        margin-bottom: .5rem;
     }
     ul#projParams li {
         display: flex;
@@ -223,9 +270,6 @@
         justify-content: space-around;
         align-items: center;
         gap: 1ch;
-    }
-    ul#scores {
-        margin-bottom: 0.5rem;
     }
     li label {
         /* Taille du label */

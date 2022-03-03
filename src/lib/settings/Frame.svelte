@@ -1,10 +1,12 @@
 <script>
-    import { regSelect, countrySelect, regbbox, countrybbox, zResetMessage, callZoomReset } from '../../stores.js'
+    import { regSelect, countrySelect, regbbox, countrybbox,
+             zResetMessage, callZoomReset, isModalOpen, modalContent, bboxType } from '../../stores.js'
     import Tip from '../UI/Tip.svelte'
-    import regionsBbox from '../../assets/regionsBbox.js'         // cadrage régionaux  
-    import {countriesBbox} from '../../assets/countriesBbox.js'   // cadrage nationaux
+    import regionsBbox from '../../assets/regionsBbox.json'         // cadrage régionaux 
+    import countriesBbox from '../../assets/countriesBbox.json'     // cadrage nationaux
     import inView from '../js/inView.js'
     import stepEnter from '../js/stepEnter.js'
+    import tooltip from '../js/tooltip.js'
 
     //Tips message
     let m1 = "Pour préciser un cadrage, choisir dans les listes ci-dessous ou bien naviguer directement dans la carte."
@@ -16,10 +18,24 @@
         ? null
         : country
 
-    // Récupère les bbox de la région ou du pays sélectionné
-    $: $regbbox = regionsBbox.find( d => d.id === $regSelect).bbox
-    $: $countrybbox = countriesBbox.find( d => d.id === $countrySelect).bbox
+    $: $bboxType = $regSelect ? 'region' :
+                   $countrySelect ? 'country' :
+                   'freeFrame'
     
+    // Bbox -> polygone (geojson)
+    const bbox2polygon = (bbox) => {
+        if (bbox == null) return null
+        const [x0, y0, x1, y1] = bbox
+        // attention au sens des coordonnées !
+        return { "type": "Feature", "geometry": { "type": "Polygon",
+        "coordinates": [[ [x0, y0], [x0, y1], [x1, y1], [x1, y0], [x0, y0] ]] }}
+    }
+    const regions = regionsBbox.map(d => ({...d, bbox: bbox2polygon(d.bbox)}) )
+    const countries = countriesBbox.map(d => ({...d, bbox: bbox2polygon(d.bbox)}) )
+
+    // Récupère les bbox de la région ou du pays sélectionné
+    $: $regbbox = regions.find( d => d.id === $regSelect)
+    $: $countrybbox = countries.find( d => d.id === $countrySelect)
 
     // Rends exclusif les deux select (région OU pays)
     function resetSelect(el) {
@@ -43,9 +59,9 @@
     const frameName = (list,value) => list.find(d => d.id == value).name
     $: $zResetMessage = 
         $regSelect != null
-            ? `Revenir au cadrage "${frameName(regionsBbox, $regSelect)}"`
+            ? `Réinitialiser le cadrage "${frameName(regionsBbox, $regSelect)}"`
         : $countrySelect != null
-            ? `Revenir au cadrage "${frameName(countriesBbox, $countrySelect)}"`
+            ? `Réinitialiser le cadrage "${frameName(countriesBbox, $countrySelect)}"`
             : `Revenir au cadrage "monde"`
 </script>
 
@@ -65,16 +81,28 @@
             {/each}
         </select>
         <button on:click={() => clearSelect("input_regSelect")}
-                disabled={$regSelect == null}>
+                disabled={$regSelect == null}
+                use:tooltip={{placement: 'top'}} title='Revenir au cadrage "monde"'>
             <span class="material-icons">clear</span>
-        </button>    
+        </button>
+        <button on:click={() => $callZoomReset = true}
+                disabled={$regSelect == null}
+                use:tooltip={{placement: 'top', content: $zResetMessage}}>
+            <span class="material-icons">refresh</span>
+        </button>  
     </div>
     
 
     <p><strong>ou</strong></p>
 
 
-    <h3>Pays du monde</h3>
+    <h3>Pays ou territoires
+        <span 
+        use:tooltip title="Cliquer pour en savoir plus"
+        on:click={() => modalContent.set('basemap')}
+        on:click={isModalOpen.set(!$isModalOpen)}
+        class="material-icons tooltip">help_outline</span>
+    </h3>
     <div>
         <input list="countryList"
             id="input_countrySelect"
@@ -87,8 +115,14 @@
             {/each}
         </datalist>
         <button on:click={() => clearSelect("input_countrySelect")}
-                disabled={$countrySelect == null}>
+                disabled={$countrySelect == null}
+                use:tooltip={{placement: 'top'}} title='Revenir au cadrage "monde"'>
             <span class="material-icons">clear</span>
+        </button>
+        <button on:click={() => $callZoomReset = true}
+                disabled={$countrySelect == null}
+                use:tooltip={{placement: 'top', content: $zResetMessage}}>
+            <span class="material-icons">refresh</span>
         </button>   
     </div>
     

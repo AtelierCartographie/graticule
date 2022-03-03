@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep, adaptProj, frameCenter, adaptZoom, bboxType } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -42,14 +42,14 @@
     /* --------------------------------- */
     // Clip à la volée au rectangle de cadrage initial
     // /!\ ne prend pas en compte le brush manuel de l'utilisateur
-    const xInvert = (d) => (d - $zTransform.x) / $zTransform.k
-    const yInvert = (d) => (d - $zTransform.y) / $zTransform.k
+    const xProjected = (d) => (d - $zTransform.x) / $zTransform.k
+    const yProjected = (d) => (d - $zTransform.y) / $zTransform.k
     let extent = null
     $: {
         $zTransform // recalcule l'extent à chaque changement de zoom (translate + scale)
         $proj // idem pour la projection et ses paramètres
         // [[x0,y0], [x1,y1]], coordonnées projetées planes de la carte (en pixels)
-        extent = [[xInvert(0-10),yInvert(mapMargin-10)], [xInvert(width+10),yInvert(mapHeight+10)]]
+        extent = [[xProjected(0-10),yProjected(mapMargin-10)], [xProjected(width+10),yProjected(mapHeight+10)]]
     }
 
     // PATH : centrage carte + clip au cadrage
@@ -60,6 +60,48 @@
         // le reste du temps
         : geoPath($proj.fitExtent([[0, mapMargin], [width, mapHeight]], outline).clipExtent(null))
 
+    // ADAPTER la projection au cadrage
+    // récupérer les coordonnées projetées en pixel de la carte du centre du cadrage
+    // convertir en coordonnées non-projetées [longitude, latitude]
+    const getCenter = () => {
+        const x = xProjected(rx + rw / 2)
+        const y = yProjected(ry + rh / 2)
+
+        const coords = $proj.invert([x,y])
+
+        // cadrage courant en coordonnées non-projetées
+        const [x0,y0] = $proj.invert( [xProjected(rx), yProjected(ry)] )
+        const [x1,y1] = $proj.invert( [xProjected(rx + rw), yProjected(ry + rh)] )
+
+        // Polygone geojson du cadrage courant
+        const bbox = { "type": "Feature", "geometry": { "type": "Polygon",
+        "coordinates": [[ [x0,y0], [x1, y0], [x1, y1], [x0, y1], [x0, y0] ]] }}
+
+        return {coords, bbox} // [lon,lat]
+    }
+
+    let center
+    $: if ($adaptProj) {
+        switch ($bboxType) {
+            case 'region':
+                $frameCenter = $regbbox.centroid
+                break
+            case 'country':
+                $frameCenter = $countrybbox.centroid
+                break
+            case 'freeFrame':
+                center = getCenter()
+                $frameCenter = center.coords
+                $adaptProj = false
+                break
+        } 
+    }
+    
+    $: if ($adaptZoom) {
+        zoomRegion(center.bbox)
+        $adaptZoom = false
+        $frameCenter = null
+    }
 
     /* --------------------------------- */
     /* BRUSH
@@ -225,10 +267,10 @@
         .on("zoom", ({ transform }) => select(zApply).attr("transform", transform))
 
     // ZOOM SUR UNE ZONE SPÉCIFIQUE
-    function zoomRegion(b) {
-        if (b != null) {
+    function zoomRegion(d) {
+        if (d != null) {
             // Récupère les coordonnées en pixel de la bbox d'un geosjon
-            const [[x0, y0], [x1, y1]] = path.bounds(b)
+            const [[x0, y0], [x1, y1]] = path.bounds(d)
 
             // Voir exemple : https://observablehq.com/@d3/zoom-to-bounding-box
             select(zCall).transition().duration(1750).call(
@@ -245,27 +287,28 @@
     // et au changement de projection
     $: if ($mapReady) { 
         $proj
-        zoomRegion($regbbox)
-        zoomRegion($countrybbox)
+        zoomRegion($regbbox.bbox)
+        zoomRegion($countrybbox.bbox)
     }
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
     const zoomIn = () => select(zCall).transition().call(d3zoom.scaleBy, 1.5)
     const zoomOut = () => select(zCall).transition().call(d3zoom.scaleBy, 1/1.5)
-    const zoomReset = () => $regbbox == null && $countrybbox == null
+    const zoomReset = () => $regbbox.bbox == null && $countrybbox.bbox == null
             ?  select(zCall).transition().duration(1750).call(
                 d3zoom.transform,
                 zoomIdentity,
                 zoomTransform(select(zCall).node()).invert([width / 2, mapHeight / 2]))
-            : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
+            : ( zoomRegion($regbbox.bbox), zoomRegion($countrybbox.bbox) )
     // Cas où l'utilisateur vide l'input de l'étape Cadrer
     $: if ($callZoomReset == true) {zoomReset(); $callZoomReset = false}
 
 
 
     // RELIEF -> taille de l'ombrage de l'effet Tanaka contours
-    $: dropShadowOffset = (1 / k).toFixed(3)
+    let dropShadowOffset = "1"
+    $: if (isRelief) dropShadowOffset = (1 / k).toFixed(3)
 
 
     onMount( () => {
@@ -458,7 +501,7 @@
 <div id="zoom-button">
     <button on:click={zoomIn} use:tooltip title="Zoom avant"><span class="material-icons">add</span></button>
     <button on:click={zoomOut} use:tooltip title="Zoom arrière"><span class="material-icons">remove</span></button>
-    <button on:click={zoomReset} use:tooltip={{content: $zResetMessage}}><span class="material-icons">restart_alt</span></button>
+    <button on:click={zoomReset} use:tooltip={{content: $zResetMessage}}><span class="material-icons">refresh</span></button>
 </div>
 
 

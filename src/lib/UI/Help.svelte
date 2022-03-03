@@ -4,6 +4,7 @@
     
     // Import markdown file
     //https://vitejs.dev/guide/assets.html#importing-asset-as-string
+    import helpBasemap from '../../assets/helpBasemap.md?raw'
     import helpProj from '../../assets/helpProjection.md?raw'
     import helpScale from '../../assets/helpScalBar.md?raw'
     import helpScreenSize from '../../assets/helpScreenSize.md?raw'
@@ -11,6 +12,9 @@
 
     let markdown
     $: { switch ($modalContent) {
+            case 'basemap':
+                markdown = helpBasemap
+                break
             case 'proj':
                 markdown = helpProj
                 break

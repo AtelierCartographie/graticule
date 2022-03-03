@@ -2,7 +2,7 @@
     import tooltip from '../js/tooltip.js'
 
     export let onClick,
-        classActive,
+        classActive = null,
         isTooltip = true,
         tooltipParams = {placement: 'top'},
         title = null,
