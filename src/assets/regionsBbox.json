@@ -1,10 +1,17 @@
 [
-    { "id": null, "name": "", "bbox": null },
-    { "id": "africa", "name": "Afrique", "bbox": [-25, -35, 50, 35] },
-    { "id": "am_lat", "name": "Amérique latine", "bbox": [-100, -55, -30, 30] },
-    { "id": "am_nord", "name": "Amérique du Nord", "bbox": [-170, 25, -50, 70] },
-    { "id": "asia", "name": "Asie", "bbox": [55, -10, 150, 60] },
-    { "id": "europe", "name": "Europe", "bbox": [-15, 30, 40, 60] },
-    { "id": "mid_east", "name": "Moyen-Orient", "bbox": [30, 10, 60, 45] },
-    { "id": "oceania", "name": "Océanie", "bbox": [110, -50, 180, 30] }
+    { "id": null, "name": "", "bbox": null, "centroid": null },
+    { "id": "africa", "name": "Afrique",
+        "bbox": [-25, -35, 50, 35], "centroid": [12.5,0] },
+    { "id": "am_lat", "name": "Amérique latine",
+        "bbox": [-100, -55, -30, 30], "centroid": [-65,-12.5] },
+    { "id": "am_nord", "name": "Amérique du Nord",
+        "bbox": [-170, 25, -50, 70], "centroid": [-110,47.5] },
+    { "id": "asia", "name": "Asie",
+        "bbox": [55, -10, 150, 60], "centroid": [102,25] },
+    { "id": "europe", "name": "Europe",
+        "bbox": [-15, 30, 40, 60], "centroid": [12.5,45] },
+    { "id": "mid_east", "name": "Moyen-Orient",
+        "bbox": [30, 10, 60, 45], "centroid": [45,17.5] },
+    { "id": "oceania", "name": "Océanie",
+        "bbox": [110, -50, 180, 30], "centroid": [145,-10] }
 ]

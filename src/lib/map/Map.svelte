@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep, adaptProj, frameCenter, adaptZoom } from '../../stores.js'
+    import { proj, regbbox, countrybbox, zTransform, isZooming, mapTheme, lyr, mapTitle, scaleDist, mapReady, scaleBarLeft, scaleBarTop, zResetMessage, callZoomReset, rectBrush, downloadStep, adaptProj, frameCenter, adaptZoom, bboxType } from '../../stores.js'
     import { geoPath } from 'd3-geo'
     import { select } from 'd3-selection'
     import { brush } from 'd3-brush'
@@ -82,16 +82,26 @@
 
     let center
     $: if ($adaptProj) {
-        center = getCenter()
-        $frameCenter = center.coords
-        $adaptProj = false
+        switch ($bboxType) {
+            case 'region':
+                $frameCenter = $regbbox.centroid
+                break
+            case 'country':
+                $frameCenter = $countrybbox.centroid
+                break
+            case 'freeFrame':
+                center = getCenter()
+                $frameCenter = center.coords
+                $adaptProj = false
+                break
+        } 
     }
+    
     $: if ($adaptZoom) {
         zoomRegion(center.bbox)
         $adaptZoom = false
         $frameCenter = null
     }
-
 
     /* --------------------------------- */
     /* BRUSH
@@ -277,20 +287,20 @@
     // et au changement de projection
     $: if ($mapReady) { 
         $proj
-        zoomRegion($regbbox)
-        zoomRegion($countrybbox)
+        zoomRegion($regbbox.bbox)
+        zoomRegion($countrybbox.bbox)
     }
 
     // Boutons de contrôle du zoom
     // voir https://observablehq.com/@d3/programmatic-zoom
     const zoomIn = () => select(zCall).transition().call(d3zoom.scaleBy, 1.5)
     const zoomOut = () => select(zCall).transition().call(d3zoom.scaleBy, 1/1.5)
-    const zoomReset = () => $regbbox == null && $countrybbox == null
+    const zoomReset = () => $regbbox.bbox == null && $countrybbox.bbox == null
             ?  select(zCall).transition().duration(1750).call(
                 d3zoom.transform,
                 zoomIdentity,
                 zoomTransform(select(zCall).node()).invert([width / 2, mapHeight / 2]))
-            : ( zoomRegion($regbbox), zoomRegion($countrybbox) )
+            : ( zoomRegion($regbbox.bbox), zoomRegion($countrybbox.bbox) )
     // Cas où l'utilisateur vide l'input de l'étape Cadrer
     $: if ($callZoomReset == true) {zoomReset(); $callZoomReset = false}
 

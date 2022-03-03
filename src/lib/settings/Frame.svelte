@@ -30,9 +30,12 @@
         return { "type": "Feature", "geometry": { "type": "Polygon",
         "coordinates": [[ [x0, y0], [x0, y1], [x1, y1], [x1, y0], [x0, y0] ]] }}
     }
+    const regions = regionsBbox.map(d => ({...d, bbox: bbox2polygon(d.bbox)}) )
+    const countries = countriesBbox.map(d => ({...d, bbox: bbox2polygon(d.bbox)}) )
+
     // Récupère les bbox de la région ou du pays sélectionné
-    $: $regbbox = bbox2polygon( regionsBbox.find( d => d.id === $regSelect).bbox )
-    $: $countrybbox = bbox2polygon( countriesBbox.find( d => d.id === $countrySelect).bbox )
+    $: $regbbox = regions.find( d => d.id === $regSelect)
+    $: $countrybbox = countries.find( d => d.id === $countrySelect)
 
     // Rends exclusif les deux select (région OU pays)
     function resetSelect(el) {

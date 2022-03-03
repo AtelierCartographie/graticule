@@ -70,7 +70,8 @@
         lambda: ['bertin53', 'fuller', 'atlantis'],
         phi: ['bertin53', 'fuller', 'armadillo'],
         gamma: ['bertin53', 'fuller', 'atlantis', 'armadillo'],
-        phiAdaptProj: ['equalEarth', 'naturalEarth2', 'mercator', 'equirectangular']
+        phiAdaptProj: ['equalEarth', 'naturalEarth2', 'mercator', 'equirectangular'],
+        noAdaptProj: ['bertin53', 'armadillo', 'interruptedMollweide', 'mollweideHemisphere']
     }
 
     // Système de notation des projections
@@ -96,7 +97,6 @@
     }
     
     // ADAPTER la projection au cadrage
-    // TODO : prendre en compte les verrouillages de paramètres de certaines projections
     $: if ($frameCenter) {
         const [lon,lat] = $frameCenter
         if (!projInputDisabled.lambda.includes($projID)) lambda = -lon
@@ -199,7 +199,7 @@
             text="Par défaut" />
         {/if}
         
-        {#if $projID != 'bertin53' && $projID != 'interruptedMollweide' && $projID != 'mollweideHemisphere'}
+        {#if !projInputDisabled.noAdaptProj.includes($projID)}
         <Badge onClick={() => adaptProj.set(true)}
             tooltipParams={{placement: 'right'}}
             title="Adapter les paramètres de la projection au cadrage"

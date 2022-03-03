@@ -16,7 +16,7 @@ import {geoAirocean } from 'd3-geo-polygon'
 const params = [
     {id: "equalEarth", fn: geoEqualEarth(), lambda: 0, phi: 0, gamma: 0},
     {id: "naturalEarth2", fn: geoNaturalEarth2(), lambda: 0, phi: 0, gamma: 0},
-    {id: "armadillo", fn: geoArmadillo(), lambda: -10, phi: NaN, gamma: NaN, parallel: 20},
+    {id: "armadillo", fn: geoArmadillo(), lambda: -10, phi: 0, gamma: 0, parallel: 20},
     {id: "bertin53", fn: geoBertin1953(), lambda: -16, phi: -42, gamma: 0},
     {id: "bonne", fn: geoBonne(), lambda: 0, phi: 0, gamma: 0, parallel: 45},
     {id: "orthographic", fn: geoOrthographic(), lambda: 15, phi: -40, gamma: 0},
