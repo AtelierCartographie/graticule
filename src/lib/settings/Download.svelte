@@ -109,7 +109,6 @@
     // stock la taille et l'url du blob d'export svg et png
     let blobSVG = {},
         blobPNG = {}
-
     // param1: svg de la carte = appel de cleaningSVG()
     // param2: format de fichier (svg, png ou pdf)
     // param3: (optionnel) si le téléchargement doit être enclenché ou non
@@ -133,6 +132,7 @@
                 url = URL.createObjectURL(blob)
                 const size = (blob.size / 1024 / 1024).toFixed(1) // octet => Ko => Mo
                 blobSVG = {size, url}
+                console.log(blobSVG)
                 if (dl) {
                     a.href = url
                     a.setAttribute("download", `basemap-${today}.svg`)

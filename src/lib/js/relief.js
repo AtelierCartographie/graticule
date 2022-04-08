@@ -17,8 +17,11 @@ import z2 from '../../assets/basemap/z2.tif'
 async function getRaster(url) {
     const tiff = await fromUrl(url)
     const image = await tiff.getImage()
-    const r = await image.readRasters() // [values, width, height]
-    return r
+    const r = (await image.readRasters())[0] // [values, width, height]
+    const width = image.getWidth()           // width
+    const height = image.getHeight()         // height
+
+    return {values: r, width, height}
 }
 
 export const r110m = await getRaster(z0)

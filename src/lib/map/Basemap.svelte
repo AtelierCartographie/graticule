@@ -144,29 +144,19 @@
     /* B. Convertit en polygone de contours (geojson) selon des seuils d'élévations
     /* C. Met à jour B. si changement de seuils
     /* --------------------------------- */
-    const getRelief = async (rLevel) => {
-        let r
-        switch (rLevel) {
-            case '0':
-                const { r110m } = await import('../js/relief.js')
-                r = r110m
-                break;
-        
-            case '1':
-                const { r50m } = await import('../js/relief.js')
-                r = r50m
-                break;
-            case '2':
-                const { r10m } = await import('../js/relief.js')
-                r = r10m
-                break;
-        }
-        
-        return r
+    const getRelief = async () => {
+        const { r110m } = await import('../js/relief.js')
+        r0 = r110m
+
+        const { r50m } = await import('../js/relief.js')
+        r1 = r50m
+
+        const { r10m } = await import('../js/relief.js')
+        r2 = r10m
     }
     const relief2geojson = async (r, seuils) => {
         const d3Contours = await contours().size([r.width, r.height]).thresholds(seuils.split(","))
-        const geojsonXY = await d3Contours(r[0])
+        const geojsonXY = await d3Contours(r.values)
         const geojsonLatLon = geojsonXY.map(d => invert(d, r.width, r.height))
         
         return geojsonLatLon
@@ -174,21 +164,17 @@
 
     let r0, r1, r2
     let r110m, r50m, r10m, rOnce = 0
+    // A.
     $: if (isRelief && rOnce == 0) {
         showSnackbar.set({state: 'loading', message: 'Chargement du relief'})
-        getRelief('0').then(async d => r0 = d)
-        getRelief('1').then(async d => r1 = d)
-        getRelief('2').then(async d => {
-            r2 = d
-            showSnackbar.set({state: 'loaded', message: 'Relief chargé'})
-        })
+        getRelief()
+            .then(d => showSnackbar.set({state: 'loaded', message: 'Relief chargé'}))
         ++rOnce
     }
-    $: if (r0) {
-        relief2geojson(r0, $reliefLevels).then(d => r110m = d)
-        relief2geojson(r1, $reliefLevels).then(d => r50m = d)
-        relief2geojson(r2, $reliefLevels).then(d => r10m = d)
-    }
+    // B. et C.
+    $: if (r0) relief2geojson(r0, $reliefLevels).then(d => r110m = d)
+    $: if (r1) relief2geojson(r1, $reliefLevels).then(d => r50m = d)
+    $: if (r2) relief2geojson(r2, $reliefLevels).then(d => r10m = d)
     
     /* --------------------------------- */
     /* CITIES -> async à l'activation
