@@ -1,20 +1,4 @@
 import { writable } from 'svelte/store'
-
-/* --------------------------------- */
-/* PARTAGE D'URL
-/* URL.searchParams -> store
-/* --------------------------------- */
-// Récupérer le paramètre de l'url encodé en base64
-// const urlEncoded = (new URL(document.location)).searchParams.get('p')
-
-// if (urlEncoded) {
-//     const urlDecoded = atob(urlEncoded)
-//     const urlObject = JSON.parse(urlDecoded)
-
-//     // Loop sur urlObject pour ajouter chaque clé + valeur au sessionStorage
-//     Object.entries(urlObject).map( d => sessionStorage.setItem(d[0], d[1]))
-//     console.log(sessionStorage)
-// }
   
 
 /* --------------------------------- */
@@ -73,7 +57,7 @@ export const resType = writable( fromSS('resType', ['dynamic']) )
 export const res = writable( fromSS('res', '110m') )
 
 // Download
-export const downloadStep = writable(false)
+export const downloadStep = writable()
 
 // Nav settings
 export const stepActive = writable('test')

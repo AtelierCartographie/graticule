@@ -5,7 +5,7 @@
 <footer>
     <div id="logo">
         <a href="https://www.sciencespo.fr/cartographie/" title="Sciences Po - Atelier de cartographie">
-            <img width="130" src="./logo-Atelier-NB.svg" alt="Logo de Sciences Po - Atelier de cartographie">
+            <img src="./logo-Atelier-NB.svg" width="144" height="37" alt="Logo de Sciences Po - Atelier de cartographie">
         </a>
     </div>
     <div>
@@ -42,8 +42,5 @@
     footer p { 
         font-size: var(--text-small);
         color: var(--dark-grey);
-    }
-    footer img {
-        width: 9rem;
     }
 </style>
