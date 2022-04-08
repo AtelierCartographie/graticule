@@ -132,7 +132,7 @@
                 url = URL.createObjectURL(blob)
                 const size = (blob.size / 1024 / 1024).toFixed(1) // octet => Ko => Mo
                 blobSVG = {size, url}
-                console.log(blobSVG)
+
                 if (dl) {
                     a.href = url
                     a.setAttribute("download", `basemap-${today}.svg`)

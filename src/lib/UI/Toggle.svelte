@@ -18,18 +18,26 @@
       } else {
         bindGroup = bindGroup.filter((item) => item !== value);
       }
-	}
+  	}
+
+    $: isSafari = (navigator.userAgent.indexOf('Safari') != -1 
+                && navigator.userAgent.indexOf('Chrome') == -1)
+                ? true : false
+    const messageSafari = `Oups...
+Le relief n'est malheureusement pas disponible avec le navigateur Safari.`
 </script>
 
 
-<label class="Toggle" for={`input_${id}`}>
+<label class="Toggle" for={`input_${id}`} on:click={id == "relief" && isSafari ? alert(messageSafari) : ""}>
   
   <span class="Toggle__label">{label}</span> 
 
   <input type="checkbox" class="Toggle__input"
           {name} id={`input_${id}`} {value}
           checked={bindGroup.includes(value)}
-          on:change={onChange} />
+          on:change={onChange} 
+          disabled={id == "relief" && isSafari ? true : false}
+          />
 
   <span class="Toggle__display" hidden>
     <!-- <svg
