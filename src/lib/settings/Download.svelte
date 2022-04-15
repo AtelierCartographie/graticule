@@ -169,11 +169,11 @@
     // ----------------- FILE SIZE ----------------- //
     // À l'ouverture de l'étape Télécharger
     // calculer le poids des fichiers exportables
-    $: if ($downloadStep) {
-        $zCat
-        downloadMap(cleaningSVG(), 'svg')
-        downloadMap(cleaningSVG(), 'png')
-    }
+    // $: if ($downloadStep) {
+    //     $zCat
+    //     downloadMap(cleaningSVG(), 'svg')
+    //     downloadMap(cleaningSVG(), 'png')
+    // }
 </script>
 
 
@@ -186,12 +186,14 @@
 
     <Tip message={m1} />
     <a id="download_svg" on:click={ () => downloadMap(cleaningSVG(), 'svg', true) }>
-        <button><span class="material-icons">download_for_offline</span> SVG ({blobSVG.size} Mo)</button>
+        <button><span class="material-icons">download_for_offline</span> SVG</button>
+        <!-- <button><span class="material-icons">download_for_offline</span> SVG ({blobSVG.size} Mo)</button> -->
     </a>
 
     <Tip message={m2} />
     <a id="download_png" on:click={ () => downloadMap(cleaningSVG(), 'png', true) }>
-        <button><span class="material-icons">download_for_offline</span> PNG ({blobPNG.size} Ko)</button>
+        <button><span class="material-icons">download_for_offline</span> PNG</button>
+        <!-- <button><span class="material-icons">download_for_offline</span> PNG ({blobPNG.size} Ko)</button> -->
     </a>
 
     <Tip message={m3} />
