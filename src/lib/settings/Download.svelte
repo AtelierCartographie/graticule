@@ -113,7 +113,7 @@
     // param2: format de fichier (svg, png ou pdf)
     // param3: (optionnel) si le téléchargement doit être enclenché ou non
     function downloadMap(svg, type, dl) {
-        const a = select(`#download_${type}`).node()
+        const a = document.createElement("a");
         let url // stocke l'url du blob
         
         // reset blobURL, href et download attributes
@@ -136,8 +136,7 @@
                 if (dl) {
                     a.href = url
                     a.setAttribute("download", `basemap-${today}.svg`)
-                    // Pas besoin, le téléchargement se lance déjà, pourquoi ?
-                    // a.click()
+                    a.click()
                 }
                 break
             }
@@ -148,8 +147,8 @@
                         const size = (blob.size / 1024).toFixed(0) // octet => Ko
                         blobPNG = {size, url}
                         if (dl) {
-                            a.setAttribute("download", `basemap-${today}.png`)
                             a.href = url
+                            a.setAttribute("download", `basemap-${today}.png`)
                             a.click()
                         }
                     }
@@ -185,32 +184,30 @@
     <h2><span class="material-icons">download</span> Télécharger</h2>
 
     <Tip message={m1} />
-    <a id="download_svg" on:click={ () => downloadMap(cleaningSVG(), 'svg', true) }>
-        <button><span class="material-icons">download_for_offline</span> SVG</button>
-        <!-- <button><span class="material-icons">download_for_offline</span> SVG ({blobSVG.size} Mo)</button> -->
-    </a>
+    <button type="button" on:click={ () => downloadMap(cleaningSVG(), 'svg', true) }>
+        <span class="material-icons">download_for_offline</span> SVG
+    </button>
 
     <Tip message={m2} />
-    <a id="download_png" on:click={ () => downloadMap(cleaningSVG(), 'png', true) }>
-        <button><span class="material-icons">download_for_offline</span> PNG</button>
-        <!-- <button><span class="material-icons">download_for_offline</span> PNG ({blobPNG.size} Ko)</button> -->
-    </a>
+    <button type="button" on:click={ () => downloadMap(cleaningSVG(), 'png', true) }>
+        <span class="material-icons">download_for_offline</span> PNG
+    </button>
 
     <Tip message={m3} />
-    <a id="download_pdf" on:click={ () => downloadMap(cleaningSVG(), 'pdf', true) }>
-        <button><span class="material-icons">print</span> Imprimer</button>
-    </a>
+    <button type="button" on:click={ () => downloadMap(cleaningSVG(), 'pdf', true) }>
+        <span class="material-icons">print</span> Imprimer
+    </button>
 </section>
 
 <style>
-    section#download a {
-        margin-bottom: 1rem;
-    }
     button {
+        width: fit-content;
         border: 1px solid var(--dark-grey);
         border-radius: 2em;
         padding: .3rem .7rem;
+        margin-bottom: 1rem;
         background-color: var(--light-grey);
+        
     }
     button:hover {
         border: 1px solid var(--accent-color);
