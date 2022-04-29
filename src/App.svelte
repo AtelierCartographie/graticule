@@ -4,6 +4,7 @@
   import "@fontsource/open-sans/latin-400-italic.css"
   import "@fontsource/open-sans/latin-700.css"
   import "@fontsource/open-sans/latin-700-italic.css"
+  import "@fontsource/material-icons"
   
   import { onMount } from 'svelte'
   import Header from './lib/Header.svelte'
@@ -115,40 +116,9 @@
 
   /* -------------------------- */
   /* PICTOGRAMME MATERIAL ICONS */
-  @font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-    src: local('Material Icons'),
-      local('MaterialIcons-Regular'),
-      url("./assets/MaterialIcons-Regular.woff2") format('woff2');
-  }
-
   :global(.material-icons) {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;  /* Preferred icon size */
     display: inline-flex;
     vertical-align: middle;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-
-    /* Support for all WebKit browsers. */
-    -webkit-font-smoothing: antialiased;
-    /* Support for Safari and Chrome. */
-    text-rendering: optimizeLegibility;
-
-    /* Support for Firefox. */
-    -moz-osx-font-smoothing: grayscale;
-
-    /* Support for IE. */
-    font-feature-settings: 'liga';
   }
   /* -------------------------- */
 
